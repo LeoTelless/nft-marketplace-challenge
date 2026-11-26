@@ -2,7 +2,7 @@
 
 Aplicação front-end de um marketplace de NFTs (catálogo, detalhe, carrinho, checkout com cotação, pedidos, conta, carteiras e favoritos), com **tempo real via Socket.IO** e um **backend totalmente simulado na camada de rede com MSW**. Não existe servidor real: REST e WebSocket são interceptados no navegador, também no build publicado.
 
-- Aplicação publicada: <!-- PENDENTE: URL do deploy -->
+- Aplicação publicada: https://nft-marketplace-challenge-ivory.vercel.app
 - Arquitetura, contratos, cache, sessão, tempo real e decisões de UX: [ARCHITECTURE.md](./ARCHITECTURE.md)
 
 ## Stack
