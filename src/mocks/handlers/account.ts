@@ -1,0 +1,191 @@
+import { http, HttpResponse } from 'msw'
+import {
+  changePasswordRequestSchema,
+  connectWalletRequestSchema,
+  createWalletRequestSchema,
+  endpoints,
+  updateAvatarRequestSchema,
+  updateProfileRequestSchema,
+  updateWalletRequestSchema,
+  type Profile,
+  type WalletConnection,
+  type WalletList,
+} from '@/contracts'
+import { db, nextId, persist } from '../db/store'
+import type { DbUser, DbWallet } from '../db/types'
+import { is } from '../scenarios'
+import { api, hashPassword, MockHttpError, now, parseBody, randomHex, requireUser, route, validationError } from './utils'
+
+function profileOf(user: DbUser): Profile {
+  return { id: user.id, name: user.name, email: user.email, bio: user.bio, avatarUrl: user.avatarUrl }
+}
+
+function publicWallet(wallet: DbWallet) {
+  const { userId: _userId, ...rest } = wallet
+  return rest
+}
+
+function walletsOf(userId: string) {
+  return db().wallets.filter((w) => w.userId === userId)
+}
+
+function findWallet(userId: string, id: string): DbWallet {
+  const wallet = db().wallets.find((w) => w.id === id)
+  if (!wallet) throw new MockHttpError(404, 'not_found', 'Wallet not found')
+  if (wallet.userId !== userId) throw new MockHttpError(403, 'forbidden', 'This wallet belongs to another account')
+  return wallet
+}
+
+function assertAddressFree(userId: string, address: string, exceptId?: string) {
+  const clash = walletsOf(userId).some((w) => w.id !== exceptId && w.address.toLowerCase() === address.toLowerCase())
+  if (clash) {
+    throw new MockHttpError(409, 'wallet_conflict', 'This address is already registered', {
+      fieldErrors: { address: ['This address is already registered'] },
+    })
+  }
+}
+
+export const accountHandlers = [
+  http.get(
+    api(endpoints.profile),
+    route((ctx) => HttpResponse.json(profileOf(requireUser(ctx))), { auth: true }),
+  ),
+
+  http.patch(
+    api(endpoints.profile),
+    route(
+      async (ctx) => {
+        const user = requireUser(ctx)
+        const body = await parseBody(ctx.request, updateProfileRequestSchema)
+        if (is('validation-error')) validationError({ name: ['This name is not allowed (simulated server rule)'] })
+        const taken = db().users.some((u) => u.id !== user.id && u.email.toLowerCase() === body.email.toLowerCase())
+        if (taken) {
+          throw new MockHttpError(409, 'email_conflict', 'This email is used by another account', {
+            fieldErrors: { email: ['This email is used by another account'] },
+          })
+        }
+        Object.assign(user, { name: body.name, email: body.email, bio: body.bio })
+        persist()
+        return HttpResponse.json(profileOf(user))
+      },
+      { auth: true },
+    ),
+  ),
+
+  http.put(
+    api(endpoints.avatar),
+    route(
+      async (ctx) => {
+        const user = requireUser(ctx)
+        const body = await parseBody(ctx.request, updateAvatarRequestSchema)
+        user.avatarUrl = body.dataUrl
+        persist()
+        return HttpResponse.json(profileOf(user))
+      },
+      { auth: true },
+    ),
+  ),
+
+  http.post(
+    api(endpoints.password),
+    route(
+      async (ctx) => {
+        const user = requireUser(ctx)
+        const body = await parseBody(ctx.request, changePasswordRequestSchema)
+        if (is('validation-error')) validationError({ newPassword: ['This password was used recently (simulated server rule)'] })
+        if ((await hashPassword(user.salt, body.currentPassword)) !== user.passwordHash) {
+          validationError({ currentPassword: ['Current password is incorrect'] })
+        }
+        if (body.currentPassword === body.newPassword) {
+          validationError({ newPassword: ['The new password must be different'] })
+        }
+        user.salt = randomHex(6)
+        user.passwordHash = await hashPassword(user.salt, body.newPassword)
+        // Other sessions of this user are revoked; the current one stays valid.
+        db().sessions = db().sessions.filter((s) => s.userId !== user.id || s.token === ctx.session?.token)
+        persist()
+        return new HttpResponse(null, { status: 204 })
+      },
+      { auth: true },
+    ),
+  ),
+
+  http.get(
+    api(endpoints.wallets),
+    route(
+      (ctx) => {
+        const user = requireUser(ctx)
+        const items = walletsOf(user.id)
+          .sort((a, b) => (a.role === b.role ? 0 : a.role === 'primary' ? -1 : 1))
+          .map(publicWallet)
+        return HttpResponse.json({ items } satisfies WalletList)
+      },
+      { auth: true },
+    ),
+  ),
+
+  http.post(
+    api(endpoints.wallets),
+    route(
+      async (ctx) => {
+        const user = requireUser(ctx)
+        const body = await parseBody(ctx.request, createWalletRequestSchema)
+        if (is('validation-error')) validationError({ address: ['This address is flagged (simulated server rule)'] })
+        if (walletsOf(user.id).some((w) => w.role === body.role)) {
+          throw new MockHttpError(409, 'wallet_conflict', `You already have a ${body.role} wallet`, {
+            fieldErrors: { role: [`You already have a ${body.role} wallet`] },
+          })
+        }
+        assertAddressFree(user.id, body.address)
+        const timestamp = now()
+        const wallet: DbWallet = { id: nextId('wallet'), userId: user.id, ...body, createdAt: timestamp, updatedAt: timestamp }
+        db().wallets.push(wallet)
+        persist()
+        return HttpResponse.json(publicWallet(wallet), { status: 201 })
+      },
+      { auth: true },
+    ),
+  ),
+
+  http.patch(
+    api(endpoints.wallet(':id')),
+    route<{ id: string }>(
+      async (ctx) => {
+        const user = requireUser(ctx)
+        const wallet = findWallet(user.id, ctx.params.id)
+        const body = await parseBody(ctx.request, updateWalletRequestSchema)
+        if (is('validation-error')) validationError({ label: ['This label is not allowed (simulated server rule)'] })
+        if (body.address) assertAddressFree(user.id, body.address, wallet.id)
+        if (body.role && body.role !== wallet.role) {
+          const other = walletsOf(user.id).find((w) => w.id !== wallet.id && w.role === body.role)
+          // Promoting/demoting swaps roles so there is always at most one of each.
+          if (other) other.role = wallet.role
+        }
+        Object.assign(wallet, body, { updatedAt: now() })
+        persist()
+        return HttpResponse.json(publicWallet(wallet))
+      },
+      { auth: true },
+    ),
+  ),
+
+  http.post(
+    api(endpoints.walletConnect(':id')),
+    route<{ id: string }>(
+      async (ctx) => {
+        const user = requireUser(ctx)
+        const wallet = findWallet(user.id, ctx.params.id)
+        const body = await parseBody(ctx.request, connectWalletRequestSchema)
+        if (is('wallet-declined')) {
+          throw new MockHttpError(422, 'wallet_rejected', 'The connection request was declined in the wallet (simulated)')
+        }
+        if (!wallet.networks.includes(body.network)) {
+          validationError({ network: [`${wallet.label} does not support ${body.network}`] })
+        }
+        const connection: WalletConnection = { walletId: wallet.id, network: body.network, connectedAt: now() }
+        return HttpResponse.json(connection)
+      },
+      { auth: true },
+    ),
+  ),
+]
