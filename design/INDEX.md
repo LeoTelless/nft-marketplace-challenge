@@ -28,7 +28,7 @@ Gerado por `scripts/figma-dump.mjs`. PNG @2x em `design/frames`, árvore simplif
 
 - Roboto Mono: pesos 400, 500, 700 (825 usos)
 
-Verifique se cada família está no Google Fonts (ver relatório do agente).
+Verifique se cada família está no Google Fonts.
 
 ## Componentes mais usados (instâncias)
 

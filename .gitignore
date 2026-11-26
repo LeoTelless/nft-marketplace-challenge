@@ -24,12 +24,7 @@ dist-ssr
 *.sw?
 
 # Local
-CLAUDE.md
-.claude/
-design/raw/
 .env
 playwright-report/
 test-results/
-docs/CHECKLIST.md
-docs/AUDITORIA-*.md
 .tanstack/
