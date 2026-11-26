@@ -8,8 +8,13 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
+  // HTML report in playwright-report/ (`npx playwright show-report`); traces, screenshots and
+  // error context of failed tests in test-results/ (both ignored by git; published by CI as artifacts).
   reporter: [['line'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
-  // One baseline per project, no OS suffix: the baselines are versioned and regenerated with `npm run test:visual:update`.
+  outputDir: 'test-results',
+  // One baseline per project, no OS suffix: the baselines are versioned, were generated on Windows
+  // (font rasterization differs on Linux/macOS, so CI skips them) and are regenerated with
+  // `npm run test:visual:update`.
   snapshotPathTemplate: '{testDir}/__screenshots__/{projectName}/{arg}{ext}',
   expect: {
     timeout: 7_000,
