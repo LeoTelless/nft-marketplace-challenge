@@ -14,7 +14,34 @@ import { profileApi } from './api'
 
 export const profileFormSchema = updateProfileRequestSchema
 export type ProfileFormValues = z.infer<typeof profileFormSchema>
-export const PROFILE_FIELDS = ['name', 'email', 'bio'] as const
+export const PROFILE_FIELDS = ['name', 'email', 'username', 'ensName', 'bio'] as const
+
+/**
+ * "Perfil do colecionador" screen: profile data, the primary wallet nickname and an optional
+ * password change, saved by one "Salvar" (as in the frame). The password group is validated
+ * only when one of its fields is filled.
+ */
+export const accountFormSchema = z
+  .object({
+    name: updateProfileRequestSchema.shape.name,
+    username: updateProfileRequestSchema.shape.username,
+    email: updateProfileRequestSchema.shape.email,
+    ensName: updateProfileRequestSchema.shape.ensName,
+    walletLabel: z.string().trim().max(40, 'Use no máximo 40 caracteres'),
+    currentPassword: z.string(),
+    newPassword: z.string(),
+    confirmPassword: z.string(),
+  })
+  .superRefine((values, ctx) => {
+    const { currentPassword, newPassword, confirmPassword } = values
+    if (!currentPassword && !newPassword && !confirmPassword) return
+    if (!currentPassword) ctx.addIssue({ code: 'custom', path: ['currentPassword'], message: 'Informe a senha atual' })
+    const strength = changePasswordRequestSchema.shape.newPassword.safeParse(newPassword)
+    if (!strength.success) ctx.addIssue({ code: 'custom', path: ['newPassword'], message: strength.error.issues[0]?.message ?? 'Senha inválida' })
+    else if (newPassword === currentPassword) ctx.addIssue({ code: 'custom', path: ['newPassword'], message: 'A nova senha deve ser diferente da atual' })
+    if (confirmPassword !== newPassword) ctx.addIssue({ code: 'custom', path: ['confirmPassword'], message: 'As senhas não coincidem' })
+  })
+export type AccountFormValues = z.infer<typeof accountFormSchema>
 
 export const passwordFormSchema = changePasswordRequestSchema
   .extend({ confirmPassword: z.string().min(1, 'Confirme a nova senha') })
