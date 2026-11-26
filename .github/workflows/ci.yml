@@ -43,7 +43,7 @@ jobs:
       # The visual regression baselines (e2e/__screenshots__) were generated on Windows: font
       # rendering differs on Linux, so those 4 tests (8 screenshots) are run locally only.
       - name: E2E tests (Chromium desktop and mobile, without visual regression)
-        run: npx playwright test --grep-invert "visual: "
+        run: 'npx playwright test --grep-invert "visual: "'
 
       - name: Upload Playwright HTML report
         if: ${{ !cancelled() }}
