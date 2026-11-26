@@ -38,9 +38,13 @@ export function NftGallery({ nft }: { nft: Nft }) {
   }
 
   return (
-    <div className="flex flex-col-reverse gap-4 lg:flex-row lg:items-start lg:gap-7">
+    <div className="flex flex-col-reverse gap-4 max-md:-mx-6 max-md:bg-linear-135 max-md:from-surface max-md:to-surface-raised max-md:px-7 max-md:pt-14 max-md:pb-12 lg:flex-row lg:items-start lg:gap-7">
       {nft.images.length > 1 ? (
-        <div role="group" aria-label="Imagens do NFT" className="flex gap-4 max-lg:justify-center lg:w-[100px] lg:flex-col">
+        <div
+          role="group"
+          aria-label="Imagens do NFT"
+          className="flex gap-4 max-lg:justify-center lg:w-[100px] lg:flex-col"
+        >
           {nft.images.map((thumb, index) => (
             <button
               key={thumb.url}
@@ -63,7 +67,7 @@ export function NftGallery({ nft }: { nft: Nft }) {
         </div>
       ) : null}
 
-      <div className="relative bg-linear-135 from-surface to-surface-raised p-0 max-md:-mx-6 max-md:px-7 max-md:pt-2 max-md:pb-10 md:rounded-sm md:bg-none md:bg-surface md:p-4 lg:w-[444px] lg:shrink-0">
+      <div className="relative md:rounded-sm md:bg-surface md:p-4 lg:w-[444px] lg:shrink-0">
         <div className="aspect-square overflow-hidden rounded-3xl">
           <NftImage image={image} sizes="(min-width: 1024px) 404px, (min-width: 768px) 60vw, 100vw" priority />
         </div>

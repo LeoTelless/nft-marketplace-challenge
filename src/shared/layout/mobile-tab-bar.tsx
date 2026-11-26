@@ -7,7 +7,13 @@ import { HeartIcon, HomeIcon, ShopIcon, UserIcon } from '@/shared/ui/icons'
  * Conta. The central "scan" button of the layout was left out: scanning is not in scope
  * (DECISOES.md). Favorites is a private page: visitors are sent to login by its guard.
  */
-export function MobileTabBar({ cartCount, accountHref }: { cartCount: number; accountHref: '/account/profile' | '/login' }) {
+export function MobileTabBar({
+  cartCount,
+  accountHref,
+}: {
+  cartCount: number
+  accountHref: '/account/profile' | '/login'
+}) {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   const item = (active: boolean) =>
     cn(
@@ -61,7 +67,9 @@ export function MobileTabBar({ cartCount, accountHref }: { cartCount: number; ac
           <Link
             to={accountHref}
             aria-current={pathname === accountHref ? 'page' : undefined}
-            className={item(pathname === '/account/profile' || pathname === '/account/wallets' || pathname === '/login')}
+            className={item(
+              pathname === '/account/profile' || pathname === '/account/wallets' || pathname === '/login',
+            )}
           >
             <UserIcon className="size-5" />
             Conta

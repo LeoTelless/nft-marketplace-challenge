@@ -7,10 +7,15 @@ import { Skeleton } from '@/shared/ui/skeleton'
 /** Skeleton with the final geometry of `NftDetail` (gallery, title, price, editions, actions). */
 export function NftDetailSkeleton() {
   return (
-    <div className="container-page pt-4 md:pt-8" aria-busy="true" aria-label="Carregando NFT" data-testid="nft-detail-skeleton">
+    <div
+      className="container-page pt-4 md:pt-8"
+      aria-busy="true"
+      aria-label="Carregando NFT"
+      data-testid="nft-detail-skeleton"
+    >
       <Skeleton className="h-4 w-48 max-md:hidden" />
       <div className="mt-3 flex flex-col gap-8 lg:flex-row lg:gap-8">
-        <div className="flex flex-col-reverse gap-4 lg:w-[573px] lg:shrink-0 lg:flex-row lg:gap-7">
+        <div className="flex flex-col-reverse gap-4 md:max-lg:mx-auto md:max-lg:w-[480px] lg:w-[573px] lg:shrink-0 lg:flex-row lg:gap-7">
           <div className="flex gap-4 max-lg:justify-center lg:w-[100px] lg:flex-col">
             <Skeleton className="size-16 md:size-20 lg:size-[100px]" />
             <Skeleton className="size-16 md:size-20 lg:size-[100px]" />
@@ -42,20 +47,28 @@ export function NftNotFound({ nftId }: { nftId: string }) {
       title="Este NFT não existe ou foi removido"
       testId="nft-not-found"
       actions={
-        <Link to="/" hash="catalogo" className={buttonVariants()}>
+        <Link to="/" hash="catalogo" activeOptions={{ includeHash: true }} className={buttonVariants()}>
           Explorar o catálogo
         </Link>
       }
     >
       <p>
-        Não encontramos nenhum NFT com o identificador <code className="text-foreground">{nftId}</code>. Confira o link ou
-        procure no catálogo.
+        Não encontramos nenhum NFT com o identificador <code className="text-foreground">{nftId}</code>. Confira o link
+        ou procure no catálogo.
       </p>
     </StatusPage>
   )
 }
 
-export function NftDetailError({ message, onRetry, retrying }: { message: string; onRetry: () => void; retrying: boolean }) {
+export function NftDetailError({
+  message,
+  onRetry,
+  retrying,
+}: {
+  message: string
+  onRetry: () => void
+  retrying: boolean
+}) {
   return (
     <div role="alert">
       <StatusPage

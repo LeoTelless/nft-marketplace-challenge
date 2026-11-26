@@ -7,9 +7,21 @@ import { RealtimeIndicator } from './realtime-indicator'
 
 /** The W/C/D letters of the layout are replaced by informative icons (DECISOES.md). */
 const SERVICES: Array<{ icon: LucideIcon; title: string; text: string }> = [
-  { icon: ShieldCheck, title: 'Segurança da carteira', text: 'Proteja sua carteira e colecione arte digital verificada com confiança.' },
-  { icon: Sparkles, title: 'Criadores em destaque', text: 'Conheça artistas, estúdios e comunidades que moldam a cultura digital na rede.' },
-  { icon: BellRing, title: 'Alertas de lançamentos', text: 'Receba calendários de cunhagem, novidades de listas de acesso e análises do mercado.' },
+  {
+    icon: ShieldCheck,
+    title: 'Segurança da carteira',
+    text: 'Proteja sua carteira e colecione arte digital verificada com confiança.',
+  },
+  {
+    icon: Sparkles,
+    title: 'Criadores em destaque',
+    text: 'Conheça artistas, estúdios e comunidades que moldam a cultura digital na rede.',
+  },
+  {
+    icon: BellRing,
+    title: 'Alertas de lançamentos',
+    text: 'Receba calendários de cunhagem, novidades de listas de acesso e análises do mercado.',
+  },
 ]
 
 const SOCIAL = [
@@ -38,7 +50,10 @@ function Newsletter() {
       return
     }
     // Out of scope: say so instead of faking a subscription.
-    setMessage({ tone: 'info', text: 'A newsletter ainda não está disponível nesta demonstração. Nenhum dado foi enviado.' })
+    setMessage({
+      tone: 'info',
+      text: 'A newsletter ainda não está disponível nesta demonstração. Nenhum dado foi enviado.',
+    })
   }
 
   return (
@@ -59,11 +74,18 @@ function Newsletter() {
           aria-describedby={message ? `${id}-message` : undefined}
           className="min-w-0 flex-1 rounded-l-sm bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-text-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-accent"
         />
-        <button type="submit" className="cursor-pointer rounded-r-sm bg-brand pr-1 pl-4 text-lg leading-4 font-bold text-ink hover:bg-brand-accent">
+        <button
+          type="submit"
+          className="cursor-pointer rounded-r-sm bg-brand pr-1 pl-4 text-lg leading-4 font-bold text-ink hover:bg-brand-accent"
+        >
           Enviar
         </button>
       </div>
-      <p id={`${id}-message`} role={message?.tone === 'error' ? 'alert' : 'status'} className={cn('text-[13px] leading-[22px]', message?.tone === 'error' ? 'text-coral' : 'text-text-secondary')}>
+      <p
+        id={`${id}-message`}
+        role={message?.tone === 'error' ? 'alert' : 'status'}
+        className={cn('text-[13px] leading-[22px]', message?.tone === 'error' ? 'text-coral' : 'text-text-secondary')}
+      >
         {message?.text ?? 'Receba lançamentos selecionados, histórias de criadores e novidades do mercado.'}
       </p>
     </form>
@@ -74,7 +96,10 @@ function Newsletter() {
 export function SiteFooter() {
   return (
     <footer className="container-page mt-16 md:mt-24">
-      <section aria-label="Serviços KURIO" className="grid grid-cols-1 gap-8 bg-surface p-6 md:grid-cols-2 md:p-8 lg:grid-cols-[repeat(3,1fr)_1.35fr] lg:gap-0">
+      <section
+        aria-label="Serviços KURIO"
+        className="grid grid-cols-1 gap-8 bg-surface p-6 md:grid-cols-2 md:p-8 lg:grid-cols-[repeat(3,1fr)_1.35fr] lg:gap-0"
+      >
         {SERVICES.map(({ icon: Icon, title, text }) => (
           <div key={title} className="flex flex-col gap-3 lg:border-r lg:border-brand lg:px-4">
             <span className="grid size-[74px] place-content-center rounded-full bg-brand text-ink" aria-hidden="true">
@@ -130,7 +155,13 @@ export function SiteFooter() {
         <div className="flex flex-col gap-2">
           <h2 className={columnTitle}>Central de ajuda</h2>
           <ul>
-            {['Central de ajuda', 'Como comprar NFTs', 'Carteira e segurança', 'Política do mercado', 'Denunciar item'].map((item) => (
+            {[
+              'Central de ajuda',
+              'Como comprar NFTs',
+              'Carteira e segurança',
+              'Política do mercado',
+              'Denunciar item',
+            ].map((item) => (
               <li key={item} className={soonItem}>
                 {item}
               </li>
@@ -153,7 +184,13 @@ export function SiteFooter() {
               ] as const
             ).map(([label, category]) => (
               <li key={category}>
-                <Link to="/" search={{ category: [category] }} hash="catalogo" className={linkItem}>
+                <Link
+                  to="/"
+                  search={{ category: [category] }}
+                  hash="catalogo"
+                  activeOptions={{ includeHash: true }}
+                  className={linkItem}
+                >
                   {label}
                 </Link>
               </li>

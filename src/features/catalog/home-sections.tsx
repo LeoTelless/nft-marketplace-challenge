@@ -102,6 +102,7 @@ export function HomeHero() {
                 to="."
                 search={(prev) => prev}
                 hash="catalogo"
+                activeOptions={{ includeHash: true }}
                 className="mt-1 inline-flex w-fit items-center gap-2 py-1 text-xs leading-[14px] font-bold text-brand-accent"
               >
                 EXPLORAR <ArrowRightIcon className="size-4" />
@@ -125,7 +126,7 @@ export function HomeHero() {
         <div className="flex items-center gap-10 lg:gap-[110px] lg:pl-10">
           <div className="flex min-w-0 flex-1 flex-col">
             <p className="text-sm leading-4 font-medium tracking-[0.1em] text-foreground">Bem-vindo à Kurio</p>
-            <h1 className="mt-2 text-[32px] leading-[52px] font-bold text-foreground uppercase lg:text-[43px] lg:leading-[70px]">
+            <h1 className="mt-2 text-[28px] leading-[44px] font-bold text-foreground uppercase lg:text-[43px] lg:leading-[70px]">
               Seja dono do futuro
               <br />
               da arte digital
@@ -139,6 +140,7 @@ export function HomeHero() {
               to="."
               search={(prev) => prev}
               hash="catalogo"
+              activeOptions={{ includeHash: true }}
               className={cn(buttonVariants(), 'mt-8 h-10 w-[140px] pr-9 pl-7 text-base font-bold')}
             >
               EXPLORAR
@@ -222,6 +224,7 @@ export function HomePromos() {
               to="/"
               search={{ ...promo.search }}
               hash="catalogo"
+              activeOptions={{ includeHash: true }}
               aria-label={promo.label}
               className={cn(buttonVariants(), 'h-10 w-[140px] font-medium')}
             >

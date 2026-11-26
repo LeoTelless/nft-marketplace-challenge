@@ -18,7 +18,11 @@ export function RealtimeIndicator() {
   const status = useRealtimeStatus()
   const connected = status === 'connected'
   return (
-    <p data-testid="realtime-status" data-status={status} className="inline-flex items-center gap-2 text-xs leading-5 text-text-secondary">
+    <p
+      data-testid="realtime-status"
+      data-status={status}
+      className="inline-flex items-center gap-2 text-xs leading-5 text-text-secondary"
+    >
       <span
         aria-hidden="true"
         className={cn('size-2 rounded-full', connected ? 'bg-success' : 'border border-amber bg-transparent')}

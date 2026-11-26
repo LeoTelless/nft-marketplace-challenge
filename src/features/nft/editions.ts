@@ -12,11 +12,7 @@ export function editionLabel(edition: Pick<Edition, 'name'>): string {
 
 /** Edition shown on arrival: the requested one (URL) if it exists, else the first available, else the first. */
 export function initialEdition(nft: Nft, requestedId: string | undefined): Edition {
-  return (
-    nft.editions.find((e) => e.id === requestedId) ??
-    nft.editions.find((e) => e.available > 0) ??
-    nft.editions[0]
-  )
+  return nft.editions.find((e) => e.id === requestedId) ?? nft.editions.find((e) => e.available > 0) ?? nft.editions[0]
 }
 
 /** "nft-042" → "#0042" (token id shown in the layout). */

@@ -94,7 +94,9 @@ export function RouteErrorPage({ error, reset }: ErrorComponentProps) {
       }
     >
       <p>Não foi possível exibir esta tela. Tente novamente; se o problema continuar, volte ao início.</p>
-      {import.meta.env.DEV && error instanceof Error ? <pre className="mt-4 overflow-auto text-left text-xs text-coral">{error.message}</pre> : null}
+      {import.meta.env.DEV && error instanceof Error ? (
+        <pre className="mt-4 overflow-auto text-left text-xs text-coral">{error.message}</pre>
+      ) : null}
     </StatusPage>
   )
 }

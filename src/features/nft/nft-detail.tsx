@@ -40,18 +40,26 @@ export function NftDetail({
       <Breadcrumb name={nft.name} />
 
       <div className="mt-3 flex flex-col gap-8 lg:flex-row lg:gap-8">
-        <div className="relative lg:w-[573px] lg:shrink-0">
-          <MobileImageActions isFavorite={isFavorite} pending={favoritePending} onToggle={toggleFavorite} name={nft.name} />
+        <div className="relative md:max-lg:mx-auto md:max-lg:w-[480px] lg:w-[573px] lg:shrink-0">
+          <MobileImageActions
+            isFavorite={isFavorite}
+            pending={favoritePending}
+            onToggle={toggleFavorite}
+            name={nft.name}
+          />
           <NftGallery nft={nft} />
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col gap-5 max-md:relative max-md:z-10 max-md:-mx-6 max-md:-mt-14 max-md:rounded-t-[31px] max-md:bg-surface max-md:px-6 max-md:pt-8 max-md:pb-4">
+        <div className="flex min-w-0 flex-1 flex-col gap-5 max-md:relative max-md:z-10 max-md:-mx-6 max-md:-mt-8 max-md:rounded-t-[31px] max-md:bg-surface max-md:px-6 max-md:pt-8 max-md:pb-4">
           <header className="flex flex-col gap-3">
             <h1 className="text-xl leading-6 font-bold text-foreground md:text-[28px] md:leading-[37px]">{nft.name}</h1>
             <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-brand/30 pb-3">
               <p className="text-[22px] leading-6 font-bold text-brand-accent max-md:hidden">
                 <span className="sr-only">Preço da edição {editionLabel(edition)}: </span>
-                <span data-testid="detail-price" className={cn('rounded-xs transition-colors', announcement.flash && 'bg-brand/20')}>
+                <span
+                  data-testid="detail-price"
+                  className={cn('rounded-xs transition-colors', announcement.flash && 'bg-brand/20')}
+                >
                   {formatEth(edition.price)}
                 </span>
               </p>
@@ -98,7 +106,13 @@ export function NftDetail({
             <div className="flex gap-1">
               <dt>Coleção:</dt>
               <dd>
-                <Link to="/" search={{ category: [nft.category] }} hash="catalogo" className="hover:text-brand-accent hover:underline">
+                <Link
+                  to="/"
+                  search={{ category: [nft.category] }}
+                  hash="catalogo"
+                  activeOptions={{ includeHash: true }}
+                  className="hover:text-brand-accent hover:underline"
+                >
                   {CATEGORY_LABELS[nft.category]}
                 </Link>
               </dd>
@@ -126,7 +140,7 @@ function Breadcrumb({ name }: { name: string }) {
         </li>
         <li aria-hidden="true">/</li>
         <li>
-          <Link to="/" hash="catalogo" className="hover:text-brand-accent">
+          <Link to="/" hash="catalogo" activeOptions={{ includeHash: true }} className="hover:text-brand-accent">
             Mercado
           </Link>
         </li>
@@ -156,7 +170,7 @@ function MobileImageActions({
   const circle =
     'grid size-[35px] cursor-pointer place-content-center rounded-full border border-line bg-surface-raised text-foreground'
   return (
-    <div className="pointer-events-none absolute inset-x-0 -top-1 z-10 flex justify-between md:hidden">
+    <div className="pointer-events-none absolute inset-x-1 top-2 z-10 flex justify-between md:hidden">
       <button
         type="button"
         aria-label="Voltar"
@@ -338,7 +352,10 @@ function PurchasePanel({
             describedBy={hint ? hintId : undefined}
           />
         </div>
-        <p aria-hidden="true" className={cn('text-xl leading-4 font-bold text-brand-accent md:hidden', priceFlash && 'bg-brand/20')}>
+        <p
+          aria-hidden="true"
+          className={cn('text-xl leading-4 font-bold text-brand-accent md:hidden', priceFlash && 'bg-brand/20')}
+        >
           {formatEth(edition.price)}
         </p>
         <div className="flex items-center gap-3 md:gap-2">
@@ -398,7 +415,9 @@ function useLiveChanges(nft: Nft, edition: Edition) {
       const parts: string[] = []
       const priceChange = compareEth(edition.price, seen.price)
       if (priceChange !== 0) {
-        parts.push(`Preço ${priceChange > 0 ? 'subiu' : 'caiu'} de ${formatEth(seen.price)} para ${formatEth(edition.price)}.`)
+        parts.push(
+          `Preço ${priceChange > 0 ? 'subiu' : 'caiu'} de ${formatEth(seen.price)} para ${formatEth(edition.price)}.`,
+        )
       }
       if (edition.available !== seen.available) {
         parts.push(
@@ -443,7 +462,11 @@ function ShareLinks({ nft }: { nft: Nft }) {
       >
         <LinkedinIcon className="size-8" />
       </a>
-      <a className={link} href={`mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}`} aria-label="Compartilhar por e-mail">
+      <a
+        className={link}
+        href={`mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}`}
+        aria-label="Compartilhar por e-mail"
+      >
         <Mail className="size-[18px]" aria-hidden="true" />
       </a>
       <a
@@ -473,8 +496,8 @@ export function NftDetailsSection({ nft }: { nft: Nft }) {
       </div>
       <div className="mt-4 flex flex-col gap-3 text-sm leading-6 text-text-secondary">
         <p>
-          {nft.description} A propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um
-          registro permanente de procedência registrado na rede.
+          {nft.description} A propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e
+          um registro permanente de procedência registrado na rede.
         </p>
         <div>
           <h3 className="font-bold text-foreground">Rede:</h3>
@@ -482,7 +505,9 @@ export function NftDetailsSection({ nft }: { nft: Nft }) {
         </div>
         <div>
           <h3 className="font-bold text-foreground">Contrato:</h3>
-          <p>Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.</p>
+          <p>
+            Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.
+          </p>
         </div>
         <div>
           <h3 className="font-bold text-foreground">Direitos autorais:</h3>

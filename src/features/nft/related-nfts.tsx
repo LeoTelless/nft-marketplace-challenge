@@ -18,7 +18,10 @@ export function RelatedNfts({ nft }: { nft: Nft }) {
   const cell = 'w-[175px] shrink-0 snap-start md:w-[220px] lg:w-auto'
   return (
     <section aria-labelledby="related-title" className="container-page mt-16 md:mt-24">
-      <h2 id="related-title" className="border-b border-brand/30 pb-3 text-[17px] leading-4 font-bold text-brand-accent">
+      <h2
+        id="related-title"
+        className="border-b border-brand/30 pb-3 text-[17px] leading-4 font-bold text-brand-accent"
+      >
         Mais desta coleção
       </h2>
       {items ? (

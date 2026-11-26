@@ -136,7 +136,6 @@ function PriceFilter({
   const [draftMax, setDraftMax] = useState(maxPrice ?? '')
   const [error, setError] = useState<string | null>(null)
 
-
   const sliderValue = [toNumber(draftMin, PRICE_MIN), toNumber(draftMax, PRICE_MAX)]
 
   function apply(event: FormEvent) {

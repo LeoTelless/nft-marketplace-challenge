@@ -13,7 +13,10 @@ export function CartButton({ count, className }: { count: number; className?: st
       to="/cart"
       aria-label={label}
       data-testid="header-cart"
-      className={cn('relative grid size-10 place-content-center rounded-full text-foreground hover:text-brand-accent', className)}
+      className={cn(
+        'relative grid size-10 place-content-center rounded-full text-foreground hover:text-brand-accent',
+        className,
+      )}
     >
       <CartIcon className="size-6" />
       {count > 0 ? (

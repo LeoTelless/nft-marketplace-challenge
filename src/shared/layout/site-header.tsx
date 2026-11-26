@@ -4,7 +4,15 @@ import { Popover as PopoverPrimitive } from 'radix-ui'
 import { useState, type ReactNode } from 'react'
 import { cn } from '@/shared/lib/utils'
 import { SearchIcon } from '@/shared/ui/icons'
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/sheet'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/shared/ui/sheet'
 
 type NavKey = 'home' | 'market'
 
@@ -31,7 +39,9 @@ const navItemClass = (active: boolean) =>
   cn(
     'relative flex h-[45px] items-start text-base leading-[21px] whitespace-nowrap transition-colors',
     'after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-brand after:transition-opacity',
-    active ? 'font-bold text-brand-accent after:opacity-100' : 'text-foreground after:opacity-0 hover:text-brand-accent',
+    active
+      ? 'font-bold text-brand-accent after:opacity-100'
+      : 'text-foreground after:opacity-0 hover:text-brand-accent',
   )
 
 /** Pages outside the scope (editorial): shown, but clearly not navigable. */
@@ -50,12 +60,21 @@ function DesktopNav() {
     <nav aria-label="Principal">
       <ul className="flex items-start gap-6 lg:gap-10">
         <li>
-          <Link to="/" aria-current={active === 'home' ? 'page' : undefined} className={navItemClass(active === 'home')}>
+          <Link
+            to="/"
+            aria-current={active === 'home' ? 'page' : undefined}
+            className={navItemClass(active === 'home')}
+          >
             Início
           </Link>
         </li>
         <li>
-          <Link to="/" hash="catalogo" className={navItemClass(active === 'market')}>
+          <Link
+            to="/"
+            hash="catalogo"
+            activeOptions={{ includeHash: true }}
+            className={navItemClass(active === 'market')}
+          >
             Mercado
           </Link>
         </li>
@@ -149,14 +168,23 @@ function MobileMenu({ account }: { account: ReactNode }) {
           <ul>
             <li>
               <SheetClose asChild>
-                <Link to="/" aria-current={active === 'home' ? 'page' : undefined} className={linkClass(active === 'home')}>
+                <Link
+                  to="/"
+                  aria-current={active === 'home' ? 'page' : undefined}
+                  className={linkClass(active === 'home')}
+                >
                   Início
                 </Link>
               </SheetClose>
             </li>
             <li>
               <SheetClose asChild>
-                <Link to="/" hash="catalogo" className={linkClass(active === 'market')}>
+                <Link
+                  to="/"
+                  hash="catalogo"
+                  activeOptions={{ includeHash: true }}
+                  className={linkClass(active === 'market')}
+                >
                   Mercado
                 </Link>
               </SheetClose>
@@ -180,7 +208,15 @@ function MobileMenu({ account }: { account: ReactNode }) {
  * account. `cart` and `account` are slots filled by the root layout with session-aware
  * components (`CartButton`, `LoginButton` / `UserMenu`).
  */
-export function SiteHeader({ cart, account, mobileAccount }: { cart: ReactNode; account: ReactNode; mobileAccount: ReactNode }) {
+export function SiteHeader({
+  cart,
+  account,
+  mobileAccount,
+}: {
+  cart: ReactNode
+  account: ReactNode
+  mobileAccount: ReactNode
+}) {
   return (
     <header className="container-page pt-4 md:pt-6">
       <div className="relative flex h-[45px] items-start justify-between border-b border-brand/30">

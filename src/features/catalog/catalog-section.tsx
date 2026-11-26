@@ -42,7 +42,12 @@ export function CatalogCompactBar({ className }: { className?: string }) {
   const list = useNftList(toListQuery(search))
   return (
     <div className={cn('container-page flex items-center gap-2 lg:hidden', className)}>
-      <CatalogSearchField id="catalog-search-compact" value={search.q} onSearch={(q) => update({ q })} className="flex-1" />
+      <CatalogSearchField
+        id="catalog-search-compact"
+        value={search.q}
+        onSearch={(q) => update({ q })}
+        className="flex-1"
+      />
       <FiltersSheet
         activeCount={countActive(search)}
         onClear={() => replaceAll(clearedFilters(search))}
@@ -242,6 +247,13 @@ function CatalogError({ message, onRetry, retrying }: { message: string; onRetry
   )
 }
 
+/**
+ * Page 1 is written as an explicit `undefined` (stripped from the URL) and compared with
+ * `explicitUndefined`, so the router marks only the current page link as active.
+ */
+const PAGE_LINK_ACTIVE = { explicitUndefined: true } as const
+const pageParam = (page: number) => (page === 1 ? undefined : page)
+
 function CatalogPagination({ page, totalPages }: { page: number; totalPages: number }) {
   const scrollTop = () => document.getElementById('catalogo')?.scrollIntoView({ block: 'start' })
   return (
@@ -252,7 +264,8 @@ function CatalogPagination({ page, totalPages }: { page: number; totalPages: num
             <Link
               from="/"
               to="."
-              search={(prev) => ({ ...prev, page: page - 1 })}
+              search={(prev) => ({ ...prev, page: pageParam(page - 1) })}
+              activeOptions={PAGE_LINK_ACTIVE}
               resetScroll={false}
               onClick={scrollTop}
               aria-label="Página anterior"
@@ -272,11 +285,11 @@ function CatalogPagination({ page, totalPages }: { page: number; totalPages: num
               <Link
                 from="/"
                 to="."
-                search={(prev) => ({ ...prev, page: item })}
+                search={(prev) => ({ ...prev, page: pageParam(item) })}
+                activeOptions={PAGE_LINK_ACTIVE}
                 resetScroll={false}
                 onClick={scrollTop}
                 aria-label={`Página ${item}`}
-                aria-current={item === page ? 'page' : undefined}
                 className={paginationItemClass({ current: item === page })}
               >
                 {item}
@@ -289,7 +302,8 @@ function CatalogPagination({ page, totalPages }: { page: number; totalPages: num
             <Link
               from="/"
               to="."
-              search={(prev) => ({ ...prev, page: page + 1 })}
+              search={(prev) => ({ ...prev, page: pageParam(page + 1) })}
+              activeOptions={PAGE_LINK_ACTIVE}
               resetScroll={false}
               onClick={scrollTop}
               aria-label="Próxima página"
