@@ -50,7 +50,7 @@ Toda resposta não-2xx usa o envelope:
 | 401 | `invalid_credentials`, `unauthorized`, `session_expired` | Sessão ausente, inválida ou expirada |
 | 403 | `forbidden` | Autenticado, sem permissão (ex.: pedido ou carteira de outro usuário) |
 | 404 | `not_found` | Recurso inexistente |
-| 409 | `availability_conflict`, `email_conflict`, `idempotency_conflict`, `quote_outdated`, `wallet_conflict` | Conflito de estado |
+| 409 | `availability_conflict`, `email_conflict`, `idempotency_conflict`, `quote_outdated`, `wallet_conflict`, `wallet_not_connected` | Conflito de estado |
 | 422 | `validation_error`, `coupon_invalid`, `coupon_expired`, `wallet_rejected` | Validação semântica (com `fieldErrors`) |
 | 5xx | `server_error`, `service_unavailable` | Falha transitória |
 
@@ -100,7 +100,7 @@ Visitante: `X-Cart-Id`; autenticado: carrinho da conta.
 
 | Método | Rota | Corpo | Resposta | Erros |
 | --- | --- | --- | --- | --- |
-| POST | `/orders` | `{ quoteId, quoteFingerprint, walletId, network, collector }` + cabeçalho `Idempotency-Key` | 201 `Order` `pending`; 200 com o mesmo `Order` se a chave já foi usada com o mesmo corpo | 400 `idempotency_key_required`; 409 `idempotency_conflict` (mesma chave, corpo diferente), `quote_outdated` (com `details.quote`), `availability_conflict` (com `details.issues` e `details.quote`); 422 |
+| POST | `/orders` | `{ quoteId, quoteFingerprint, walletId, network, collector }` + cabeçalho `Idempotency-Key` | 201 `Order` `pending`; 200 com o mesmo `Order` se a chave já foi usada com o mesmo corpo | 400 `idempotency_key_required`; 409 `idempotency_conflict` (mesma chave, corpo diferente), `wallet_not_connected` (a carteira do pedido não está conectada na rede do pedido nesta sessão), `quote_outdated` (com `details.quote`), `availability_conflict` (com `details.issues` e `details.quote`); 422 (`walletId` que não é do usuário, rede que a carteira não opera) |
 | GET | `/orders` | , | `{ items: Order[] }` (mais recentes primeiro) | 401 |
 | GET | `/orders/:id` | , | `Order` | 404; 403 (pedido de outro usuário) |
 
@@ -122,9 +122,12 @@ Visitante: `X-Cart-Id`; autenticado: carrinho da conta.
 | GET | `/wallets` | , | `{ items: Wallet[] }` (principal primeiro) | 401 |
 | POST | `/wallets` | `{ label, address, provider, role, networks }` | 201 `Wallet` | 409 `wallet_conflict` (papel já ocupado ou endereço repetido); 422 |
 | PATCH | `/wallets/:id` | campos parciais; promover a `primary` rebaixa a principal atual | `Wallet` | 403/404; 409; 422 |
-| POST | `/wallets/:id/connect` | `{ network }` | `{ walletId, network, connectedAt }` (conexão simulada) | 422 `wallet_rejected`; 403/404 |
+| POST | `/wallets/:id/connect` | `{ network }` | `{ walletId, network, connectedAt }` (conexão simulada, registrada no servidor) | 422 `wallet_rejected` (recusa na carteira; a sessão fica sem carteira conectada) ou `validation_error` (rede não suportada); 403/404 |
+| DELETE | `/wallets/:id/connect` | , | 204 (desconecta, se for a carteira conectada) | 403/404 |
 
 Cada usuário tem uma carteira principal e, no máximo, uma secundária.
+
+**Conexão de carteira.** O servidor guarda **uma conexão por sessão** (token), como uma carteira de navegador, que expõe uma conta em uma rede por vez: conectar outra carteira ou rede substitui a anterior, uma recusa (`wallet_rejected`) ou o `DELETE` a remove, e ela termina com a sessão (logout, expiração, novo login). `POST /orders` só cria o pedido se a carteira do corpo for do usuário, operar na rede escolhida e estiver conectada **nessa rede, nesta sessão**; caso contrário responde 409 `wallet_not_connected`, antes de qualquer outra verificação de estado. O cliente espelha esse estado (`useWalletConnection`): "Desconectar carteira" chama o `DELETE`, e um 409 `wallet_not_connected` (por exemplo, a carteira desconectou do lado dela, simulado por `window.__mocks.disconnectWallets()`) fecha a revisão, marca a carteira como desconectada e mostra a mensagem no campo da carteira. Não há endpoint de leitura da conexão: depois de um refresh o checkout pede para conectar de novo. A recuperação de uma tentativa de compra já enviada (mesma `Idempotency-Key`) não depende da conexão, porque o servidor devolve o pedido existente antes dessa verificação.
 
 ## 3. Eventos Socket.IO
 
@@ -150,9 +153,9 @@ Cada payload é validado com Zod (inválidos são descartados com `console.warn`
 
 ## 4. Reconciliação REST × Socket.IO
 
-- O socket usa reconexão automática (atraso de 500 ms a 3 s). O status (`connecting`, `connected`, `reconnecting`, `unauthorized`, `idle`) é exposto no rodapé com texto e ícone (`data-status` para testes); só a conexão mais recente atualiza o status.
+- O socket usa reconexão automática com atraso de 300 ms dobrando até 2 s, sem variação aleatória (`randomizationFactor: 0`), e `timeout` de 4 s por tentativa de conexão (`realtime-client.ts`), de modo que o tempo de recuperação é limitado e reproduzível. O status (`connecting`, `connected`, `reconnecting`, `unauthorized`, `idle`) é exposto no rodapé com texto e ícone (`data-status` para testes); só a conexão mais recente atualiza o status.
 - Em cada `reconnect`, o cliente chama `queryClient.invalidateQueries()`: tudo que está ativo (catálogo, detalhe, carrinho, cotação, pedidos) é refeito por REST, o que cobre eventos perdidos enquanto estava offline. Consultas inativas ficam obsoletas e refazem na próxima montagem.
-- O pedido (`orders/$orderId`) também é reconciliado por REST na montagem da tela (acesso direto, refresh) e no foco da janela. A função de consulta nunca devolve uma versão menor que a já recebida por evento.
+- O pedido (`orders/$orderId`) também é reconciliado por REST na montagem da tela (acesso direto, refresh) e no foco da janela, e, enquanto está `pending`, por polling a cada 3 s (`PENDING_ORDER_POLL_MS` em `use-order.ts`): mesmo que o `order.updated` se perca sem queda perceptível do socket, a tela chega ao estado final. A função de consulta nunca devolve uma versão menor que a já recebida por evento.
 - Eventos e REST convergem porque, no mock, toda mutação de NFT ou pedido passa pelo mesmo caminho do banco (`mutateNft`/`mutateOrder`), que incrementa a versão, persiste e emite o evento.
 - Listeners e conexões: `RealtimeProvider` cria uma conexão por `(token, userId)` e a destrói (remove listeners, desconecta, limpa o guard) ao trocar de usuário, no logout ou na desmontagem; os hooks de aviso (`onRealtimeNotice`) removem seus listeners ao desmontar.
 - Pedido pendente com a conexão interrompida: o estado é recuperado após a reconexão ou recarga, via REST, sem criar nova compra (a tentativa de compra é idempotente, ver seção 7).
@@ -161,6 +164,7 @@ Cada payload é validado com Zod (inválidos são descartados com `console.warn`
 
 - **Armazenamento**: apenas o token opaco (`nft.session.token`) e o id do carrinho de visitante (`nft.cart.guestId`) ficam em `localStorage`. O usuário é sempre recuperado por `GET /session`, nunca lido do armazenamento. A consulta da sessão tem a chave `['session', token]`, então um novo login nunca lê a sessão anterior.
 - **Duração e expiração**: o servidor simulado emite sessões de 2 h. Um 401 em requisição que enviou token (interceptor do Axios) ou a rejeição do handshake do socket emite `session:expired`. O `SessionProvider` (tratado uma vez por sessão, mesmo com várias requisições falhando) limpa o token e os dados privados, avisa "Sua sessão expirou." e, em rota privada, redireciona para `/login?redirect=<local atual>&reason=expired`; em rotas públicas, a navegação continua como visitante e as consultas são refeitas. Um 401 de login com senha errada não é tratado como expiração.
+- **Falha ao validar a sessão**: se `GET /session` falha por rede, timeout ou 5xx, a consulta segue a política geral (até 2 novas tentativas com atraso exponencial). Persistindo a falha, a sessão fica em estado `error` (o token é mantido; só um 401 encerra a sessão): o header troca "Entrar"/menu por "Tentar novamente", o carrinho mostra "Não foi possível carregar o carrinho" com "Tentar novamente" (o dono do carrinho é desconhecido, então nenhum carrinho é exibido) e as rotas privadas caem na fronteira de erro, cujo "Tentar novamente" refaz o `beforeLoad`.
 - **Guarda de rota**: `_authenticated` valida a sessão no `beforeLoad` (via cache, no máximo um `GET /session` por token) e redireciona para `/login?redirect=...&reason=required|expired`. `redirect` só aceita caminhos internos (sem `//host`, sem esquema, sem voltar para `/login` ou `/register`), evitando redirecionamento aberto.
 - **Retomada**: depois de autenticar, o usuário volta ao destino. O rascunho do formulário de checkout e a tentativa de compra pendente ficam em `sessionStorage` por usuário (`nft.user.<userId>.*`) e são retomados.
 - **Login/cadastro**: `startSession` descarta cache privado, carrinhos, avisos e armazenamento de outros usuários, gira o id do carrinho de visitante (o carrinho foi fundido no servidor) e só então publica o novo token.
@@ -178,7 +182,7 @@ Cada payload é validado com Zod (inválidos são descartados com `console.warn`
 
 ## 7. Checkout e pedidos
 
-1. **Revisão**: o formulário (dados do colecionador, carteira, rede) é validado com o mesmo schema dos contratos; a carteira precisa estar conectada (`POST /wallets/:id/connect`) para a rede escolhida. "Confirmar compra" abre o diálogo de revisão com o total da cotação, e o `fingerprint` exibido vira o aceito pelo usuário.
+1. **Revisão**: o formulário (dados do colecionador, carteira, rede) é validado com o mesmo schema dos contratos; a carteira precisa estar conectada (`POST /wallets/:id/connect`) para a rede escolhida, regra que o servidor também aplica na criação do pedido (409 `wallet_not_connected`, ver "Conexão de carteira" na seção 2). "Confirmar compra" abre o diálogo de revisão com o total da cotação, e o `fingerprint` exibido vira o aceito pelo usuário.
 2. **Bloqueio por cotação desatualizada**: se a cotação mudar depois da revisão (evento `nft.updated`, cupom, rede, revalidação), o botão fica bloqueado até "Aceitar novos valores". Motivos de bloqueio: cotação em atualização, alterada, com problemas (esgotado/insuficiente), carteira desconectada, carrinho vazio.
 3. **Revalidação**: ao confirmar, uma nova cotação é pedida (`staleTime: 0`); se o `fingerprint` diferir do aceito, nada é enviado e os novos valores são exibidos. O servidor repete a verificação: cotação expirada ou fingerprint diferente retorna 409 `quote_outdated` com a cotação atual; estoque insuficiente retorna 409 `availability_conflict`; nesses casos a cotação nova entra no cache.
 4. **Idempotência**: antes de enviar, a tentativa (`Idempotency-Key` = `order_<uuid>` e o corpo exato) é gravada em `sessionStorage` por usuário. Cliques repetidos durante o envio são ignorados. Em timeout, erro de rede, 5xx ou sessão expirada, a tentativa é mantida e uma ação explícita do usuário reenvia a mesma chave e o mesmo corpo, e o servidor devolve o mesmo pedido (200). Mesma chave com corpo diferente gera 409 `idempotency_conflict`. Mutations nunca sofrem retry automático (`retry: 0`). A tentativa só é apagada quando há resposta definitiva.
@@ -201,7 +205,7 @@ Valores reais de `src/shared/api/query-client.ts` e dos hooks:
 | Cotação | `staleTime: 0`, `placeholderData: keepPreviousData` |
 | Contagem por coleção (filtros do catálogo) | `staleTime` 5 min; uma requisição `pageSize=1` por categoria (não há endpoint de facetas) |
 | Lista do catálogo | `placeholderData: keepPreviousData` (página anterior visível durante o carregamento) |
-| Detalhe do NFT | `placeholderData` a partir de qualquer página de lista em cache (detalhe instantâneo) |
+| Detalhe do NFT | `placeholderData` a partir de qualquer página de lista em cache (detalhe instantâneo); `retryOnMount: false`, porque o loader da rota já busca a cada navegação (um 404 é pedido uma única vez) |
 | Timeout do Axios | 15 s |
 
 **Chaves**: `['nfts','list',query]`, `['nfts','detail',id]`, `['user',userId,'favorites'|'profile'|'wallets'|'orders'|'orders',orderId]`, `['cart', owner]` e `['cart', owner, 'quote', request]`, `['session', token]`.
@@ -216,9 +220,9 @@ Valores reais de `src/shared/api/query-client.ts` e dos hooks:
 
 **Arquitetura.** MSW 3 intercepta REST pelo Service Worker (`public/mockServiceWorker.js`) e WebSocket por interceptação na página. `src/mocks/browser.ts` registra os handlers (`handlers/auth.ts`, `catalog.ts`, `cart.ts`, `orders.ts`, `account.ts`) e o servidor Socket.IO simulado (`realtime.ts`). Todos os handlers passam por `route()` (`handlers/utils.ts`), que aplica os comportamentos transversais dos cenários (latência, offline, 5xx, flaky, sessão expirada, 403), autentica pelo token Bearer e converte `MockHttpError` no envelope de erro. Contratos (schemas e `endpoints`) são os mesmos do app. A ativação é por `VITE_ENABLE_MOCKS=true`, com `import()` dinâmico antes da renderização (o app só cria o cliente Socket.IO depois que o MSW iniciou).
 
-**Persistência e reset.** Um banco único em memória (`db/store.ts`) é persistido em `localStorage` (`nft-mocks:db:v3`), então refresh preserva usuários, carrinhos, pedidos e favoritos. `resetDb()` reconstrói o estado semente exato: 48 NFTs determinísticos (gerador com semente fixa, 6 categorias, preços de 0,0042 a 12,5 ETH, 1 a 3 edições, NFTs esgotados e com uma edição esgotada), 2 usuários, carteiras, cupons e favoritos iniciais. Ids são sequenciais e persistidos. Toda mutação de NFT ou pedido passa por `mutateNft`/`mutateOrder`, que incrementam a versão e notificam o servidor Socket.IO: REST e eventos nunca divergem. Reset: `?mocks=reset`, botão do painel Demo ou `window.__mocks.reset()` (volta também ao cenário `default`).
+**Persistência e reset.** Um banco único em memória (`db/store.ts`) é persistido em `localStorage` (`nft-mocks:db:v4`), então refresh preserva usuários, carrinhos, pedidos, favoritos e conexões de carteira. `resetDb()` reconstrói o estado semente exato: 48 NFTs determinísticos (gerador com semente fixa, 6 categorias, preços de 0,0042 a 12,5 ETH, 1 a 3 edições, NFTs esgotados e com uma edição esgotada), 2 usuários, carteiras, cupons e favoritos iniciais. Ids são sequenciais e persistidos. Toda mutação de NFT ou pedido passa por `mutateNft`/`mutateOrder`, que incrementam a versão e notificam o servidor Socket.IO: REST e eventos nunca divergem. Reset: `?mocks=reset`, botão do painel Demo ou `window.__mocks.reset()` (volta também ao cenário `default`).
 
-**Cenários.** Lista completa com efeitos no [README.md](./README.md#seleção-e-reset-de-cenários). A seleção persiste em `localStorage` (`nft-mocks:scenario`); cenários de uso único registram o consumo (`nft-mocks:scenario-consumed`). Latências seguem sequências fixas indexadas pelo contador de requisições. `window.__mocks` expõe o controle (alterar NFT, resolver pedido, expirar sessões, repetir evento, emitir evento antigo, derrubar/restaurar o socket); ele só atua no servidor simulado, nunca no cache ou na interface. O painel Demo (`features/demo`, carregado sob demanda e visível só com mocks ativos) usa essa mesma superfície.
+**Cenários.** Lista completa com efeitos no [README.md](./README.md#seleção-e-reset-de-cenários). A seleção persiste em `localStorage` (`nft-mocks:scenario`); cenários de uso único registram o consumo (`nft-mocks:scenario-consumed`). Latências seguem sequências fixas indexadas pelo contador de requisições. `window.__mocks` expõe o controle (alterar NFT, resolver pedido, expirar sessões, desconectar carteiras, repetir evento, emitir evento antigo, derrubar/restaurar o socket); ele só atua no servidor simulado, nunca no cache ou na interface. O painel Demo (`features/demo`, carregado sob demanda e visível só com mocks ativos) usa essa mesma superfície.
 
 **Transporte do Socket.IO simulado e limitações.** O servidor usa `ws.link` do MSW e `@mswjs/socket.io-binding` (codificação Engine.IO/Socket.IO). O cliente é o `socket.io-client` real. Limitações tratadas ou aceitas:
 
@@ -248,7 +252,7 @@ O que foi feito:
 - Imagens de NFT com `alt` do contrato; ícones decorativos com `aria-hidden`.
 - Skeletons com shimmer preservam as dimensões do conteúdo (sem deslocamento de layout) e respeitam `prefers-reduced-motion`.
 - Contraste: ver ajuste de cor de erro abaixo; ordem de foco e semântica de landmarks (`header`, `main`, `footer`, `nav`).
-- Responsividade verificada em 390, 768 e 1440 px, sem overflow horizontal.
+- Responsividade verificada em 390, 768, 1024 e 1440 px, sem overflow horizontal e sem elementos flutuantes sobre o conteúdo.
 
 Ajustes em relação ao layout: a cor de erro do Figma (`#ED1B2E`, 4,0:1 sobre `#241612`) foi trocada por `#F0805F` (6,6:1) sempre acompanhada de ícone e texto; foco visível acrescentado onde o layout não o define; rótulos acessíveis ocultos nos campos de login/cadastro; "(em breve)" textual em itens desabilitados.
 
@@ -259,13 +263,14 @@ O Figma tem inconsistências. A regra foi **preservar a identidade** (cores, Rob
 ### Geral e layout base
 
 - Card de NFT: usa o frame 206 do grid do Início como padrão único (os frames 230 e 231 eram inconsistentes entre si); nome e valor sempre alinhados. Elementos sem função (retângulos soltos, círculos, imagem indevida no mobile) foram removidos e desalinhamentos corrigidos; contêineres centralizados em 1440 px.
-- Header idêntico em todas as telas; logado, "Entrar" dá lugar ao menu do usuário (perfil, carteiras, sair). Abaixo de 1024 px a navegação vai para um menu lateral; "Criadores" e "Aprenda" ficam visíveis, porém desabilitados com "(em breve)" por estarem fora do escopo. A lupa abre uma busca que leva ao catálogo filtrado.
-- Mobile: header compacto (logo, busca, carrinho, menu) em todas as telas, além da barra inferior do frame, que ganhou rótulos visíveis (Início, Favoritos, Carrinho, Conta); o botão central de "scan" foi removido (sem função). No detalhe e no pagamento a barra inferior dá lugar à barra de ação da tela.
+- Header idêntico em todas as telas a partir de 768 px (abaixo disso, ver o item "Mobile"); logado, "Entrar" dá lugar ao menu do usuário (perfil, carteiras, sair). Abaixo de 1024 px a navegação vai para um menu lateral; "Criadores" e "Aprenda" ficam visíveis, porém desabilitados com "(em breve)" por estarem fora do escopo. A lupa abre uma busca que leva ao catálogo filtrado.
+- Mobile (< 768 px): como nos frames, Início, Detalhe, Carrinho, Pagamento, Login e Cadastro não têm header (`NO_MOBILE_HEADER` em `routes/__root.tsx`); Carrinho e Pagamento têm só o cabeçalho "voltar + título" da tela. As telas sem frame mobile (pedido, atividade, conta) mantêm um header compacto (logo, busca, carrinho, menu). A barra inferior do frame ganhou rótulos visíveis (Início, Favoritos, Carrinho, Conta; a aba "Conta" abre o menu de navegação e de conta) e perdeu o botão central de "scan" (sem função). Ela não aparece no Detalhe, no Carrinho e no Pagamento (`NO_TAB_BAR`): no Detalhe e no Pagamento dá lugar à barra fixa de ação da tela; no Carrinho o resumo fica no painel arredondado do frame.
 - Tablet (768): adaptação fluida entre os frames desktop e mobile. Confirmação, Perfil e Carteiras em mobile derivados do desktop em coluna única.
 - Login e Cadastro são modais sobre o conteúdo no Figma: implementados como rotas `/login` e `/register`, que funcionam em acesso direto, com backdrop escuro (~60%) e foco preso; no mobile, tela cheia.
 - Telas sem frame (Favoritos e Atividade/pedidos) derivadas do menu da conta, com os cards do catálogo e linhas de pedido com status em texto e ícone.
 - Rodapé: blog "Diário da Cunhagem" e links editoriais sem destino ficam como "Em breve"; a newsletter valida o e-mail e informa que não está disponível (não finge sucesso); redes sociais abrem os sites oficiais em nova aba; coleções do rodapé apontam ao catálogo filtrado (Arte 3D/Utilidade trocadas por Jogos/Colecionáveis, que existem nos dados).
-- Painel Demo: acréscimo fora do layout, visível só com mocks ativos.
+- Painel Demo: acréscimo fora do layout, visível só com mocks ativos. A partir de 1440 px é um botão flutuante no canto inferior esquerdo, na margem vazia ao lado do conteúdo de 1200 px; abaixo disso é um botão comum depois do rodapé, para nunca cobrir cards, campos, totais ou a barra de ação.
+- Resumos (carrinho, pagamento): desconto zero aparece como `(-) 0 ETH`, no formato dos demais valores, em vez do texto fixo `(-) 00.00` do frame.
 
 ### Início
 
@@ -278,8 +283,9 @@ O Figma tem inconsistências. A regra foi **preservar a identidade** (cores, Rob
 ### Detalhe do NFT
 
 - Estrelas, avaliações e a aba de avaliações removidas: não há dados de avaliação e não inventamos números. "Atributos" virou "Edições" (não há atributos nos dados).
-- Miniaturas são a galeria do mesmo NFT (2 imagens: arte e um recorte gerado do mesmo arquivo); a edição é um seletor separado que altera preço e disponibilidade, exibindo nome e tiragem (`Padrão · 1/146`); edição esgotada fica riscada e desabilitada. A lupa abre a imagem ampliada em diálogo.
+- Miniaturas são a galeria do mesmo NFT (4 vistas geradas do mesmo arquivo: inteira, rosto, tronco/acessório e um enquadramento alternativo); a edição é um seletor separado que altera preço e disponibilidade, exibindo nome e tiragem (`Padrão · 1/146`); edição esgotada fica riscada e desabilitada. A lupa abre a imagem ampliada em diálogo.
 - Acrescentados o botão "Adicionar ao carrinho" ao lado de "COMPRAR" e "por <criador>" na linha de preço. Quantidade: "diminuir" desabilitado no mínimo e "aumentar" no limite da edição. ID do token e demais dados vêm das fixtures (o Figma era inconsistente entre carrinho e pagamento).
+- No mobile a descrição é o primeiro parágrafo da área de compra e não se repete em "Detalhes do NFT" (no desktop as duas seções ficam distantes e ela aparece nas duas). Em "Detalhes do NFT", os textos de "Contrato" e "Direitos autorais", trocados no frame, ficam sob o título correto.
 
 ### Carrinho
 
@@ -290,7 +296,7 @@ O Figma tem inconsistências. A regra foi **preservar a identidade** (cores, Rob
 - Primeira opção de carteira é WalletConnect (como no mobile); "Carteira e rede" lista as carteiras cadastradas com a marca do provedor, em vez de provedores genéricos, e a conexão simulada é explícita ("Conectar carteira"). "Rede" lista só as redes da carteira selecionada.
 - "Endereço da carteira" e "Tipo de carteira" são somente leitura (vêm da carteira cadastrada). "Usar outra carteira?" equivale a escolher a secundária.
 - "Nome ENS" e "Código de indicação", obrigatórios no Figma, ficam **opcionais** (validados só quando preenchidos): exigi-los bloquearia compradores sem ENS ou sem indicação. O slot "ENS ou carteira secundária" virou "Nome ENS (opcional)" com sufixo `.eth`; o segundo "Nome ENS" (duplicado) foi removido.
-- "Confirmar compra" abre um diálogo de revisão com o total da cotação (substitui um passo "Revisar pedido" separado); se a cotação mudar, o botão fica bloqueado até "Aceitar novos valores". "Tem um código promocional? Aplique aqui" abre o campo de cupom. Mobile: dados do colecionador antes da carteira e barra fixa com total e "Confirmar compra" (a barra de navegação some nessa rota).
+- "Confirmar compra" abre um diálogo de revisão com o total da cotação (substitui um passo "Revisar pedido" separado); se a cotação mudar, o botão fica bloqueado até "Aceitar novos valores". "Tem um código promocional? Aplique aqui" abre o campo de cupom. Mobile: a ordem do frame ("Carteira e rede", depois os dados do colecionador, itens e resumo) e barra fixa com total e "Confirmar compra" (a barra de navegação some nessa rota).
 
 ### Pedido (confirmação)
 
@@ -308,7 +314,7 @@ O Figma tem inconsistências. A regra foi **preservar a identidade** (cores, Rob
 
 ### Substituição de assets
 
-- As 4 artes do Figma (PNG de 1254 px, cerca de 2 MB cada) foram convertidas para AVIF e WebP em 256/512/800 px (`scripts/optimize-assets.mjs`) e distribuídas entre os 48 NFTs das fixtures; o segundo item da galeria é um recorte gerado do mesmo arquivo.
+- As 4 artes do Figma (PNG de 1254 px, cerca de 2 MB cada) foram convertidas para AVIF e WebP em 256/512/800 px (`scripts/optimize-assets.mjs`) e distribuídas entre os 48 NFTs das fixtures; cada NFT tem 4 vistas na galeria (inteira, rosto, tronco/acessório e enquadramento alternativo), recortadas do mesmo arquivo pelo mesmo script.
 - Os ícones SVG do Figma viram componentes React (`scripts/generate-icons.mjs`, `shared/ui/icons.tsx`); as letras W/C/D do rodapé foram trocadas por ícones lucide; ícones informativos do Início, idem.
 - Fonte Roboto Mono (a do layout) servida localmente (`public/fonts`, com preload), sem dependência de CDN.
 
@@ -322,19 +328,18 @@ Cobertura atual (`e2e/`):
 | --- | --- |
 | `smoke.spec.ts` | Listagem por REST e `nft.updated` recebido pelo `socket.io-client` |
 | `session-cart.spec.ts` | Carrinho de visitante persiste no refresh e é fundido no login; diálogo de login (foco preso, erros da API, volta à página); favorito otimista com rollback na falha; troca de usuário sem vazamento de dados, eventos e armazenamento; sessão expirando durante o checkout e retomada após novo login; perfil e carteiras persistem após refresh, com erros da API nos campos |
-| `checkout.spec.ts` | Compra completa pelo detalhe (pendente, depois confirmada; só as unidades compradas saem do carrinho); pagamento recusado mantém o carrinho; cliques repetidos e resposta perdida recuperam o mesmo pedido; recuperação da tentativa pendente após refresh; mudança de preço por socket bloqueia a confirmação até aceitar os novos valores; 409 `quote_outdated` ao confirmar; resumo do carrinho segue a cotação da API e cupons são validados pela API |
-
-| `catalog.spec.ts` | Busca (nome, criador, descrição, vazio e limpar), filtros combinados (coleções, faixa de preço, disponibilidade) conferidos com os dados, validação da faixa de preço, ordenação, paginação pelos 48 NFTs com reset e página fora do intervalo, histórico (voltar/avançar restauram busca, filtros, ordenação e página; voltar do detalhe devolve à mesma página filtrada); detalhe por link direto com edição, edição desconhecida, NFT inexistente e rota inexistente (404) |
+| `checkout.spec.ts` | Compra completa pelo detalhe (pendente, depois confirmada; só as unidades compradas saem do carrinho); pagamento recusado mantém o carrinho; cliques repetidos e resposta perdida recuperam o mesmo pedido; recuperação da tentativa pendente após refresh; mudança de preço por socket bloqueia a confirmação até aceitar os novos valores; 409 `quote_outdated` ao confirmar; resumo do carrinho segue a cotação da API e cupons são validados pela API; o servidor recusa o pedido sem a carteira conectada na rede (409 `wallet_not_connected`) e aceita depois de reconectar; "Desconectar carteira" desconecta no servidor |
+| `catalog.spec.ts` | Busca (nome, criador, descrição, vazio e limpar), filtros combinados (coleções, faixa de preço, disponibilidade) conferidos com os dados, validação da faixa de preço, ordenação, paginação pelos 48 NFTs com reset e página fora do intervalo, histórico (voltar/avançar restauram busca, filtros, ordenação e página; voltar do detalhe devolve à mesma página filtrada); detalhe por link direto com edição, edição desconhecida, NFT inexistente (tela própria, um único `GET`) e rota inexistente (404) |
 | `auth-favorites.spec.ts` | Cadastro (sucesso, validação com foco no primeiro erro, e-mail repetido, cenário `register-conflict`); login, página privada com retorno, sessão expirada com destino preservado e logout; favoritos (visitante volta após o login, persistência no backend simulado e após refresh, mutação com falha reverte e nova tentativa funciona) |
 | `account.spec.ts` | Perfil (dados e avatar com pré-visualização, validação no cliente e no servidor, troca de senha com a senha nova passando a valer) e carteiras (adicionar secundária, redes, endereço repetido, regra do servidor, editar apelido e tornar principal) |
 | `realtime.spec.ts` | `nft.updated` (carrinho explica a mudança, eventos duplicados e antigos não regridem, item esgotado, revisão do checkout bloqueada, detalhe ao vivo), `order.updated` (confirmação duplicada aplicada uma vez, recusa), perda de conexão (conciliação por REST e por polling, tentativa de reconexão durante a queda, recarga com pedido pendente, pedido confirmado com a página fechada, preços do catálogo perdidos offline) e indicador "conectado" |
 | `a11y.spec.ts` | Teclado (link de pular, cartão por Tab/Enter com foco visível, favorito, filtros e ordenação, menu da conta com Escape), diálogos e gavetas (foco preso e devolvido: login, revisão da compra, filtros e "Conta" no mobile) e validação que move o foco ao primeiro erro (checkout e faixa de preço) |
-| `resilience.spec.ts` | Skeletons com carregamento lento sem salto de layout (catálogo, detalhe, páginas privadas), latência variável (respostas fora de ordem ignoradas) e falhas (HTTP 500, sem conexão, 503 transitório absorvido, resultado vazio, requisição travada com timeout, erros do detalhe, do perfil e do carrinho, sempre com "Tentar novamente" ou reversão) |
+| `resilience.spec.ts` | Skeletons com carregamento lento sem salto de layout (catálogo, detalhe, páginas privadas), latência variável (respostas fora de ordem ignoradas) e falhas (HTTP 500, sem conexão, 503 transitório absorvido, resultado vazio, requisição travada com timeout, erros do detalhe, do perfil e do carrinho, falha ao validar a sessão com o carrinho em estado de erro, sempre com "Tentar novamente" ou reversão) |
 | `visual.spec.ts` | Regressão visual de Início, Detalhe, Carrinho e Pagamento (`toHaveScreenshot`, baselines por projeto em `e2e/__screenshots__/`; `npm run test:visual` e `npm run test:visual:update`) |
 
-Cada arquivo roda nos dois projetos (`chromium-desktop` e `chromium-mobile`). Há 90 testes por projeto (180 no total), dos quais 8 são de regressão visual. Quatro testes de acessibilidade são específicos de um viewport (filtros na lateral só no desktop, sheet e drawer só no mobile) e são ignorados no outro projeto.
+Cada arquivo roda nos dois projetos (`chromium-desktop` e `chromium-mobile`). Há 93 testes por projeto (186 no total), dos quais 8 são de regressão visual. Quatro testes de acessibilidade são específicos de um viewport (filtros na lateral só no desktop, sheet e drawer só no mobile) e são ignorados no outro projeto.
 
-Resultado da última execução (26/11/2026, `npx playwright test --reporter=line --grep-invert visual`, build de produção): **168 passaram, 0 falharam, 4 ignorados** (os específicos de viewport), somando os dois projetos. A regressão visual (`npm run test:visual`) é executada à parte: **8 de 8 baselines conferem**, em execuções repetidas.
+Resultado da última execução (26/11/2026, `npx playwright test --reporter=line --grep-invert visual`, build de produção): **174 passaram, 0 falharam, 4 ignorados** (os específicos de viewport), somando os dois projetos. A regressão visual (`npm run test:visual`) é executada à parte: **8 de 8 baselines conferem** (as duas do Detalhe foram regeneradas depois da mudança na seção "Detalhes do NFT").
 
 Relatório HTML: `playwright-report/index.html`; traces e capturas das falhas: `test-results/`.
 
@@ -359,20 +364,27 @@ URL `https://nft-marketplace-challenge-ivory.vercel.app` (mesmo código do commi
 
 Todas as metas foram atingidas. A Performance do Início mobile é a mais justa: 90, 91 e 88 nas três execuções (mediana 90; a execução de 88 teve TBT de 363 ms), então fica no limite da meta e pode oscilar abaixo dela em uma medição isolada.
 
-### Medição local (build servido por `lighthouse/server.mjs`: Brotli, cabeçalhos do `vercel.json`, fallback de SPA, HTTP/1.1)
+### Medição local (build servido por `lighthouse/server.mjs`: HTTP/2 sobre TLS, Brotli, cabeçalhos do `vercel.json`, fallback de SPA)
+
+26/11/2026, mesmo código desta entrega, `npm run lighthouse` completo (3 execuções × 2 páginas × 2 perfis).
 
 | Página | Perfil | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Início | Mobile | **80** | 100 | 100 | 100 | 4,38 s | 0 | 259 ms |
-| Início | Desktop | 97 | 100 | 100 | 100 | 1,22 s | 0 | 0 ms |
-| Detalhe do NFT | Mobile | **81** | 100 | 100 | 100 | 4,08 s | 0 | 265 ms |
-| Detalhe do NFT | Desktop | 98 | 100 | 100 | 100 | 1,13 s | 0 | 0 ms |
+| Início | Mobile | 92 | 100 | 100 | 100 | 2,41 s | 0 | 251 ms |
+| Início | Desktop | 100 | 100 | 100 | 100 | 0,54 s | 0 | 0 ms |
+| Detalhe do NFT | Mobile | 94 | 100 | 100 | 100 | 2,43 s | 0 | 214 ms |
+| Detalhe do NFT | Desktop | 100 | 100 | 100 | 100 | 0,53 s | 0 | 0 ms |
 
-Medições anteriores no mesmo ambiente local, com o `vite preview` (gzip, HTTP/1.1): Início mobile 81 (LCP 4,38 s) e Detalhe mobile 84 (3,94 s); antes de todas as otimizações, Início mobile 80 e Detalhe mobile 83 (LCP 4,4 s e 4,2 s) com SEO 92, porque o `robots.txt` caía no fallback do SPA e era lido como inválido. O `vite preview` já comprimia com gzip, então trocar por Brotli não mudou a nota de forma mensurável.
+Todas as metas são atingidas. Execuções individuais de Performance mobile: Início 92, 93 e 92; Detalhe 94, 94 e 91 (a de 91 teve TBT de 318 ms). O servidor local fala HTTP/2 sobre TLS, o transporte do ambiente publicado (Vercel), com um certificado autoassinado para `localhost` gerado na hora pelo `openssl` (o Chrome da auditoria roda com `--ignore-certificate-errors`); o conteúdo servido, os mocks, as imagens e as fontes são os mesmos da entrega, e nada na aplicação detecta a auditoria. `LH_HTTP1=1` reproduz a medição antiga em HTTP/1.1.
 
-**Abaixo da meta no local: Performance mobile (80 e 81).** Accessibility, Best Practices e SEO atingem a meta em todas as combinações, CLS é 0 e no desktop a Performance é 97-98. O que pesa é o LCP (4,4 s e 4,1 s contra cerca de 2,5 s para a nota 90). Causa, medida no grafo de dependências que o Lighthouse simula (Lantern): o LCP mobile é uma imagem cujo endereço só existe depois de uma resposta da API (card do catálogo, foto do NFT), e a API é a camada de mocks, que precisa estar de pé antes de qualquer requisição. O caminho crítico é HTML, JavaScript de inicialização (vendor ~164 kB, app 17 kB, MSW e handlers ~47 + 39 kB, gzip), execução com 4x de CPU, requisições à API, chunk da rota e a imagem. Sob 1,6 Mbps compartilhados entre ~30 requisições simultâneas, em um servidor local HTTP/1.1 (no máximo 6 conexões, uma fila de requisições pequenas), só o download desse JavaScript leva cerca de 2,7 s simulados. Na Vercel, com HTTP/2 (multiplexação em uma conexão) e Brotli, o mesmo código e as mesmas páginas dão LCP de 2,7 s e Performance 90-92: a diferença entre as duas tabelas é o protocolo de transporte da medição, não o conteúdo, que é idêntico. Essa explicação é a mais consistente com os dados, mas não foi isolada com um servidor local em HTTP/2.
+**Por que o transporte decide a nota mobile.** Até a medição anterior, o servidor local usava HTTP/1.1 e a Performance mobile ficava em 81 (Início, LCP 4,34 s) e 83 (Detalhe, LCP 4,08 s), abaixo da meta, com o mesmo build. O LCP mobile é uma imagem cujo endereço só existe depois de uma resposta da API (card do catálogo, foto do NFT), e a API é a camada de mocks, que precisa estar de pé antes de qualquer requisição. O caminho crítico é HTML, JavaScript de inicialização (vendor ~164 kB, app 17 kB, MSW e handlers ~47 + 39 kB, gzip, em ~30 arquivos), execução com 4x de CPU, requisições à API, chunk da rota e a imagem. No grafo que o Lighthouse simula (Lantern), HTTP/1.1 limita a origem a 6 conexões, e as ~30 requisições de script entram em fila, cada uma pagando RTT de 150 ms; com HTTP/2 elas são multiplexadas em uma conexão. Trocar só o protocolo do servidor local, sem mudar uma linha da aplicação, levou o LCP mobile de 4,3 s para 2,4 s e a Performance para 92/94, coerente com a medição em produção (90/92, LCP 2,7 s) feita antes desta troca.
 
-Tentativas que não mudaram a nota de forma mensurável (não mantidas): mover as duas rotas para o chunk principal (mais bytes antes do conteúdo, TBT pior), remover o preload da fonte, adiar as 6 requisições de contagem por coleção, servir com Brotli. Uma versão que juntava todo o `node_modules` em um único chunk quebrou o `socket.io-client` (o engine.io capturou o `WebSocket` antes do MSW, com erro no console e Best Practices 96); por isso o agrupamento atual é uma lista de permissão que deixa o `socket.io-client` no chunk carregado por `import()`.
+Tentativas que não mudaram a nota de forma mensurável (não mantidas):
+- buscar os dados do catálogo no `loader` da rota (`prefetchQuery`, em paralelo com o download do chunk da página) junto com um `modulepreload` do chunk da rota escolhido pela URL: em HTTP/1.1, Início 78 (LCP 4,24 s, TBT maior) e Detalhe 85; em HTTP/2, Início 91 (LCP 2,55 s) contra 92 (2,40 s) sem a mudança e Detalhe igual (94): os bytes a mais competem com o vendor pela banda simulada;
+- importar só o locale `pt` do Zod em vez de `z.locales.pt()`: o chunk vendor saiu byte a byte idêntico (os demais idiomas já eram eliminados pelo tree-shaking);
+- antes: mover as duas rotas para o chunk principal (mais bytes antes do conteúdo, TBT pior), remover o preload da fonte, adiar as 6 requisições de contagem por coleção, servir com Brotli em vez de gzip. Uma versão que juntava todo o `node_modules` em um único chunk quebrou o `socket.io-client` (o engine.io capturou o `WebSocket` antes do MSW, com erro no console e Best Practices 96); por isso o agrupamento atual é uma lista de permissão que deixa o `socket.io-client` no chunk carregado por `import()`.
+
+O build ainda avisa que o chunk `vendor` passa de 500 kB sem compressão (164 kB gzip): é proposital (React, Router, Query, Axios, Zod e tailwind-merge, todos necessários para pintar a primeira tela, em uma requisição).
 
 Otimizações aplicadas (efeito medido no mesmo ambiente):
 
@@ -383,7 +395,7 @@ Otimizações aplicadas (efeito medido no mesmo ambiente):
 - **SEO:** `public/robots.txt` (antes a rota caía no fallback do SPA e o Lighthouse o lia como inválido: SEO 92 para 100); `lang="pt-BR"`, meta description, viewport e `theme-color` no `index.html`.
 - **Fontes:** Roboto Mono local em WOFF2 variável com `font-display: swap`, apenas o subconjunto latino em preload.
 - **Cache (`vercel.json`):** `/assets/*` e `/fonts/*` `immutable` por um ano, `/images/*` por 7 dias com `stale-while-revalidate`, Service Worker do MSW sem cache. O regex do rewrite tinha escapes inválidos em JSON (`\.`) e foi corrigido.
-- Os devtools do React Query não são importados pelo código e portanto não entram no build; o Tailwind ignora `lighthouse/` ao varrer classes.
+- Dependências sem uso removidas do `package.json` (devtools do React Query, entre outras); a fonte de origem (`@fontsource-variable/roboto-mono`) é só dependência de desenvolvimento, copiada para `public/fonts` por `scripts/optimize-assets.mjs`. O Tailwind ignora `lighthouse/` ao varrer classes.
 - Não há shell estático no `index.html`: o CSS bloqueante já pinta o fundo no primeiro frame (FCP de 0,6 s no mobile) e um esqueleto estático teria de reproduzir três layouts (mobile, tablet e desktop) sem gerar CLS.
 
 ## 15. Limitações conhecidas

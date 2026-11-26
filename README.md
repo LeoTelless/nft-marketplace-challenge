@@ -83,8 +83,8 @@ Notas sobre o Playwright (`playwright.config.ts`): os testes rodam contra o **bu
 Os cenários são determinísticos (latências seguem sequências fixas, sem aleatoriedade) e ficam em `src/mocks/scenarios.ts`. Três formas de usá-los:
 
 1. **URL**: `?scenario=<id>` seleciona e persiste o cenário (em `localStorage`). `?mocks=reset` restaura o banco simulado e volta ao cenário `default`. Os dois parâmetros são removidos da URL depois de aplicados, então atualizar a página não zera o banco de novo. Exemplo: `http://localhost:5173/?mocks=reset&scenario=payment-declined`.
-2. **Painel Demo**: botão discreto "Demo" (canto inferior esquerdo no desktop; botão redondo sobre a barra inferior no mobile) abre um painel com: seletor de cenário, "Aplicar cenário", "Recarregar página" e "Restaurar dados iniciais (reset)"; botões para alterar preço/estoque de um item do carrinho (emite `nft.updated`); resolução manual de pedidos pendentes (emite `order.updated`); "Expirar sessão", "Derrubar Socket.IO" e "Restaurar Socket.IO". O painel só aparece com os mocks ativos.
-3. **Console**: `window.__mocks` (`setScenario(id)`, `reset()`, `updateNft(...)`, `resolveOrder(id, 'confirmed' | 'rejected')`, `expireSessions()`, `replayLastEvent()`, `emitStaleNftEvent(id)`, `dropSocket()`, `restoreSocket()`, `getState()`...). É a superfície usada pelos testes E2E.
+2. **Painel Demo**: botão discreto "Demo" (flutuante no canto inferior esquerdo a partir de 1440 px; abaixo disso, um botão comum logo depois do rodapé, para não cobrir o conteúdo) abre um painel com: seletor de cenário, "Aplicar cenário", "Recarregar página" e "Restaurar dados iniciais (reset)"; botões para alterar preço/estoque de um item do carrinho (emite `nft.updated`); resolução manual de pedidos pendentes (emite `order.updated`); "Expirar sessão", "Derrubar Socket.IO" e "Restaurar Socket.IO". O painel só aparece com os mocks ativos.
+3. **Console**: `window.__mocks` (`setScenario(id)`, `reset()`, `updateNft(...)`, `resolveOrder(id, 'confirmed' | 'rejected')`, `expireSessions()`, `disconnectWallets()`, `replayLastEvent()`, `emitStaleNftEvent(id)`, `dropSocket()`, `restoreSocket()`, `getState()`...). É a superfície usada pelos testes E2E.
 
 Cenários de "uso único" disparam uma vez por ativação e depois se comportam como `default`, para que o caminho de recuperação possa ser exercitado. Aplicar o cenário pelo painel ou por `setScenario` os rearma; pela URL, apenas se o cenário for diferente do ativo (`?mocks=reset` sempre rearma).
 
@@ -111,7 +111,7 @@ Cenários de "uso único" disparam uma vez por ativação e depois se comportam 
 | `order-timeout` | Uso único: o primeiro pedido é criado, mas a resposta se perde (erro de rede); repetir com a mesma chave o recupera. |
 | `payment-declined` | Pedidos são resolvidos como recusados. |
 | `order-pending` | Pedidos ficam pendentes até serem resolvidos pelo painel Demo ou por `window.__mocks.resolveOrder()`. |
-| `wallet-declined` | A conexão simulada da carteira responde 422 `wallet_rejected`. |
+| `wallet-declined` | A conexão simulada da carteira responde 422 `wallet_rejected` (e a sessão fica sem carteira conectada). |
 
 Cenários que valem sem seleção: o cupom `EXPIRED20` sempre expira e códigos desconhecidos sempre são inválidos; e-mails já cadastrados (`ana@...`, `bruno@...`) sempre geram 409 no cadastro.
 
@@ -141,7 +141,7 @@ Todos partem de um estado limpo: abra `/?mocks=reset&scenario=<id>`. Para compra
 
 **Falha de mutation com rollback (favoritos).** Em um cenário com erro (`server-error`) ou com a conta em `forbidden`, favoritar um NFT: o coração muda na hora (otimista), volta ao estado anterior e um aviso explica a falha. No carrinho, alterar a quantidade ou remover itens também é otimista com rollback.
 
-**Conexão da carteira recusada.** Cenário `wallet-declined`: em "Conectar carteira" no checkout a conexão é recusada e o botão de confirmar permanece bloqueado.
+**Conexão da carteira recusada ou perdida.** Cenário `wallet-declined`: em "Conectar carteira" no checkout a conexão é recusada e o botão de confirmar permanece bloqueado. A conexão é registrada no servidor simulado (uma por sessão) e `POST /orders` a exige: com a revisão aberta, rode `__mocks.disconnectWallets()` no console (a carteira "desconectou do lado dela") e confirme; o servidor responde 409 `wallet_not_connected`, nada é comprado, a carteira aparece desconectada com a mensagem no campo e, depois de "Conectar carteira", a compra segue. "Desconectar carteira" no checkout também desconecta no servidor.
 
 ### Cenário de tempo real (preço/disponibilidade mudando com o item no carrinho)
 
@@ -158,7 +158,7 @@ Todos partem de um estado limpo: abra `/?mocks=reset&scenario=<id>`. Para compra
 
 ```
 e2e/                 Testes Playwright (specs, support/mocks.ts com o acesso tipado a window.__mocks)
-design/              Cache do Figma (frames, tokens, medidas) e DECISOES.md
+design/              Tokens e assets do Figma, INDEX.md e DECISOES.md (frames e medidas por nó são regeráveis com scripts/figma-dump.mjs e não são versionados)
 docs/                Enunciado do desafio
 public/              Fonte Roboto Mono, imagens otimizadas, favicon e mockServiceWorker.js
 scripts/             Otimização de imagens (AVIF/WebP) e geração dos ícones a partir dos SVGs do Figma
@@ -179,6 +179,6 @@ src/
 
 - Relatório HTML dos testes E2E: `playwright-report/index.html` (gerado por `npm run test:e2e`); traces e capturas das falhas em `test-results/`.
 - Relatórios Lighthouse: `lighthouse/reports/` (build local) e `lighthouse/reports/production/` (Vercel). De cada página e perfil ficam o HTML e o JSON da execução mediana (`<página>-<perfil>-run<N>`); `summary.md` (duas tabelas de medianas rotuladas, execuções individuais, versões, sistema, hardware e condições) e `summary.json` cobrem as três execuções. Configuração: `lighthouse/config.mjs` (páginas, perfis mobile/desktop, throttling simulado padrão, 3 execuções); script: `lighthouse/run.mjs`.
-- `npm run lighthouse` faz o `npm run build`, serve `dist/` com `lighthouse/server.mjs` (Brotli/gzip, cabeçalhos de cache do `vercel.json`, fallback de SPA; porta 4180), audita Início (`/`) e Detalhe (`/nft/nft-001`) nos perfis mobile e desktop, cada um em um Chrome novo (cenário `default`, sem estado salvo), e sobrescreve os relatórios locais. `npm run lighthouse -- --url https://nft-marketplace-challenge-ivory.vercel.app` audita o ambiente publicado e grava em `lighthouse/reports/production/`. Usa o Chrome instalado ou, se não houver, o Chromium do Playwright (`CHROME_PATH` força outro). Variáveis opcionais: `LH_RUNS`, `LH_ONLY=inicio:mobile,...`, `LH_SKIP_BUILD=1`. A auditoria usa o mesmo build, os mesmos mocks, imagens e fontes da entrega.
-- Resultado resumido (mediana de 3): em produção, Performance mobile 90 (Início) e 92 (Detalhe), desktop 100, e 100 em Accessibility, Best Practices e SEO. No servidor local (HTTP/1.1) a Performance mobile fica em 80-81; a análise está no [ARCHITECTURE.md](./ARCHITECTURE.md).
+- `npm run lighthouse` faz o `npm run build`, serve `dist/` com `lighthouse/server.mjs` (HTTP/2 sobre TLS, como na Vercel, com um certificado autoassinado para `localhost` gerado pelo `openssl` numa pasta temporária; Brotli/gzip, cabeçalhos de cache do `vercel.json`, fallback de SPA; porta 4180; sem `openssl` no PATH, no Windows ele é procurado na instalação do Git, e sem ele ou com `LH_HTTP1=1` o servidor usa HTTP/1.1 e o resumo registra isso), audita Início (`/`) e Detalhe (`/nft/nft-001`) nos perfis mobile e desktop, cada um em um Chrome novo (cenário `default`, sem estado salvo), e sobrescreve os relatórios locais. `npm run lighthouse -- --url https://nft-marketplace-challenge-ivory.vercel.app` audita o ambiente publicado e grava em `lighthouse/reports/production/`. Usa o Chrome instalado ou, se não houver, o Chromium do Playwright (`CHROME_PATH` força outro). Variáveis opcionais: `LH_RUNS`, `LH_ONLY=inicio:mobile,...`, `LH_SKIP_BUILD=1`, `LH_HTTP1=1`. A auditoria usa o mesmo build, os mesmos mocks, imagens e fontes da entrega.
+- Resultado resumido (mediana de 3): no servidor local (HTTP/2), Performance mobile 92 (Início) e 94 (Detalhe), desktop 100, e 100 em Accessibility, Best Practices e SEO em todas as combinações; em produção (Vercel), mobile 90 e 92, desktop 100. Em HTTP/1.1 (`LH_HTTP1=1`) a Performance mobile local cai para 81-83; a análise está no [ARCHITECTURE.md](./ARCHITECTURE.md).
 - Resultados e análise: seções "Testes" e "Performance (Lighthouse)" do [ARCHITECTURE.md](./ARCHITECTURE.md).
