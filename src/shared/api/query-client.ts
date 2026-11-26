@@ -11,7 +11,10 @@ import { isApiError } from './api-error'
  * - `gcTime` 5 min: inactive data is kept for back/forward navigation.
  * - Retry: never on 4xx (the same request would fail again) nor on cancellation; up to
  *   2 retries with exponential backoff (500ms, 1s… capped at 4s) on transient failures
- *   (network, timeout, 5xx).
+ *   (network, 5xx). A timeout is not retried: the server already took the whole timeout
+ *   (10 s, `shared/api/http.ts`), and three attempts would keep the skeleton for ~32 s before
+ *   the error. Worst case is therefore ~10 s for a timeout and ~1.5 s plus 3 round trips for
+ *   a failing network or 5xx.
  * - `refetchOnWindowFocus` on (cheap reconciliation); on reconnect of the browser too.
  *   Socket.IO reconnection triggers its own reconciliation (see `shared/realtime`).
  *
@@ -26,7 +29,7 @@ export const MAX_QUERY_RETRIES = 2
 
 export function shouldRetryQuery(failureCount: number, error: unknown): boolean {
   if (!isApiError(error)) return false
-  if (error.kind === 'canceled' || error.kind === 'invalid_response') return false
+  if (error.kind === 'canceled' || error.kind === 'invalid_response' || error.kind === 'timeout') return false
   if (!error.isTransient) return false
   return failureCount < MAX_QUERY_RETRIES
 }
