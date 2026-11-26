@@ -52,14 +52,19 @@ export function AuthScreen({ mode, search }: { mode: Mode; search: AuthSearch })
             target?.focus()
           }}
           className={cn(
-            'gap-0 overflow-y-auto p-0',
-            // Mobile: full screen, as the mobile frames.
-            'max-md:inset-0 max-md:top-0 max-md:left-0 max-md:h-dvh max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0 max-md:rounded-none max-md:border-0 max-md:bg-ink max-md:px-7 max-md:pt-20 max-md:pb-6',
-            // Desktop: the 500px card with the orange bottom bar.
-            'md:max-h-[calc(100dvh-2rem)] md:max-w-[500px] md:rounded-none md:border-0 md:border-b-[10px] md:border-b-brand md:pt-12 md:pb-14',
+            // Rows keep their own height (no stretching to fill the box): the frames stack the
+            // blocks with fixed gaps and leave the remaining space at the bottom.
+            'content-start gap-0 overflow-y-auto p-0 shadow-none!',
+            // Mobile (and 640–767px, where the base `sm:max-w-lg` would pin a 512px box to the
+            // left): full screen, as the mobile frames.
+            'max-md:inset-0 max-md:top-0 max-md:left-0 max-md:h-dvh max-md:max-w-none max-md:sm:max-w-none max-md:translate-x-0 max-md:translate-y-0 max-md:rounded-none max-md:border-0 max-md:bg-ink max-md:px-7 max-md:pt-20 max-md:pb-6',
+            // Desktop: the 500px card with the orange bottom bar (login 500x600, sign-up 500x656
+            // with an 8px radius); the blocks start at the top and the space left stays below.
+            'md:max-h-[calc(100dvh-2rem)] md:max-w-[500px] md:border-0 md:border-b-[10px] md:border-b-brand md:pt-12 md:pb-14',
+            mode === 'login' ? 'md:min-h-[600px] md:rounded-none' : 'md:min-h-[656px] md:rounded-[8px]',
           )}
         >
-          <p aria-hidden="true" className="mb-10 grid h-[136px] place-content-center text-[32px] leading-[42px] font-bold tracking-[0.12em] md:hidden">
+          <p aria-hidden="true" className="mb-10 grid h-[136px] place-content-center text-[32px] leading-[42px] font-bold tracking-[0.1em] md:hidden">
             KURIO
           </p>
           <div className="flex flex-col items-center gap-10 md:px-12">
@@ -97,19 +102,20 @@ export function AuthScreen({ mode, search }: { mode: Mode; search: AuthSearch })
             </p>
           ) : null}
           {mode === 'login' ? <LoginForm redirectTo={search.redirect} /> : <RegisterForm redirectTo={search.redirect} />}
-          <SocialLogin />
+          <SocialLogin mode={mode} />
+          {/* Frame: the whole line in #CFB28C; the link is told apart by the underline (not by color only). */}
           <p className="mt-10 text-center text-[15px] leading-5 text-text-secondary md:hidden">
             {mode === 'login' ? (
               <>
                 Novo na Kurio?{' '}
-                <Link to="/register" search={search} replace className="text-brand-accent underline-offset-4 hover:underline">
+                <Link to="/register" search={search} replace className="underline underline-offset-4 hover:text-brand-accent">
                   Crie uma conta
                 </Link>
               </>
             ) : (
               <>
                 Já tem uma conta?{' '}
-                <Link to="/login" search={search} replace className="text-brand-accent underline-offset-4 hover:underline">
+                <Link to="/login" search={search} replace className="underline underline-offset-4 hover:text-brand-accent">
                   Entre
                 </Link>
               </>
@@ -137,7 +143,8 @@ function FormShell({ label, onSubmit, children }: { label: string; onSubmit: () 
   )
 }
 
-const submitClass = 'mt-9 h-[60px] w-full rounded-[10px] text-base font-bold md:mt-6 md:h-[45px] md:rounded-sm'
+/** 40px below the last field on mobile and 24px in the modal (the form gap adds 12px). */
+const submitClass = 'mt-7 h-[60px] w-full rounded-[10px] text-base font-bold md:mt-3 md:h-[45px] md:rounded-[5px]'
 
 function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const login = useLogin({ redirectTo })
@@ -147,7 +154,9 @@ function LoginForm({ redirectTo }: { redirectTo?: string }) {
     try {
       await login.mutateAsync(values)
     } catch (error) {
-      applyApiErrors(error, form.setError, ['email', 'password'])
+      // A wrong e-mail/password has no field error: the submit button was disabled while sending
+      // (focus would drop to <body>), so focus goes back to the first field; the alert is announced.
+      if (!applyApiErrors(error, form.setError, ['email', 'password'])) form.setFocus('email')
     }
   })
   return (
@@ -178,7 +187,7 @@ function RegisterForm({ redirectTo }: { redirectTo?: string }) {
     try {
       await register.mutateAsync(values)
     } catch (error) {
-      applyApiErrors(error, form.setError, ['name', 'email', 'password', 'confirmPassword'])
+      if (!applyApiErrors(error, form.setError, ['name', 'email', 'password', 'confirmPassword'])) form.setFocus('name')
     }
   })
   return (
@@ -193,6 +202,7 @@ function RegisterForm({ redirectTo }: { redirectTo?: string }) {
         placeholder="Senha"
         required
         hint="Mínimo de 8 caracteres, com letras e números."
+        hintMode="on-error"
         error={errors.password?.message}
         {...form.register('password')}
       />
@@ -206,17 +216,19 @@ function RegisterForm({ redirectTo }: { redirectTo?: string }) {
 }
 
 /** Social login is outside the challenge scope: shown as in the layout, disabled and marked. */
-function SocialLogin() {
+function SocialLogin({ mode }: { mode: Mode }) {
   const button =
-    'flex h-10 w-full cursor-not-allowed items-center justify-center gap-3 rounded-sm border border-line text-[13px] font-medium text-text-secondary opacity-70'
+    'flex h-10 w-full cursor-not-allowed items-center justify-center gap-3 rounded-[5px] border border-line text-[13px] font-medium text-text-secondary opacity-70'
+  // Frames: divider → buttons 12px and 16px between the buttons on mobile; in the modal 12/12
+  // (login) and 16/16 (sign-up).
   return (
-    <div className="mt-10 flex flex-col gap-3 md:mt-6">
-      <div className="flex items-center gap-3 text-[13px] leading-4">
+    <div className={cn('mt-10 flex flex-col gap-3 md:mt-6', mode === 'register' && 'md:gap-4')}>
+      <div className="flex items-center gap-2.5 text-[13px] leading-4 md:gap-3">
         <span aria-hidden="true" className="h-px flex-1 bg-line" />
         Ou continue com
         <span aria-hidden="true" className="h-px flex-1 bg-line" />
       </div>
-      <div className="mx-auto flex w-full max-w-[340px] flex-col gap-3 max-md:max-w-none md:gap-3">
+      <div className={cn('mx-auto flex w-full max-w-[340px] flex-col gap-4 max-md:max-w-none', mode === 'login' && 'md:gap-3')}>
         <button type="button" disabled className={button}>
           <img src={googleUrl} alt="" width={20} height={20} /> Continuar com Google <span className="text-xs text-text-muted">(em breve)</span>
         </button>
