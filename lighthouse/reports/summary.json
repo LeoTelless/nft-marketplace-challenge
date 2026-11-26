@@ -1,0 +1,227 @@
+{
+  "environment": {
+    "generatedAt": "2026-11-26T18:22:15.908Z",
+    "lighthouse": "13.6.0",
+    "chrome": "Chrome/159.0.8154.6",
+    "node": "v22.23.5",
+    "system": "Windows_NT 10.0.26200 (win32 x64)",
+    "hardware": "AMD Ryzen 5 5500, 12 threads, 31.9 GB RAM",
+    "conditions": {
+      "build": "npm run build (production, mocks on) served by vite preview",
+      "scenario": "default (fresh browser profile per run, no ?scenario)",
+      "throttling": "simulated (Lighthouse default). Mobile: 4x CPU, 150 ms RTT, 1.6 Mbps. Desktop: 1x CPU, 40 ms RTT, 10 Mbps",
+      "runsPerCase": 3,
+      "categories": "performance, accessibility, best-practices, seo"
+    }
+  },
+  "results": [
+    {
+      "page": "Início",
+      "path": "/",
+      "profile": "Mobile",
+      "median": {
+        "performance": 81,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100,
+        "lcpMs": 4381,
+        "cls": 0,
+        "tbtMs": 221
+      },
+      "runs": [
+        {
+          "run": 1,
+          "performance": 81,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 4400.224000000002,
+          "cls": 0,
+          "tbt": 221.00000000000023,
+          "report": "inicio-mobile-run1",
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "run": 2,
+          "performance": 80,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 4381.158000000001,
+          "cls": 0,
+          "tbt": 270.99999999999955,
+          "report": "inicio-mobile-run2",
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "run": 3,
+          "performance": 81,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 4376.645,
+          "cls": 0,
+          "tbt": 211.50000000000045,
+          "report": "inicio-mobile-run3",
+          "lighthouseVersion": "13.6.0"
+        }
+      ]
+    },
+    {
+      "page": "Início",
+      "path": "/",
+      "profile": "Desktop",
+      "median": {
+        "performance": 99,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100,
+        "lcpMs": 967,
+        "cls": 0,
+        "tbtMs": 0
+      },
+      "runs": [
+        {
+          "run": 1,
+          "performance": 99,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 972.2259999999994,
+          "cls": 0,
+          "tbt": 0,
+          "report": "inicio-desktop-run1",
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "run": 2,
+          "performance": 99,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 967.3280000000005,
+          "cls": 0,
+          "tbt": 0,
+          "report": "inicio-desktop-run2",
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "run": 3,
+          "performance": 99,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 965.2619999999995,
+          "cls": 0,
+          "tbt": 0,
+          "report": "inicio-desktop-run3",
+          "lighthouseVersion": "13.6.0"
+        }
+      ]
+    },
+    {
+      "page": "Detalhe do NFT",
+      "path": "/nft/nft-001",
+      "profile": "Mobile",
+      "median": {
+        "performance": 84,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100,
+        "lcpMs": 3935,
+        "cls": 0,
+        "tbtMs": 206
+      },
+      "runs": [
+        {
+          "run": 1,
+          "performance": 85,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 3934.9275,
+          "cls": 0,
+          "tbt": 199.49999999999955,
+          "report": "detalhe-mobile-run1",
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "run": 2,
+          "performance": 84,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 3934.675,
+          "cls": 0,
+          "tbt": 205.5,
+          "report": "detalhe-mobile-run2",
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "run": 3,
+          "performance": 84,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 3944.3999999999987,
+          "cls": 0,
+          "tbt": 207,
+          "report": "detalhe-mobile-run3",
+          "lighthouseVersion": "13.6.0"
+        }
+      ]
+    },
+    {
+      "page": "Detalhe do NFT",
+      "path": "/nft/nft-001",
+      "profile": "Desktop",
+      "median": {
+        "performance": 99,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100,
+        "lcpMs": 909,
+        "cls": 0,
+        "tbtMs": 0
+      },
+      "runs": [
+        {
+          "run": 1,
+          "performance": 99,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 907.0925000000003,
+          "cls": 0,
+          "tbt": 0,
+          "report": "detalhe-desktop-run1",
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "run": 2,
+          "performance": 99,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 911.8587499999994,
+          "cls": 0,
+          "tbt": 0,
+          "report": "detalhe-desktop-run2",
+          "lighthouseVersion": "13.6.0"
+        },
+        {
+          "run": 3,
+          "performance": 99,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 909.2924999999997,
+          "cls": 0,
+          "tbt": 0,
+          "report": "detalhe-desktop-run3",
+          "lighthouseVersion": "13.6.0"
+        }
+      ]
+    }
+  ]
+}

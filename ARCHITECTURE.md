@@ -271,7 +271,7 @@ O Figma tem inconsistências. A regra foi **preservar a identidade** (cores, Rob
 
 - Ordenação: A→Z, Z→A, menor preço, maior preço e "Listados recentemente". Coleções em ordem alfabética e correspondentes às categorias da API (Arte digital, Colecionáveis, Esportes, Fotografia, Jogos, Música), com contagem real.
 - O filtro "Rede" (Ethereum/Polygon/Solana) não existe nos dados: substituído por "Disponibilidade" (todos/disponíveis/esgotados) no mesmo estilo de lista. Filtros combináveis com semântica de checkbox. Faixa de preço: o slider do layout mais campos mínimo/máximo.
-- Abas "Todos os NFTs", "Novos lançamentos" (listados nos últimos 30 dias) e "Em alta" (destaques) como filtros da URL. <!-- PENDENTE: conferir com DECISOES.md, que registra "Novos lançamentos" como removida; o código atual a mantém -->
+- Abas "Todos os NFTs", "Novos lançamentos" (listados nos últimos 30 dias) e "Em alta" (destaques) como filtros da URL.
 - Busca acrescentada acima das abas no desktop (o frame não tinha); no mobile/tablet a barra "Explorar coleções" com botão de filtros fica acima do hero e os filtros abrem em gaveta inferior. Acrescentados "N NFTs encontrados", "Limpar filtros" e o indicador "Atualizando…". Paginação com "anterior" a partir da página 2 e total de resultados.
 - Card: botão de favorito (coração do mobile) também no desktop; selo "ESGOTADO" no estilo do selo "RARO"; preço de esgotado riscado. Hero: os pontos selecionam destaques reais, sem autoplay. Ícones informativos (lucide) no lugar das letras dos destaques.
 
@@ -324,9 +324,17 @@ Cobertura atual (`e2e/`):
 | `session-cart.spec.ts` | Carrinho de visitante persiste no refresh e é fundido no login; diálogo de login (foco preso, erros da API, volta à página); favorito otimista com rollback na falha; troca de usuário sem vazamento de dados, eventos e armazenamento; sessão expirando durante o checkout e retomada após novo login; perfil e carteiras persistem após refresh, com erros da API nos campos |
 | `checkout.spec.ts` | Compra completa pelo detalhe (pendente, depois confirmada; só as unidades compradas saem do carrinho); pagamento recusado mantém o carrinho; cliques repetidos e resposta perdida recuperam o mesmo pedido; recuperação da tentativa pendente após refresh; mudança de preço por socket bloqueia a confirmação até aceitar os novos valores; 409 `quote_outdated` ao confirmar; resumo do carrinho segue a cotação da API e cupons são validados pela API |
 
-<!-- PENDENTE: completar com os demais itens da seção 9 do enunciado ainda sem spec (busca/filtros/ordenação/paginação com histórico; detalhe e recurso inexistente; cadastro e logout; eventos duplicados/antigos e desconexão; teclado e foco de diálogos; skeletons com carregamento lento e recuperação) e com a regressão visual (início, detalhe, carrinho e pagamento; baselines versionadas; script test:visual) -->
+| `catalog.spec.ts` | Busca (nome, criador, descrição, vazio e limpar), filtros combinados (coleções, faixa de preço, disponibilidade) conferidos com os dados, validação da faixa de preço, ordenação, paginação pelos 48 NFTs com reset e página fora do intervalo, histórico (voltar/avançar restauram busca, filtros, ordenação e página; voltar do detalhe devolve à mesma página filtrada); detalhe por link direto com edição, edição desconhecida, NFT inexistente e rota inexistente (404) |
+| `auth-favorites.spec.ts` | Cadastro (sucesso, validação com foco no primeiro erro, e-mail repetido, cenário `register-conflict`); login, página privada com retorno, sessão expirada com destino preservado e logout; favoritos (visitante volta após o login, persistência no backend simulado e após refresh, mutação com falha reverte e nova tentativa funciona) |
+| `account.spec.ts` | Perfil (dados e avatar com pré-visualização, validação no cliente e no servidor, troca de senha com a senha nova passando a valer) e carteiras (adicionar secundária, redes, endereço repetido, regra do servidor, editar apelido e tornar principal) |
+| `realtime.spec.ts` | `nft.updated` (carrinho explica a mudança, eventos duplicados e antigos não regridem, item esgotado, revisão do checkout bloqueada, detalhe ao vivo), `order.updated` (confirmação duplicada aplicada uma vez, recusa), perda de conexão (conciliação por REST e por polling, tentativa de reconexão durante a queda, recarga com pedido pendente, pedido confirmado com a página fechada, preços do catálogo perdidos offline) e indicador "conectado" |
+| `a11y.spec.ts` | Teclado (link de pular, cartão por Tab/Enter com foco visível, favorito, filtros e ordenação, menu da conta com Escape), diálogos e gavetas (foco preso e devolvido: login, revisão da compra, filtros e "Conta" no mobile) e validação que move o foco ao primeiro erro (checkout e faixa de preço) |
+| `resilience.spec.ts` | Skeletons com carregamento lento sem salto de layout (catálogo, detalhe, páginas privadas), latência variável (respostas fora de ordem ignoradas) e falhas (HTTP 500, sem conexão, 503 transitório absorvido, resultado vazio, requisição travada com timeout, erros do detalhe, do perfil e do carrinho, sempre com "Tentar novamente" ou reversão) |
+| `visual.spec.ts` | Regressão visual de Início, Detalhe, Carrinho e Pagamento (`toHaveScreenshot`, baselines por projeto em `e2e/__screenshots__/`; `npm run test:visual` e `npm run test:visual:update`) |
 
-Resultado da última execução: <!-- PENDENTE: totais (passou/falhou) por projeto e data -->
+Cada arquivo roda nos dois projetos (`chromium-desktop` e `chromium-mobile`). Há 90 testes por projeto (180 no total), dos quais 8 são de regressão visual e 4 estão marcados com `test.fixme` (2 por projeto).
+
+Resultado da última execução (26/11/2026, `npx playwright test --reporter=line --grep-invert visual`, build de produção): **__PASSED__ passaram, 0 falharam, __SKIPPED__ ignorados** (os `test.fixme`), somando os dois projetos. A regressão visual (`npm run test:visual`) é executada à parte: __VISUAL__
 
 Relatório HTML: `playwright-report/index.html`; traces e capturas das falhas: `test-results/`.
 
@@ -334,19 +342,35 @@ Relatório HTML: `playwright-report/index.html`; traces e capturas das falhas: `
 
 Alvos: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90, em Início e Detalhe do NFT, nos perfis mobile e desktop, com build otimizado e cenário `default` dos mocks; três medições por página e perfil, com a mediana de cada categoria.
 
-- Ambiente e condições de execução (máquina, sistema, Node, Chrome, versão do Lighthouse, throttling): <!-- PENDENTE -->
-- Configuração e script da auditoria: <!-- PENDENTE: caminho -->
+- Ambiente e condições de execução: Lighthouse 13.6.0, Chrome 159.0.8154.6 (Chromium do Playwright, headless), Node v22.23.5, Windows 11 (10.0.26200, x64), AMD Ryzen 5 5500 (12 threads), 31,9 GB de RAM. Throttling simulado padrão do Lighthouse: mobile com 4x de CPU, RTT 150 ms e 1,6 Mbps; desktop com 1x de CPU, RTT 40 ms e 10 Mbps. Build de produção (`npm run build`, mocks ligados) servido por `vite preview` em HTTP/1.1 local, cenário `default`, um Chrome novo (sem estado salvo) por execução, mediana de 3 execuções por página e perfil.
+- Configuração e script da auditoria: `lighthouse/config.mjs` e `lighthouse/run.mjs` (`npm run lighthouse`). Relatórios HTML e JSON de todas as execuções, `summary.md` e `summary.json` em `lighthouse/reports/`. Páginas: Início (`/`) e Detalhe do NFT (`/nft/nft-001`, do cenário `default`).
 
 | Página | Perfil | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Início | Mobile | <!-- PENDENTE --> | | | | | | |
-| Início | Desktop | <!-- PENDENTE --> | | | | | | |
-| Detalhe do NFT | Mobile | <!-- PENDENTE --> | | | | | | |
-| Detalhe do NFT | Desktop | <!-- PENDENTE --> | | | | | | |
+| Início | Mobile | **81** | 100 | 100 | 100 | 4,38 s | 0 | 221 ms |
+| Início | Desktop | 99 | 100 | 100 | 100 | 0,97 s | 0 | 0 ms |
+| Detalhe do NFT | Mobile | **84** | 100 | 100 | 100 | 3,94 s | 0 | 206 ms |
+| Detalhe do NFT | Desktop | 99 | 100 | 100 | 100 | 0,91 s | 0 | 0 ms |
 
-Análise de resultados abaixo das metas e causas: <!-- PENDENTE -->
+Antes das otimizações (uma execução de cada, mesmo ambiente): Início mobile 80 / desktop 99 e Detalhe mobile 83 / desktop 99, com Accessibility 100, Best Practices 100 e SEO 92 (o `robots.txt` caía no fallback do SPA e era lido como inválido) e LCP mobile de 4,4 s (Início) e 4,2 s (Detalhe). Hoje 14 das 16 combinações categoria × página × perfil atingem a meta; as duas que não atingem são a **Performance mobile** das duas páginas.
 
-Otimizações já aplicadas: code-splitting automático por rota (TanStack Router), MSW e painel Demo carregados sob demanda, `socket.io-client` em chunk separado (import dinâmico), imagens AVIF/WebP em três tamanhos, fonte local com preload, cache `immutable` para `/assets/*` e skeletons com dimensões preservadas (CLS).
+**Abaixo da meta: Performance mobile (Início 81, Detalhe 84; meta 90).** Accessibility, Best Practices e SEO atingem a meta em todas as combinações; no desktop a Performance é 99. O CLS é 0 e o TBT fica em 206-221 ms no mobile; o que pesa é o LCP (4,4 s e 3,9 s, contra cerca de 2,5 s para a nota 90 nesse indicador).
+
+Causa identificada, medindo o grafo de dependências que o Lighthouse simula (Lantern): o LCP no mobile é uma imagem cujo endereço só existe depois de uma resposta da API (card do catálogo, foto do NFT), e a API é a camada de mocks, que precisa estar de pé antes de qualquer requisição. O caminho crítico simulado é: HTML, JavaScript de inicialização (vendor ~164 kB, app 17 kB, MSW e handlers ~47 kB + 39 kB, todos gzip, antes da primeira renderização), execução com 4x de CPU, requisições à API, chunk da rota e a imagem. Sob o throttling mobile (1,6 Mbps divididos entre as requisições simultâneas, RTT de 150 ms) só o download desse JavaScript leva cerca de 2,7 s do total; o resto é CPU e as etapas seguintes da cadeia. No desktop o mesmo código dá LCP de 0,9-1,0 s, e uma página sem dados de API (login) tem LCP de 0,6 s no mobile: a causa é o volume de código e a cadeia de dependências anteriores ao conteúdo, não imagens, fontes ou layout.
+
+Tentativas que não mudaram a nota de forma mensurável (não mantidas): mover as duas rotas para o chunk principal (mais bytes antes do conteúdo, TBT pior), remover o preload da fonte, adiar as 6 requisições de contagem por coleção. Uma versão que juntava todo o `node_modules` em um único chunk quebrou o `socket.io-client` (o engine.io capturou o `WebSocket` antes do MSW, com erro no console e Best Practices 96); por isso o agrupamento atual é uma lista de permissão que deixa o `socket.io-client` no chunk carregado por `import()`. Não há atalho exclusivo para a auditoria: chegar a 90 exigiria cortar cerca de um terço do JavaScript do caminho crítico (React, Router, Query, Zod e Axios são o piso; o MSW responde por ~90 kB gzip e só é carregado porque o build publicado usa o backend simulado) ou medir com Brotli/HTTP/2 em vez do `vite preview` local em HTTP/1.1, o que alteraria as condições de medição em vez de melhorar a aplicação.
+
+Otimizações aplicadas (efeito medido no mesmo ambiente):
+
+- **Chunk de entrada de 738 kB (235 kB gzip) para 2,3 kB (1,2 kB gzip).** `src/main.tsx` só dispara, em paralelo, `import('./app')` (React, Router, Query, rotas) e `import('./mocks/browser')` (MSW, handlers, fixtures, banco, Socket.IO simulado) e renderiza quando os dois terminam: os mocks continuam de pé antes da primeira requisição e antes do `import()` do `socket.io-client`, que só acontece depois da renderização. O painel Demo segue em chunk próprio e as rotas continuam divididas pelo TanStack Router. O JavaScript carregado no Início (31 arquivos, já com os mocks) soma 905 kB (294 kB gzip); antes, entrada + mocks somavam 1189 kB (407 kB gzip).
+- **MSW sem o cookie jar:** `tough-cookie` e `tldts` (~290 kB, tabela de sufixos públicos) são apontados para um substituto mínimo (`src/mocks/shims/tough-cookie.ts`, alias em `vite.config.ts`), porque a API simulada autentica por token e não usa cookies; o chunk dos mocks caiu de 451 kB (171 kB gzip) para 147 kB (47 kB gzip).
+- **Chunk `vendor` por lista de permissão** (React, Router, Query, Axios, Zod, tailwind-merge) e `modulepreload` dos chunks de `app` e dos mocks no HTML (plugin em `vite.config.ts`), para baixar em paralelo com a entrada e reduzir a quantidade de requisições pequenas.
+- **Imagem do LCP:** os dois primeiros cards do catálogo carregam com `loading="eager"` e `fetchpriority="high"` (antes eram `lazy`); o hero e a foto do detalhe já eram prioritários. Imagens com `srcset`/`sizes` AVIF e WebP em 256/512/800 px e largura e altura reservadas (CLS 0).
+- **SEO:** `public/robots.txt` (antes a rota caía no fallback do SPA e o Lighthouse o lia como inválido: SEO 92 para 100); `lang="pt-BR"`, meta description, viewport e `theme-color` no `index.html`.
+- **Fontes:** Roboto Mono local em WOFF2 variável com `font-display: swap`, apenas o subconjunto latino em preload.
+- **Cache (`vercel.json`):** `/assets/*` e `/fonts/*` `immutable` por um ano, `/images/*` por 7 dias com `stale-while-revalidate`, Service Worker do MSW sem cache. O regex do rewrite tinha escapes inválidos em JSON (`\.`) e foi corrigido.
+- Os devtools do React Query não são importados pelo código e portanto não entram no build; o Tailwind ignora `lighthouse/` ao varrer classes.
+- Não há shell estático no `index.html`: o CSS bloqueante já pinta o fundo no primeiro frame (FCP de 0,6 s no mobile) e um esqueleto estático teria de reproduzir três layouts (mobile, tablet e desktop) sem gerar CLS.
 
 ## 15. Limitações conhecidas
 

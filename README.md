@@ -73,8 +73,8 @@ Carteiras de Ana: MetaMask principal (Ethereum, Polygon, Arbitrum) e WalletConne
 | Lint | `npm run lint` |
 | Testes E2E (Playwright, Chromium desktop e mobile) | `npm run test:e2e` |
 | Testes E2E com a UI do Playwright | `npm run test:e2e:ui` |
-| Regressão visual | <!-- PENDENTE: script `test:visual` ainda não existe --> |
-| Auditoria Lighthouse | <!-- PENDENTE: script `lighthouse` ainda não existe (a dependência `lighthouse` já está instalada) --> |
+| Regressão visual (início, detalhe, carrinho e pagamento) | `npm run test:visual`; regenerar as baselines (`e2e/__screenshots__/`) com `npm run test:visual:update` |
+| Auditoria Lighthouse (build + preview + 3 execuções por página e perfil) | `npm run lighthouse` |
 
 Notas sobre o Playwright (`playwright.config.ts`): os testes rodam contra o **build de produção** (com mocks ligados, como no deploy), servido por `npm run build && npm run preview --port 4173`; se já houver um servidor na porta 4173, ele é reaproveitado (fora de CI). Projetos: `chromium-desktop` (1440×900) e `chromium-mobile` (Pixel 7). Relatório HTML em `playwright-report/` e traces/capturas das falhas em `test-results/` (`npx playwright show-report`).
 
@@ -178,5 +178,6 @@ src/
 ## Relatórios de testes e auditoria
 
 - Relatório HTML dos testes E2E: `playwright-report/index.html` (gerado por `npm run test:e2e`); traces e capturas das falhas em `test-results/`.
-- Relatórios Lighthouse (HTML/JSON) e configuração da auditoria: <!-- PENDENTE: caminho dos relatórios e do script de auditoria -->
+- Relatórios Lighthouse: `lighthouse/reports/`, com o HTML e o JSON de cada execução (`<página>-<perfil>-run<N>`), `summary.md` (tabela de medianas, execuções individuais, versões, sistema, hardware e condições) e `summary.json`. Configuração da auditoria (páginas, perfis mobile/desktop, throttling simulado padrão, 3 execuções): `lighthouse/config.mjs`; script: `lighthouse/run.mjs`.
+- `npm run lighthouse` faz o `npm run build`, sobe o `vite preview` (porta 4180), audita Início (`/`) e Detalhe (`/nft/nft-001`) nos perfis mobile e desktop, cada um em um Chrome novo (cenário `default`, sem estado salvo), e sobrescreve `lighthouse/reports/`. Usa o Chrome instalado ou, se não houver, o Chromium do Playwright (`CHROME_PATH` força outro). Variáveis opcionais: `LH_RUNS`, `LH_ONLY=inicio:mobile,...`, `LH_OUT`, `LH_SKIP_BUILD=1`. A auditoria usa o mesmo build, os mesmos mocks, imagens e fontes da entrega.
 - Resultados e análise: seções "Testes" e "Performance (Lighthouse)" do [ARCHITECTURE.md](./ARCHITECTURE.md).
