@@ -1,7 +1,16 @@
 import type { QueryClient } from '@tanstack/react-query'
-import { createRootRouteWithContext, Link, Outlet } from '@tanstack/react-router'
-import { usePrivateCacheIsolation, useSession } from '@/features/auth/use-session'
-import { RealtimeProvider } from '@/shared/realtime/realtime-provider'
+import { createRootRouteWithContext, Outlet, useRouterState } from '@tanstack/react-router'
+import { SessionProvider } from '@/features/auth/session-provider'
+import { useSession } from '@/features/auth/session'
+import { useLogout } from '@/features/auth/use-auth'
+import { useCartCount } from '@/features/cart/use-cart'
+import { cn } from '@/shared/lib/utils'
+import { CartButton } from '@/shared/layout/cart-button'
+import { MobileTabBar } from '@/shared/layout/mobile-tab-bar'
+import { SiteFooter } from '@/shared/layout/site-footer'
+import { SiteHeader } from '@/shared/layout/site-header'
+import { NotFoundPage, RouteErrorPage } from '@/shared/layout/status-page'
+import { LoginButton, UserMenu } from '@/shared/layout/user-menu'
 
 export interface RouterContext {
   queryClient: QueryClient
@@ -9,31 +18,55 @@ export interface RouterContext {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootLayout,
-  notFoundComponent: NotFound,
+  notFoundComponent: NotFoundPage,
+  errorComponent: RouteErrorPage,
 })
 
-function RootLayout() {
-  const { token, user, status } = useSession()
-  usePrivateCacheIsolation(user?.id ?? null)
-
-  // Wait for the session before opening the socket, so it is authenticated as the right user.
-  const realtimeToken = status === 'authenticated' ? token : null
-  return (
-    <RealtimeProvider token={realtimeToken} userId={user?.id ?? null}>
-      <Outlet />
-    </RealtimeProvider>
-  )
+/** Screens with their own bottom action bar on mobile (the tab bar would cover it). */
+function useHidesTabBar() {
+  return useRouterState({
+    select: (state) => state.matches.some((match) => match.routeId === '/nft/$nftId'),
+  })
 }
 
-function NotFound() {
+function AccountSlot({ variant }: { variant: 'header' | 'menu' }) {
+  const { user, status } = useSession()
+  const logout = useLogout()
+  if (status === 'loading') {
+    // Reserve the button box while the stored session is validated (no layout shift).
+    return <span aria-hidden="true" className={cn('block h-[35px] rounded-sm bg-surface', variant === 'header' ? 'w-[100px]' : 'w-full')} />
+  }
+  if (!user) return <LoginButton className={variant === 'menu' ? 'w-full' : undefined} />
+  return <UserMenu name={user.name} email={user.email} onLogout={() => logout.mutate()} loggingOut={logout.isPending} />
+}
+
+function RootLayout() {
+  const cartCount = useCartCount()
+  const { user } = useSession()
+  const hideTabBar = useHidesTabBar()
+
   return (
-    <main className="mx-auto max-w-xl p-8">
-      <h1 className="text-2xl font-semibold">Page not found</h1>
-      <p className="mt-2">
-        <Link to="/" className="underline">
-          Back to the marketplace
-        </Link>
-      </p>
-    </main>
+    <SessionProvider>
+      <a
+        href="#conteudo"
+        className="fixed top-2 left-2 z-[60] -translate-y-20 rounded-sm bg-brand px-4 py-2 text-sm font-bold text-ink transition-transform focus:translate-y-0"
+      >
+        Pular para o conteúdo
+      </a>
+      <div className="flex min-h-dvh flex-col">
+        <SiteHeader
+          cart={<CartButton count={cartCount} />}
+          account={<AccountSlot variant="header" />}
+          mobileAccount={<AccountSlot variant="menu" />}
+        />
+        <main id="conteudo" tabIndex={-1} className={cn('flex-1 outline-none', !hideTabBar && 'max-md:pb-6')}>
+          <Outlet />
+        </main>
+        <div className={hideTabBar ? 'max-md:pb-44' : 'max-md:pb-24'}>
+          <SiteFooter />
+        </div>
+      </div>
+      {hideTabBar ? null : <MobileTabBar cartCount={cartCount} accountHref={user ? '/account/profile' : '/login'} />}
+    </SessionProvider>
   )
 }
