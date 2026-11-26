@@ -6,7 +6,7 @@ export type WalletProvider = z.infer<typeof walletProviderSchema>
 /** One primary and at most one secondary wallet per user. */
 export const walletRoleSchema = z.enum(['primary', 'secondary'])
 export type WalletRole = z.infer<typeof walletRoleSchema>
-export const walletAddressSchema = z.string().regex(/^0x[0-9a-fA-F]{40}$/, 'Invalid wallet address')
+export const walletAddressSchema = z.string().regex(/^0x[0-9a-fA-F]{40}$/, 'Endereço de carteira inválido (0x + 40 caracteres hexadecimais)')
 
 export const walletSchema = z.object({
   id: idSchema,

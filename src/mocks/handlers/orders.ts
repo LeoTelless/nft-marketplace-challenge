@@ -29,7 +29,7 @@ export const orderHandlers = [
           return HttpResponse.json(existing.order, { status: 200 })
         }
 
-        if (is('validation-error')) validationError({ 'collector.fullName': ['Name does not match the wallet owner (simulated)'] })
+        if (is('validation-error')) validationError({ 'collector.displayName': ['O nome não confere com o titular da carteira (simulado)'] })
 
         const cart = getOrCreateCart({ userId: user.id })
         const firstLine = cart.lines[0]
@@ -64,9 +64,9 @@ export const orderHandlers = [
         }
 
         const wallet = state.wallets.find((w) => w.id === body.walletId && w.userId === user.id)
-        if (!wallet) validationError({ walletId: ['Select one of your wallets'] })
+        if (!wallet) validationError({ walletId: ['Selecione uma das suas carteiras'] })
         if (!wallet.networks.includes(body.network)) {
-          validationError({ network: [`${wallet.label} does not support ${body.network}`] })
+          validationError({ network: [`${wallet.label} não opera na rede ${body.network}`] })
         }
 
         const record = createPendingOrder({

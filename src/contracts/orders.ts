@@ -7,9 +7,30 @@ export type OrderStatus = z.infer<typeof orderStatusSchema>
 /** `confirmed` and `rejected` are terminal: nothing moves an order out of them. */
 export const TERMINAL_ORDER_STATUSES: readonly OrderStatus[] = ['confirmed', 'rejected']
 
+/**
+ * "Perfil do colecionador" fields of the payment layout. ENS name and referral code are
+ * optional (a required referral code would block buyers without one; see design/DECISOES.md).
+ */
 export const collectorSchema = z.object({
-  fullName: z.string().trim().min(2).max(80),
-  email: z.email(),
+  displayName: z.string().trim().min(2, 'Informe o nome de exibição').max(60),
+  username: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9_.]{3,30}$/i, 'Use de 3 a 30 letras, números, "_" ou "."'),
+  profileName: z.string().trim().min(2, 'Informe o nome do perfil').max(60),
+  email: z.email('Informe um e-mail válido'),
+  /** Without the `.eth` suffix. */
+  ensName: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9-]{3,63}$/i, 'Use de 3 a 63 letras, números ou "-"')
+    .optional(),
+  referralCode: z
+    .string()
+    .trim()
+    .regex(/^[A-Z0-9]{4,16}$/i, 'Código de indicação inválido')
+    .optional(),
+  note: z.string().trim().max(280, 'Use no máximo 280 caracteres').optional(),
 })
 export type Collector = z.infer<typeof collectorSchema>
 

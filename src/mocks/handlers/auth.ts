@@ -42,11 +42,11 @@ export const authHandlers = [
     api(endpoints.register),
     route(async ({ request }) => {
       const body = await parseBody(request, registerRequestSchema)
-      if (is('validation-error')) validationError({ name: ['This name is not allowed (simulated server rule)'] })
+      if (is('validation-error')) validationError({ name: ['Este nome não é permitido (regra simulada do servidor)'] })
       const taken = db().users.some((u) => u.email.toLowerCase() === body.email.toLowerCase())
       if (taken || is('register-conflict')) {
         throw new MockHttpError(409, 'email_conflict', 'An account with this email already exists', {
-          fieldErrors: { email: ['This email is already registered'] },
+          fieldErrors: { email: ['Este e-mail já está cadastrado'] },
         })
       }
       const salt = randomHex(6)

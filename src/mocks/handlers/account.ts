@@ -40,7 +40,7 @@ function assertAddressFree(userId: string, address: string, exceptId?: string) {
   const clash = walletsOf(userId).some((w) => w.id !== exceptId && w.address.toLowerCase() === address.toLowerCase())
   if (clash) {
     throw new MockHttpError(409, 'wallet_conflict', 'This address is already registered', {
-      fieldErrors: { address: ['This address is already registered'] },
+      fieldErrors: { address: ['Este endereço já está cadastrado'] },
     })
   }
 }
@@ -57,11 +57,11 @@ export const accountHandlers = [
       async (ctx) => {
         const user = requireUser(ctx)
         const body = await parseBody(ctx.request, updateProfileRequestSchema)
-        if (is('validation-error')) validationError({ name: ['This name is not allowed (simulated server rule)'] })
+        if (is('validation-error')) validationError({ name: ['Este nome não é permitido (regra simulada do servidor)'] })
         const taken = db().users.some((u) => u.id !== user.id && u.email.toLowerCase() === body.email.toLowerCase())
         if (taken) {
           throw new MockHttpError(409, 'email_conflict', 'This email is used by another account', {
-            fieldErrors: { email: ['This email is used by another account'] },
+            fieldErrors: { email: ['Este e-mail é usado por outra conta'] },
           })
         }
         Object.assign(user, { name: body.name, email: body.email, bio: body.bio })
@@ -92,12 +92,12 @@ export const accountHandlers = [
       async (ctx) => {
         const user = requireUser(ctx)
         const body = await parseBody(ctx.request, changePasswordRequestSchema)
-        if (is('validation-error')) validationError({ newPassword: ['This password was used recently (simulated server rule)'] })
+        if (is('validation-error')) validationError({ newPassword: ['Esta senha foi usada recentemente (regra simulada do servidor)'] })
         if ((await hashPassword(user.salt, body.currentPassword)) !== user.passwordHash) {
-          validationError({ currentPassword: ['Current password is incorrect'] })
+          validationError({ currentPassword: ['A senha atual está incorreta'] })
         }
         if (body.currentPassword === body.newPassword) {
-          validationError({ newPassword: ['The new password must be different'] })
+          validationError({ newPassword: ['A nova senha deve ser diferente da atual'] })
         }
         user.salt = randomHex(6)
         user.passwordHash = await hashPassword(user.salt, body.newPassword)
@@ -130,10 +130,10 @@ export const accountHandlers = [
       async (ctx) => {
         const user = requireUser(ctx)
         const body = await parseBody(ctx.request, createWalletRequestSchema)
-        if (is('validation-error')) validationError({ address: ['This address is flagged (simulated server rule)'] })
+        if (is('validation-error')) validationError({ address: ['Este endereço foi sinalizado (regra simulada do servidor)'] })
         if (walletsOf(user.id).some((w) => w.role === body.role)) {
           throw new MockHttpError(409, 'wallet_conflict', `You already have a ${body.role} wallet`, {
-            fieldErrors: { role: [`You already have a ${body.role} wallet`] },
+            fieldErrors: { role: [body.role === 'primary' ? 'Você já tem uma carteira principal' : 'Você já tem uma carteira secundária'] },
           })
         }
         assertAddressFree(user.id, body.address)
@@ -154,7 +154,7 @@ export const accountHandlers = [
         const user = requireUser(ctx)
         const wallet = findWallet(user.id, ctx.params.id)
         const body = await parseBody(ctx.request, updateWalletRequestSchema)
-        if (is('validation-error')) validationError({ label: ['This label is not allowed (simulated server rule)'] })
+        if (is('validation-error')) validationError({ label: ['Este apelido não é permitido (regra simulada do servidor)'] })
         if (body.address) assertAddressFree(user.id, body.address, wallet.id)
         if (body.role && body.role !== wallet.role) {
           const other = walletsOf(user.id).find((w) => w.id !== wallet.id && w.role === body.role)
@@ -180,7 +180,7 @@ export const accountHandlers = [
           throw new MockHttpError(422, 'wallet_rejected', 'The connection request was declined in the wallet (simulated)')
         }
         if (!wallet.networks.includes(body.network)) {
-          validationError({ network: [`${wallet.label} does not support ${body.network}`] })
+          validationError({ network: [`${wallet.label} não opera na rede ${body.network}`] })
         }
         const connection: WalletConnection = { walletId: wallet.id, network: body.network, connectedAt: now() }
         return HttpResponse.json(connection)

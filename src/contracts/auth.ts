@@ -23,9 +23,9 @@ export type SessionInfo = z.infer<typeof sessionInfoSchema>
 
 export const passwordSchema = z
   .string()
-  .min(8, 'Password must have at least 8 characters')
-  .regex(/[A-Za-z]/, 'Password must contain a letter')
-  .regex(/\d/, 'Password must contain a number')
+  .min(8, 'A senha deve ter pelo menos 8 caracteres')
+  .regex(/[A-Za-z]/, 'A senha deve conter uma letra')
+  .regex(/\d/, 'A senha deve conter um número')
 
 /** 401 `invalid_credentials`. */
 export const loginRequestSchema = z.object({

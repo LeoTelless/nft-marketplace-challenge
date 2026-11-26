@@ -24,8 +24,8 @@ export type UpdateProfileRequest = z.infer<typeof updateProfileRequestSchema>
 export const updateAvatarRequestSchema = z.object({
   dataUrl: z
     .string()
-    .regex(/^data:image\/(png|jpeg|webp);base64,/, 'Unsupported image format')
-    .max(1_400_000, 'Image too large')
+    .regex(/^data:image\/(png|jpeg|webp);base64,/, 'Formato de imagem não suportado (use PNG, JPEG ou WebP)')
+    .max(1_400_000, 'Imagem grande demais (máximo 1 MB)')
     .nullable(),
 })
 export type UpdateAvatarRequest = z.infer<typeof updateAvatarRequestSchema>

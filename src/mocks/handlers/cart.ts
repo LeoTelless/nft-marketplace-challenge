@@ -74,12 +74,12 @@ export const cartHandlers = [
       const body = await parseBody(request, quoteRequestSchema)
       if (body.couponCode && is('coupon-invalid')) {
         throw new MockHttpError(422, 'coupon_invalid', 'This coupon does not exist', {
-          fieldErrors: { couponCode: ['Invalid coupon code'] },
+          fieldErrors: { couponCode: ['Cupom inválido'] },
         })
       }
       if (body.couponCode && is('coupon-expired')) {
         throw new MockHttpError(422, 'coupon_expired', 'This coupon has expired', {
-          fieldErrors: { couponCode: ['This coupon has expired'] },
+          fieldErrors: { couponCode: ['Este cupom expirou'] },
         })
       }
       const quote = computeQuote(resolveCart(request, user), body.couponCode ?? null, body.network)

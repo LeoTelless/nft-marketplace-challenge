@@ -84,8 +84,8 @@ export function assertAvailable(nftId: string, editionId: string, requested: num
       409,
       'availability_conflict',
       found.edition.available === 0
-        ? `${found.nft.name} (${found.edition.name}) is sold out`
-        : `Only ${limit} unit(s) of ${found.nft.name} (${found.edition.name}) can be bought`,
+        ? `${found.nft.name} (${found.edition.name}) está esgotado`
+        : `Só é possível comprar ${limit} unidade(s) de ${found.nft.name} (${found.edition.name})`,
       { details: { issues: [{ nftId, editionId, requested, available: limit }] } },
     )
   }
@@ -117,12 +117,12 @@ export function resolveCoupon(code: string | undefined | null) {
   const coupon = db().coupons.find((c) => c.code.toLowerCase() === code.trim().toLowerCase())
   if (!coupon) {
     throw new MockHttpError(422, 'coupon_invalid', 'This coupon does not exist', {
-      fieldErrors: { couponCode: ['Invalid coupon code'] },
+      fieldErrors: { couponCode: ['Cupom inválido'] },
     })
   }
   if (Date.parse(coupon.expiresAt) <= Date.now()) {
     throw new MockHttpError(422, 'coupon_expired', 'This coupon has expired', {
-      fieldErrors: { couponCode: ['This coupon has expired'] },
+      fieldErrors: { couponCode: ['Este cupom expirou'] },
     })
   }
   return { code: coupon.code, percentOff: coupon.percentOff }
@@ -146,13 +146,13 @@ export function computeQuote(cart: DbCart, couponCode: string | null, network: N
   const issues: QuoteIssue[] = []
   for (const item of view.items) {
     if (item.available === 0) {
-      issues.push({ type: 'sold_out', nftId: item.nftId, editionId: item.editionId, message: `${item.nftName} (${item.editionName}) is sold out` })
+      issues.push({ type: 'sold_out', nftId: item.nftId, editionId: item.editionId, message: `${item.nftName} (${item.editionName}) está esgotado` })
     } else if (item.quantity > item.available) {
       issues.push({
         type: 'insufficient_availability',
         nftId: item.nftId,
         editionId: item.editionId,
-        message: `Only ${item.available} unit(s) of ${item.nftName} (${item.editionName}) left`,
+        message: `Restam apenas ${item.available} unidade(s) de ${item.nftName} (${item.editionName})`,
       })
     }
   }
@@ -260,7 +260,7 @@ export function resolveOrder(orderId: string, outcome: 'confirmed' | 'rejected')
     reserveStock(record.reserved, -1)
     return mutateOrder(orderId, (draft) => {
       draft.status = 'rejected'
-      draft.rejectionReason = 'Payment declined by the wallet (simulated)'
+      draft.rejectionReason = 'Pagamento recusado pela carteira (simulado)'
     })
   }
 
