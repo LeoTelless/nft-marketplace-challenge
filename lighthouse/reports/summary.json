@@ -1,13 +1,14 @@
 {
   "environment": {
-    "generatedAt": "2026-11-26T18:22:15.908Z",
+    "label": "Local, build servido com compressão (Brotli) e cabeçalhos do vercel.json",
+    "generatedAt": "2026-11-26T18:32:57.094Z",
     "lighthouse": "13.6.0",
     "chrome": "Chrome/159.0.8154.6",
     "node": "v22.23.5",
     "system": "Windows_NT 10.0.26200 (win32 x64)",
     "hardware": "AMD Ryzen 5 5500, 12 threads, 31.9 GB RAM",
     "conditions": {
-      "build": "npm run build (production, mocks on) served by vite preview",
+      "target": "npm run build (production, mocks on) served by lighthouse/server.mjs on localhost, HTTP/1.1, Brotli",
       "scenario": "default (fresh browser profile per run, no ?scenario)",
       "throttling": "simulated (Lighthouse default). Mobile: 4x CPU, 150 ms RTT, 1.6 Mbps. Desktop: 1x CPU, 40 ms RTT, 10 Mbps",
       "runsPerCase": 3,
@@ -20,50 +21,53 @@
       "path": "/",
       "profile": "Mobile",
       "median": {
-        "performance": 81,
+        "performance": 80,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 4381,
+        "lcpMs": 4384,
         "cls": 0,
-        "tbtMs": 221
+        "tbtMs": 259
       },
       "runs": [
         {
           "run": 1,
+          "performance": 79,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 4396.7429999999995,
+          "cls": 0,
+          "tbt": 259,
+          "report": "inicio-mobile-run1",
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": false
+        },
+        {
+          "run": 2,
           "performance": 81,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 4400.224000000002,
+          "lcp": 4384,
           "cls": 0,
-          "tbt": 221.00000000000023,
-          "report": "inicio-mobile-run1",
-          "lighthouseVersion": "13.6.0"
+          "tbt": 232,
+          "report": "inicio-mobile-run2",
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": false
         },
         {
-          "run": 2,
+          "run": 3,
           "performance": 80,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 4381.158000000001,
+          "lcp": 4379,
           "cls": 0,
-          "tbt": 270.99999999999955,
-          "report": "inicio-mobile-run2",
-          "lighthouseVersion": "13.6.0"
-        },
-        {
-          "run": 3,
-          "performance": 81,
-          "accessibility": 100,
-          "bestPractices": 100,
-          "seo": 100,
-          "lcp": 4376.645,
-          "cls": 0,
-          "tbt": 211.50000000000045,
+          "tbt": 271.5,
           "report": "inicio-mobile-run3",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": true
         }
       ]
     },
@@ -72,26 +76,27 @@
       "path": "/",
       "profile": "Desktop",
       "median": {
-        "performance": 99,
+        "performance": 97,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 967,
+        "lcpMs": 1219,
         "cls": 0,
         "tbtMs": 0
       },
       "runs": [
         {
           "run": 1,
-          "performance": 99,
+          "performance": 97,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 972.2259999999994,
+          "lcp": 1219,
           "cls": 0,
           "tbt": 0,
           "report": "inicio-desktop-run1",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": true
         },
         {
           "run": 2,
@@ -99,23 +104,25 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 967.3280000000005,
+          "lcp": 927.2740000000002,
           "cls": 0,
           "tbt": 0,
           "report": "inicio-desktop-run2",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": false
         },
         {
           "run": 3,
-          "performance": 99,
+          "performance": 97,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 965.2619999999995,
+          "lcp": 1222,
           "cls": 0,
           "tbt": 0,
           "report": "inicio-desktop-run3",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": false
         }
       ]
     },
@@ -124,50 +131,53 @@
       "path": "/nft/nft-001",
       "profile": "Mobile",
       "median": {
-        "performance": 84,
+        "performance": 81,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 3935,
+        "lcpMs": 4083,
         "cls": 0,
-        "tbtMs": 206
+        "tbtMs": 265
       },
       "runs": [
         {
           "run": 1,
-          "performance": 85,
+          "performance": 81,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 3934.9275,
+          "lcp": 4082,
           "cls": 0,
-          "tbt": 199.49999999999955,
+          "tbt": 265,
           "report": "detalhe-mobile-run1",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": true
         },
         {
           "run": 2,
-          "performance": 84,
+          "performance": 83,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 3934.675,
+          "lcp": 4083,
           "cls": 0,
-          "tbt": 205.5,
+          "tbt": 232,
           "report": "detalhe-mobile-run2",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": false
         },
         {
           "run": 3,
-          "performance": 84,
+          "performance": 81,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 3944.3999999999987,
+          "lcp": 4096,
           "cls": 0,
-          "tbt": 207,
+          "tbt": 282,
           "report": "detalhe-mobile-run3",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": false
         }
       ]
     },
@@ -176,11 +186,11 @@
       "path": "/nft/nft-001",
       "profile": "Desktop",
       "median": {
-        "performance": 99,
+        "performance": 98,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 909,
+        "lcpMs": 1125,
         "cls": 0,
         "tbtMs": 0
       },
@@ -191,35 +201,38 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 907.0925000000003,
+          "lcp": 867.1925000000001,
           "cls": 0,
           "tbt": 0,
           "report": "detalhe-desktop-run1",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": false
         },
         {
           "run": 2,
-          "performance": 99,
+          "performance": 98,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 911.8587499999994,
+          "lcp": 1139,
           "cls": 0,
           "tbt": 0,
           "report": "detalhe-desktop-run2",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": false
         },
         {
           "run": 3,
-          "performance": 99,
+          "performance": 98,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 909.2924999999997,
+          "lcp": 1124.5,
           "cls": 0,
           "tbt": 0,
           "report": "detalhe-desktop-run3",
-          "lighthouseVersion": "13.6.0"
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": true
         }
       ]
     }

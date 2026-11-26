@@ -342,23 +342,37 @@ Relatório HTML: `playwright-report/index.html`; traces e capturas das falhas: `
 
 Alvos: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90, em Início e Detalhe do NFT, nos perfis mobile e desktop, com build otimizado e cenário `default` dos mocks; três medições por página e perfil, com a mediana de cada categoria.
 
-- Ambiente e condições de execução: Lighthouse 13.6.0, Chrome 159.0.8154.6 (Chromium do Playwright, headless), Node v22.23.5, Windows 11 (10.0.26200, x64), AMD Ryzen 5 5500 (12 threads), 31,9 GB de RAM. Throttling simulado padrão do Lighthouse: mobile com 4x de CPU, RTT 150 ms e 1,6 Mbps; desktop com 1x de CPU, RTT 40 ms e 10 Mbps. Build de produção (`npm run build`, mocks ligados) servido por `vite preview` em HTTP/1.1 local, cenário `default`, um Chrome novo (sem estado salvo) por execução, mediana de 3 execuções por página e perfil.
-- Configuração e script da auditoria: `lighthouse/config.mjs` e `lighthouse/run.mjs` (`npm run lighthouse`). Relatórios HTML e JSON de todas as execuções, `summary.md` e `summary.json` em `lighthouse/reports/`. Páginas: Início (`/`) e Detalhe do NFT (`/nft/nft-001`, do cenário `default`).
+- Configuração e script: `lighthouse/config.mjs` (páginas, perfis e throttling) e `lighthouse/run.mjs` (`npm run lighthouse`; `npm run lighthouse -- --url <base>` audita um ambiente publicado). Páginas: Início (`/`) e Detalhe do NFT (`/nft/nft-001`, do cenário `default`). Cada execução usa um Chrome novo, sem estado salvo; mediana de 3 execuções por página e perfil.
+- Relatórios: `lighthouse/reports/` (local) e `lighthouse/reports/production/` (Vercel). Só o HTML e o JSON da execução mediana de cada combinação são versionados; `summary.md` e `summary.json` trazem as três execuções de cada uma.
+- Ferramentas e máquina (iguais nas duas medições): Lighthouse 13.6.0, Chrome 159.0.8154.6 (Chromium do Playwright, headless), Node v22.23.5, Windows 11 (10.0.26200, x64), AMD Ryzen 5 5500 (12 threads), 31,9 GB de RAM. Throttling simulado padrão do Lighthouse: mobile com 4x de CPU, RTT 150 ms e 1,6 Mbps; desktop com 1x de CPU, RTT 40 ms e 10 Mbps.
+
+### Medição em produção (Vercel, Brotli, HTTP/2), a entrega real
+
+URL `https://nft-marketplace-challenge-ivory.vercel.app` (mesmo código do commit auditado), cenário `default`.
 
 | Página | Perfil | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Início | Mobile | **81** | 100 | 100 | 100 | 4,38 s | 0 | 221 ms |
-| Início | Desktop | 99 | 100 | 100 | 100 | 0,97 s | 0 | 0 ms |
-| Detalhe do NFT | Mobile | **84** | 100 | 100 | 100 | 3,94 s | 0 | 206 ms |
-| Detalhe do NFT | Desktop | 99 | 100 | 100 | 100 | 0,91 s | 0 | 0 ms |
+| Início | Mobile | 90 | 100 | 100 | 100 | 2,74 s | 0 | 281 ms |
+| Início | Desktop | 100 | 100 | 100 | 100 | 0,59 s | 0 | 0 ms |
+| Detalhe do NFT | Mobile | 92 | 100 | 100 | 100 | 2,75 s | 0 | 217 ms |
+| Detalhe do NFT | Desktop | 100 | 100 | 100 | 100 | 0,60 s | 0 | 0 ms |
 
-Antes das otimizações (uma execução de cada, mesmo ambiente): Início mobile 80 / desktop 99 e Detalhe mobile 83 / desktop 99, com Accessibility 100, Best Practices 100 e SEO 92 (o `robots.txt` caía no fallback do SPA e era lido como inválido) e LCP mobile de 4,4 s (Início) e 4,2 s (Detalhe). Hoje 14 das 16 combinações categoria × página × perfil atingem a meta; as duas que não atingem são a **Performance mobile** das duas páginas.
+Todas as metas foram atingidas. A Performance do Início mobile é a mais justa: 90, 91 e 88 nas três execuções (mediana 90; a execução de 88 teve TBT de 363 ms), então fica no limite da meta e pode oscilar abaixo dela em uma medição isolada.
 
-**Abaixo da meta: Performance mobile (Início 81, Detalhe 84; meta 90).** Accessibility, Best Practices e SEO atingem a meta em todas as combinações; no desktop a Performance é 99. O CLS é 0 e o TBT fica em 206-221 ms no mobile; o que pesa é o LCP (4,4 s e 3,9 s, contra cerca de 2,5 s para a nota 90 nesse indicador).
+### Medição local (build servido por `lighthouse/server.mjs`: Brotli, cabeçalhos do `vercel.json`, fallback de SPA, HTTP/1.1)
 
-Causa identificada, medindo o grafo de dependências que o Lighthouse simula (Lantern): o LCP no mobile é uma imagem cujo endereço só existe depois de uma resposta da API (card do catálogo, foto do NFT), e a API é a camada de mocks, que precisa estar de pé antes de qualquer requisição. O caminho crítico simulado é: HTML, JavaScript de inicialização (vendor ~164 kB, app 17 kB, MSW e handlers ~47 kB + 39 kB, todos gzip, antes da primeira renderização), execução com 4x de CPU, requisições à API, chunk da rota e a imagem. Sob o throttling mobile (1,6 Mbps divididos entre as requisições simultâneas, RTT de 150 ms) só o download desse JavaScript leva cerca de 2,7 s do total; o resto é CPU e as etapas seguintes da cadeia. No desktop o mesmo código dá LCP de 0,9-1,0 s, e uma página sem dados de API (login) tem LCP de 0,6 s no mobile: a causa é o volume de código e a cadeia de dependências anteriores ao conteúdo, não imagens, fontes ou layout.
+| Página | Perfil | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Início | Mobile | **80** | 100 | 100 | 100 | 4,38 s | 0 | 259 ms |
+| Início | Desktop | 97 | 100 | 100 | 100 | 1,22 s | 0 | 0 ms |
+| Detalhe do NFT | Mobile | **81** | 100 | 100 | 100 | 4,08 s | 0 | 265 ms |
+| Detalhe do NFT | Desktop | 98 | 100 | 100 | 100 | 1,13 s | 0 | 0 ms |
 
-Tentativas que não mudaram a nota de forma mensurável (não mantidas): mover as duas rotas para o chunk principal (mais bytes antes do conteúdo, TBT pior), remover o preload da fonte, adiar as 6 requisições de contagem por coleção. Uma versão que juntava todo o `node_modules` em um único chunk quebrou o `socket.io-client` (o engine.io capturou o `WebSocket` antes do MSW, com erro no console e Best Practices 96); por isso o agrupamento atual é uma lista de permissão que deixa o `socket.io-client` no chunk carregado por `import()`. Não há atalho exclusivo para a auditoria: chegar a 90 exigiria cortar cerca de um terço do JavaScript do caminho crítico (React, Router, Query, Zod e Axios são o piso; o MSW responde por ~90 kB gzip e só é carregado porque o build publicado usa o backend simulado) ou medir com Brotli/HTTP/2 em vez do `vite preview` local em HTTP/1.1, o que alteraria as condições de medição em vez de melhorar a aplicação.
+Medições anteriores no mesmo ambiente local, com o `vite preview` (gzip, HTTP/1.1): Início mobile 81 (LCP 4,38 s) e Detalhe mobile 84 (3,94 s); antes de todas as otimizações, Início mobile 80 e Detalhe mobile 83 (LCP 4,4 s e 4,2 s) com SEO 92, porque o `robots.txt` caía no fallback do SPA e era lido como inválido. O `vite preview` já comprimia com gzip, então trocar por Brotli não mudou a nota de forma mensurável.
+
+**Abaixo da meta no local: Performance mobile (80 e 81).** Accessibility, Best Practices e SEO atingem a meta em todas as combinações, CLS é 0 e no desktop a Performance é 97-98. O que pesa é o LCP (4,4 s e 4,1 s contra cerca de 2,5 s para a nota 90). Causa, medida no grafo de dependências que o Lighthouse simula (Lantern): o LCP mobile é uma imagem cujo endereço só existe depois de uma resposta da API (card do catálogo, foto do NFT), e a API é a camada de mocks, que precisa estar de pé antes de qualquer requisição. O caminho crítico é HTML, JavaScript de inicialização (vendor ~164 kB, app 17 kB, MSW e handlers ~47 + 39 kB, gzip), execução com 4x de CPU, requisições à API, chunk da rota e a imagem. Sob 1,6 Mbps compartilhados entre ~30 requisições simultâneas, em um servidor local HTTP/1.1 (no máximo 6 conexões, uma fila de requisições pequenas), só o download desse JavaScript leva cerca de 2,7 s simulados. Na Vercel, com HTTP/2 (multiplexação em uma conexão) e Brotli, o mesmo código e as mesmas páginas dão LCP de 2,7 s e Performance 90-92: a diferença entre as duas tabelas é o protocolo de transporte da medição, não o conteúdo, que é idêntico. Essa explicação é a mais consistente com os dados, mas não foi isolada com um servidor local em HTTP/2.
+
+Tentativas que não mudaram a nota de forma mensurável (não mantidas): mover as duas rotas para o chunk principal (mais bytes antes do conteúdo, TBT pior), remover o preload da fonte, adiar as 6 requisições de contagem por coleção, servir com Brotli. Uma versão que juntava todo o `node_modules` em um único chunk quebrou o `socket.io-client` (o engine.io capturou o `WebSocket` antes do MSW, com erro no console e Best Practices 96); por isso o agrupamento atual é uma lista de permissão que deixa o `socket.io-client` no chunk carregado por `import()`.
 
 Otimizações aplicadas (efeito medido no mesmo ambiente):
 
