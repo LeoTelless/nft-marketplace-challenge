@@ -8,8 +8,13 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  reporter: [['line'], ['html', { open: 'never' }]],
-  expect: { timeout: 7_000 },
+  reporter: [['line'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
+  // One baseline per project, no OS suffix: the baselines are versioned and regenerated with `npm run test:visual:update`.
+  snapshotPathTemplate: '{testDir}/__screenshots__/{projectName}/{arg}{ext}',
+  expect: {
+    timeout: 7_000,
+    toHaveScreenshot: { animations: 'disabled', caret: 'hide', scale: 'css', maxDiffPixelRatio: 0.001 },
+  },
   use: {
     baseURL: BASE_URL,
     trace: 'retain-on-failure',

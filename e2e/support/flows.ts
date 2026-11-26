@@ -17,7 +17,7 @@ export const USERS = {
   bruno: { id: 'user-bruno', email: 'bruno@nftmarket.test', password: 'Market@2026', name: 'Bruno Lima' },
 } as const
 
-export async function fillLogin(page: Page, user: (typeof USERS)[keyof typeof USERS]) {
+export async function fillLogin(page: Page, user: { email: string; password: string }) {
   const dialog = authDialog(page)
   await expect(dialog).toBeVisible()
   await dialog.getByLabel('E-mail', { exact: true }).fill(user.email)

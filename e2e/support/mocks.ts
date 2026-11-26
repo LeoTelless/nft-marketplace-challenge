@@ -10,8 +10,21 @@ export interface MocksControl {
   setScenario(id: string): void
   reset(): void
   getState(): {
-    nfts: Array<{ id: string; name: string; editions: Array<{ id: string; name: string; price: string; available: number; maxPerOrder: number }> }>
+    nfts: Array<{
+      id: string
+      name: string
+      description: string
+      category: string
+      creator: { name: string }
+      minPrice: string
+      totalAvailable: number
+      featured: boolean
+      createdAt: string
+      editions: Array<{ id: string; name: string; price: string; available: number; maxPerOrder: number }>
+    }>
     orders: Array<{ order: { id: string; status: string }; userId: string; idempotencyKey: string }>
+    users: Array<{ id: string; email: string; name: string }>
+    wallets: Array<{ id: string; userId: string; label: string; address: string; role: 'primary' | 'secondary'; networks: string[] }>
     favorites: Record<string, string[]>
     carts: Array<{ id: string; userId: string | null; lines: Array<{ nftId: string; editionId: string; quantity: number }> }>
   }
