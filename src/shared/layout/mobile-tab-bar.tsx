@@ -1,7 +1,7 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/utils'
-import { HeartIcon, HomeIcon, ShopIcon, UserIcon } from '@/shared/ui/icons'
+import { HeartIcon, HomeIcon, ShopIcon, UserFilledIcon } from '@/shared/ui/icons'
 import { MobileMenu } from './site-header'
 
 /**
@@ -77,7 +77,7 @@ export function MobileTabBar({
                 className={item(pathname.startsWith('/account') || pathname === '/login')}
                 data-testid="tab-account"
               >
-                <UserIcon className="size-5" />
+                <UserFilledIcon className="size-5" />
                 Conta
               </button>
             }

@@ -38,6 +38,15 @@ const linkItem = cn(columnItem, 'hover:text-brand-accent hover:underline underli
 /** Out-of-scope destinations: listed (as in the layout) but not links, so nothing pretends to work. */
 const soonItem = cn(columnItem, 'text-text-secondary')
 
+/** Same "em breve" mark as the header: visible text, kept on the item's line. */
+function SoonMark() {
+  return (
+    <span className="ml-1.5 rounded-xs border border-line-soft px-1 align-[1px] text-[10px] leading-[14px] whitespace-nowrap text-text-muted">
+      <span className="sr-only">(</span>em breve<span className="sr-only">)</span>
+    </span>
+  )
+}
+
 function Newsletter() {
   const id = useId()
   const [email, setEmail] = useState('')
@@ -57,9 +66,9 @@ function Newsletter() {
   }
 
   return (
-    <form onSubmit={submit} noValidate className="flex flex-col gap-4">
+    <form onSubmit={submit} noValidate className="flex flex-col">
       <h2 className="text-lg leading-4 font-bold text-foreground">Antecipe-se ao próximo lançamento</h2>
-      <div className="flex h-10 rounded-sm bg-surface-dark shadow-card">
+      <div className="mt-4 flex h-10 rounded-sm bg-surface-dark shadow-[0_0_20px_0_#0a060473]">
         <label htmlFor={`${id}-email`} className="sr-only">
           Seu e-mail
         </label>
@@ -84,7 +93,10 @@ function Newsletter() {
       <p
         id={`${id}-message`}
         role={message?.tone === 'error' ? 'alert' : 'status'}
-        className={cn('text-[13px] leading-[22px]', message?.tone === 'error' ? 'text-coral' : 'text-text-secondary')}
+        className={cn(
+          'mt-3 text-[13px] leading-[22px]',
+          message?.tone === 'error' ? 'text-coral' : 'text-text-secondary',
+        )}
       >
         {message?.text ?? 'Receba lançamentos selecionados, histórias de criadores e novidades do mercado.'}
       </p>
@@ -98,14 +110,14 @@ export function SiteFooter() {
     <footer className="container-page mt-16 md:mt-24">
       <section
         aria-label="Serviços KURIO"
-        className="grid grid-cols-1 gap-8 bg-surface p-6 md:grid-cols-2 md:p-8 xl:grid-cols-[265px_265px_265px_1fr] xl:gap-0"
+        className="grid grid-cols-1 gap-8 bg-surface p-6 md:grid-cols-2 md:p-8 xl:grid-cols-[265px_265px_265px_1fr] xl:gap-0 xl:pb-4"
       >
         {SERVICES.map(({ icon: Icon, title, text }) => (
           <div key={title} className="flex flex-col gap-3 lg:border-r lg:border-brand lg:px-4">
             <span className="grid size-[74px] place-content-center rounded-full bg-brand text-ink" aria-hidden="true">
               <Icon className="size-8" strokeWidth={2} />
             </span>
-            <h2 className="mt-3 text-[17px] leading-4 font-bold text-foreground">{title}</h2>
+            <h2 className="text-[17px] leading-4 font-bold text-foreground">{title}</h2>
             <p className="max-w-[204px] text-sm leading-[22px] text-text-secondary">{text}</p>
           </div>
         ))}
@@ -114,7 +126,7 @@ export function SiteFooter() {
         </div>
       </section>
 
-      <div className="grid gap-4 bg-surface-dark px-6 py-6 text-sm leading-[22px] text-foreground sm:grid-cols-2 md:px-8 xl:grid-cols-[211px_211px_211px_1fr] xl:items-center xl:gap-x-[91px] xl:py-8">
+      <div className="grid gap-4 bg-surface-dark px-6 py-6 text-sm leading-[22px] text-foreground sm:grid-cols-2 md:px-8 xl:grid-cols-[211px_211px_211px_1fr] xl:items-center xl:gap-x-[91px] xl:py-[22px]">
         <Link to="/" className="text-sm font-bold tracking-[0.1em]">
           KURIO
         </Link>
@@ -123,12 +135,13 @@ export function SiteFooter() {
           <br />
           criadores e cultura
         </p>
-        <a href="mailto:contato@email.com" className="hover:text-brand-accent hover:underline">
-          contato@email.com
-        </a>
-        <a href="tel:+551140028922" className="hover:text-brand-accent hover:underline">
-          +55 11 4002 8922
-        </a>
+        {/* Sample contacts of the layout: plain text, not mailto:/tel: links that would open real apps. */}
+        <p>
+          contato@email.com<span className="sr-only"> (contato de exemplo)</span>
+        </p>
+        <p>
+          +55 11 4002 8922<span className="sr-only"> (telefone de exemplo)</span>
+        </p>
       </div>
 
       <div className="grid gap-10 bg-surface px-6 py-8 sm:grid-cols-2 md:px-8 xl:grid-cols-[211px_211px_211px_1fr] xl:gap-x-[91px]">
@@ -142,18 +155,20 @@ export function SiteFooter() {
                 Meu perfil
               </Link>
             </li>
-            <li>
-              {/* "Minha coleção" = what the collector bought (orders). */}
-              <Link to="/orders" className={linkItem}>
-                Minha coleção
-              </Link>
+            {/* There is no collection page (owned NFTs) in scope: "Atividade" is the order history. */}
+            <li className={soonItem}>
+              Minha coleção
+              <SoonMark />
             </li>
             <li>
               <Link to="/orders" className={linkItem}>
                 Atividade
               </Link>
             </li>
-            <li className={soonItem}>Estúdio do criador (em breve)</li>
+            <li className={cn(soonItem, 'whitespace-nowrap')}>
+              Estúdio do criador
+              <SoonMark />
+            </li>
             <li>
               <Link to="/account/favorites" className={linkItem}>
                 Lista de interesse
@@ -162,7 +177,10 @@ export function SiteFooter() {
           </ul>
         </nav>
         <div className="flex flex-col gap-2">
-          <h2 className={columnTitle}>Central de ajuda</h2>
+          <h2 className={columnTitle}>
+            Central de ajuda
+            <SoonMark />
+          </h2>
           <ul>
             {[
               'Central de ajuda',
@@ -176,7 +194,6 @@ export function SiteFooter() {
               </li>
             ))}
           </ul>
-          <p className="text-xs text-text-muted">Conteúdo de ajuda em breve.</p>
         </div>
         <nav aria-labelledby="footer-collections" className="flex flex-col gap-2">
           <h2 id="footer-collections" className={columnTitle}>
@@ -227,16 +244,19 @@ export function SiteFooter() {
           </div>
           <div className="flex flex-col gap-3">
             <h2 className={columnTitle}>Carteiras compatíveis</h2>
-            <p className="w-fit rounded-sm border border-line-soft bg-surface-dark px-2.5 py-2 text-[9px] leading-3 font-bold tracking-[0.01em] text-brand-accent">
+            <p className="w-fit rounded-sm border border-line-soft bg-surface-dark py-1.5 pr-1 pl-2 text-[9px] leading-3 font-bold tracking-[0.1px] text-brand-accent">
               METAMASK&nbsp;&nbsp;•&nbsp;&nbsp;WALLETCONNECT&nbsp;&nbsp;•&nbsp;&nbsp;COINBASE
             </p>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-x-6 gap-y-1 py-3 text-center text-sm leading-[30px] text-foreground sm:flex-row">
+      {/* Copyright centered as in the frame; the live-connection status sits at the right edge (own line on small screens). */}
+      <div className="relative flex flex-col items-center gap-1 pt-1.5 pb-6 text-center text-sm leading-[30px] text-foreground lg:block">
         <p>© 2026 Kurio. Propriedade digital para todos.</p>
-        <RealtimeIndicator />
+        <div className="lg:absolute lg:top-1.5 lg:right-0 lg:flex lg:h-[30px] lg:items-center">
+          <RealtimeIndicator />
+        </div>
       </div>
     </footer>
   )

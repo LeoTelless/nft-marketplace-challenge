@@ -1,5 +1,4 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { ChevronDown, Heart, LogOut, Receipt, UserRound, Wallet } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 import { buttonVariants } from '@/shared/ui/button'
 import {
@@ -10,7 +9,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu'
-import { LoginIcon } from '@/shared/ui/icons'
+import {
+  ActivityIcon,
+  ChevronDownIcon,
+  HeartIcon,
+  LoginIcon,
+  LogoutIcon,
+  UserIcon,
+  WalletIcon,
+} from '@/shared/ui/icons'
 
 /** "Entrar" button of the header (Figma: 100x35, logout glyph + 16px medium label). */
 export function LoginButton({ className }: { className?: string }) {
@@ -20,7 +27,7 @@ export function LoginButton({ className }: { className?: string }) {
     <Link
       to="/login"
       search={{ redirect: href }}
-      className={cn(buttonVariants(), 'h-[35px] gap-1 px-2.5 text-base font-medium', className)}
+      className={cn(buttonVariants(), 'h-[35px] gap-1 px-[9px] text-base font-medium', className)}
       data-testid="header-login"
     >
       <LoginIcon className="size-5" />
@@ -55,9 +62,9 @@ export function UserMenu({
           'h-[35px] max-w-[180px] gap-1.5 px-2.5 text-base font-medium data-[state=open]:bg-brand/10',
         )}
       >
-        <UserRound className="size-5" aria-hidden="true" />
+        <UserIcon className="size-5" />
         <span className="truncate">{firstName}</span>
-        <ChevronDown className="size-4" aria-hidden="true" />
+        <ChevronDownIcon className="size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>
@@ -67,27 +74,27 @@ export function UserMenu({
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="/account/profile">
-            <UserRound aria-hidden="true" /> Meu perfil
+            <UserIcon /> Meu perfil
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/account/wallets">
-            <Wallet aria-hidden="true" /> Carteiras
+            <WalletIcon /> Carteiras
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/orders">
-            <Receipt aria-hidden="true" /> Meus pedidos
+            <ActivityIcon /> Meus pedidos
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/account/favorites">
-            <Heart aria-hidden="true" /> Lista de interesse
+            <HeartIcon /> Lista de interesse
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem disabled={loggingOut} onSelect={onLogout} data-testid="logout">
-          <LogOut aria-hidden="true" /> {loggingOut ? 'Saindo…' : 'Sair'}
+          <LogoutIcon /> {loggingOut ? 'Saindo…' : 'Sair'}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -17,8 +17,8 @@
   font-weight: 100 700;
   src: url('/fonts/roboto-mono-latin-wght-normal.woff2') format('woff2-variations');
   unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
-    U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
@@ -71,6 +71,18 @@
   --border: var(--kurio-border);
   --input: var(--kurio-border);
   --ring: var(--kurio-accent);
+}
+
+/*
+ * Field borders: Color/Border (#3F2319) is the layout's value but has 1.34:1 on ink. Fields are
+ * never identified by the border alone (visible label or placeholder, hover and focus states);
+ * users who ask for more contrast get borders above 3:1 (WCAG 1.4.11).
+ */
+@media (prefers-contrast: more) {
+  :root {
+    --kurio-border: #8b6a50; /* 3.9:1 on ink */
+    --kurio-border-soft: #a3815f;
+  }
 }
 
 @theme inline {
@@ -151,6 +163,21 @@
   html {
     -webkit-text-size-adjust: 100%;
     scrollbar-gutter: stable;
+  }
+  /*
+   * Below md the tab bar / purchase bar are fixed at the bottom: focused or scrolled-to elements
+   * stop above them (WCAG 2.4.11). The root layout sets `data-bottom-bar` per route.
+   */
+  @media (max-width: 767.98px) {
+    html[data-bottom-bar='tabs'] {
+      scroll-padding-bottom: calc(88px + env(safe-area-inset-bottom));
+    }
+    html[data-bottom-bar='purchase'] {
+      scroll-padding-bottom: calc(184px + env(safe-area-inset-bottom));
+    }
+    html[data-bottom-bar='checkout'] {
+      scroll-padding-bottom: calc(162px + env(safe-area-inset-bottom));
+    }
   }
   body {
     @apply bg-background font-sans text-foreground antialiased;

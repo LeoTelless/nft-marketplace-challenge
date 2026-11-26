@@ -249,9 +249,12 @@ export function SiteHeader({
         <div className="absolute left-1/2 hidden -translate-x-1/2 lg:block xl:left-[376px] xl:translate-x-0">
           <DesktopNav />
         </div>
-        <div className="flex h-[35px] items-center gap-1 md:gap-2 lg:gap-4">
-          <HeaderSearch />
-          {cart}
+        {/* Frame (lg+): 20px search glyph, 28px to the 24px cart, 28px to "Entrar"; the 40px hit areas overlap the gaps. */}
+        <div className="flex h-[35px] items-center gap-1 md:gap-2 lg:gap-0">
+          <div className="lg:mr-[10px]">
+            <HeaderSearch />
+          </div>
+          <div className="lg:mr-[27px]">{cart}</div>
           <div className="hidden md:block">{account}</div>
           <MobileMenu account={mobileAccount} />
         </div>

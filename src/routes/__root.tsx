@@ -1,5 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { createRootRouteWithContext, HeadContent, Outlet, useRouterState } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { SessionProvider } from '@/features/auth/session-provider'
 import { DemoPanel } from '@/features/demo/demo-panel'
 import { useSession } from '@/features/auth/session'
@@ -36,6 +37,23 @@ function useHidesTabBar() {
 /** Fixed purchase bar at the bottom on mobile (detail, checkout). */
 function useHasActionBar() {
   return useRouterState({ select: (state) => state.matches.some((match) => ACTION_BAR.has(match.routeId)) })
+}
+
+/** Which fixed bar covers the bottom of the viewport below md (read by `scroll-padding-bottom` in index.css). */
+function useBottomBarAttribute(hideTabBar: boolean, actionBar: boolean) {
+  const checkout = useRouterState({
+    select: (state) => state.matches.some((match) => match.routeId === '/_authenticated/checkout'),
+  })
+  const value = actionBar ? (checkout ? 'checkout' : 'purchase') : hideTabBar ? 'none' : 'tabs'
+  useEffect(() => {
+    document.documentElement.dataset.bottomBar = value
+  }, [value])
+}
+
+/** Purchase flow screens whose mobile frame ends at the summary/CTA: no footer below 768px. */
+const NO_MOBILE_FOOTER = new Set(['/cart', '/_authenticated/checkout'])
+function useHidesMobileFooter() {
+  return useRouterState({ select: (state) => state.matches.some((match) => NO_MOBILE_FOOTER.has(match.routeId)) })
 }
 
 /** Screens whose mobile frame has no header (the tab bar gives access to menu and account). */
@@ -81,6 +99,8 @@ function RootLayout() {
   const hideTabBar = useHidesTabBar()
   const hideMobileHeader = useHidesMobileHeader()
   const actionBar = useHasActionBar()
+  useBottomBarAttribute(hideTabBar, actionBar)
+  const hideMobileFooter = useHidesMobileFooter()
 
   return (
     <SessionProvider>
@@ -102,7 +122,9 @@ function RootLayout() {
           <Outlet />
         </main>
         <div className={actionBar ? 'max-md:pb-44' : hideTabBar ? undefined : 'max-md:pb-24'}>
-          <SiteFooter />
+          <div className={hideMobileFooter ? 'max-md:hidden' : undefined}>
+            <SiteFooter />
+          </div>
           {/* Mobile: an ordinary button after the footer (above the bottom bar); desktop: floating. */}
           <DemoPanel />
         </div>
