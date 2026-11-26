@@ -160,7 +160,7 @@ const paint = (p) => {
 }
 const r2 = (n) => Math.round(n * 100) / 100
 
-function simplify(n, origin, root = false) {
+function simplify(n, origin) {
   const o = { id: n.id, name: n.name, type: n.type }
   if (n.visible === false) o.visible = false
   const b = n.absoluteBoundingBox
@@ -242,7 +242,7 @@ for (const f of frames) {
   const p = D('nodes', `${f.slug}.json`)
   if (await exists(p)) continue
   const b = f.node.absoluteBoundingBox ?? { x: 0, y: 0 }
-  await writeJson(p, { page: f.page, section: f.section, ...simplify(f.node, b, true) })
+  await writeJson(p, { page: f.page, section: f.section, ...simplify(f.node, b) })
 }
 console.log('nodes/ ok')
 
@@ -255,7 +255,6 @@ const VECTOR = new Set(['VECTOR', 'BOOLEAN_OPERATION', 'STAR', 'LINE', 'ELLIPSE'
 const PURE_VECTOR = new Set(['VECTOR', 'BOOLEAN_OPERATION', 'STAR', 'LINE', 'REGULAR_POLYGON'])
 const nodeFrame = new Map() // id -> {frame, path}
 const components = file.components ?? {}
-const compSets = file.componentSets ?? {}
 const compName = (id) => components[id]?.name
 for (const f of frames) {
   const rec = (n, path) => {
@@ -378,10 +377,10 @@ for (const f of frames)
 const sortDesc = (m) => [...m.entries()].map(([k, v]) => ({ key: k, ...v })).sort((a, b) => b.count - a.count)
 const tokens = {
   colors: sortDesc(colors).map(({ key, count }) => ({ hex: key, count })),
-  textStyles: sortDesc(texts).map(({ key, ...r }) => r),
-  radii: sortDesc(radii).map(({ key, ...r }) => r),
-  shadows: sortDesc(shadows).map(({ key, ...r }) => r),
-  spacing: sortDesc(spacing).map(({ key, ...r }) => r),
+  textStyles: sortDesc(texts).map(({ key: _key, ...r }) => r),
+  radii: sortDesc(radii).map(({ key: _key, ...r }) => r),
+  shadows: sortDesc(shadows).map(({ key: _key, ...r }) => r),
+  spacing: sortDesc(spacing).map(({ key: _key, ...r }) => r),
   namedStyles: Object.entries(file.styles ?? {}).map(([id, s]) => ({ id, name: s.name, type: s.styleType })),
   variables: 'não disponível (API de variáveis exige plano Enterprise); nenhuma variável publicada no dump',
 }
