@@ -5,6 +5,7 @@ import { queryKeys, type CartOwner } from '@/shared/api/query-keys'
 import { notify } from '@/shared/feedback/notifications'
 import { compareEth, formatEth } from '@/shared/lib/eth'
 import { onRealtimeNotice } from '@/shared/realtime/realtime-client'
+import { cartItemLabel } from './format'
 
 /**
  * While the cart or the checkout is open: announces price/availability changes of NFTs in
@@ -31,7 +32,7 @@ export function useCartChangeNotices(owner: CartOwner | null) {
           if (item.nftId !== nft.id) continue
           const edition = nft.editions.find((e) => e.id === item.editionId)
           if (!edition) continue
-          const label = `${item.nftName} (${item.editionName})`
+          const label = cartItemLabel(item)
           if (compareEth(edition.price, item.unitPrice) !== 0) {
             notify({
               tone: 'warning',
