@@ -1,9 +1,11 @@
 /**
  * Minimal static server for `dist/`, used by the audit runner so the local measurement matches the
  * delivery: Brotli/gzip compression, the same Cache-Control headers as `vercel.json` and the SPA
- * fallback of its rewrite. No dependency beyond Node.
+ * fallback of its rewrite. With `tls` ({ key, cert }) it serves HTTP/2 over TLS (HTTP/1.1 still accepted),
+ * the transport of the published environment. No dependency beyond Node.
  */
 import { createServer } from 'node:http'
+import { createSecureServer } from 'node:http2'
 import { readFile, stat } from 'node:fs/promises'
 import { extname, join, normalize } from 'node:path'
 import { brotliCompress, constants, gzip } from 'node:zlib'
@@ -35,9 +37,9 @@ function cacheControl(path) {
   return 'public, max-age=0, must-revalidate'
 }
 
-export function startStaticServer(root, port) {
+export function startStaticServer(root, port, { tls } = {}) {
   const cache = new Map() // path|encoding -> Buffer
-  const server = createServer(async (req, res) => {
+  const handler = async (req, res) => {
     try {
       let path = decodeURIComponent(new URL(req.url, 'http://x').pathname)
       let file = normalize(join(root, path))
@@ -79,6 +81,7 @@ export function startStaticServer(root, port) {
     } catch {
       res.writeHead(500).end('Error')
     }
-  })
+  }
+  const server = tls ? createSecureServer({ ...tls, allowHTTP1: true }, handler) : createServer(handler)
   return new Promise((resolve) => server.listen(port, () => resolve(server)))
 }
