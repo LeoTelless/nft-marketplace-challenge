@@ -64,7 +64,7 @@ test('the login dialog traps focus, maps API errors and closes back to the page'
 
   await page.keyboard.press('Escape')
   await expect(dialog).toBeHidden()
-  await expect(page).toHaveURL(/:\d+\/$/)
+  await expect(page).toHaveURL((url) => url.pathname === '/' && url.search === '')
 })
 
 test('favorite removal is optimistic and rolls back when the API fails', async ({ page }) => {
