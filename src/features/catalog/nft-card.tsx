@@ -22,12 +22,15 @@ export function NftCard({
   favorite,
   imageSizes = '(min-width: 1024px) 258px, (min-width: 768px) 30vw, 46vw',
   headingLevel = 3,
+  priority = false,
   className,
 }: {
   nft: Nft
   favorite?: FavoriteControl
   imageSizes?: string
   headingLevel?: 2 | 3 | 4
+  /** Above-the-fold card: its artwork loads eagerly with high priority (LCP). */
+  priority?: boolean
   className?: string
 }) {
   const soldOut = nft.totalAvailable === 0
@@ -40,6 +43,7 @@ export function NftCard({
             image={nft.images[0]}
             sizes={imageSizes}
             alt=""
+            priority={priority}
             className="transition-transform duration-300 group-hover:scale-[1.03]"
           />
           {soldOut ? (

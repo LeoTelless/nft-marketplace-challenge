@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+/* Class candidates come from the app only: not from the audit runner or its (large) reports. */
+@source not '../lighthouse';
 
 /*
  * KURIO design system. Values come from the Figma cache (`design/tokens.json`, named

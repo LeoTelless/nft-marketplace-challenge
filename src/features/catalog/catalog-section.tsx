@@ -159,10 +159,11 @@ export function CatalogSection({ sidebarExtra }: { sidebarExtra?: ReactNode }) {
                   aria-busy={isRefreshing}
                   className={cn(GRID, STAGGER, 'transition-opacity', isRefreshing && 'opacity-60')}
                 >
-                  {data.items.map((nft) => (
+                  {data.items.map((nft, index) => (
                     <li key={nft.id}>
                       <NftCard
                         nft={nft}
+                        priority={index < 2}
                         favorite={{
                           active: favorites.isFavorite(nft.id),
                           pending: favorites.pending(nft.id),
