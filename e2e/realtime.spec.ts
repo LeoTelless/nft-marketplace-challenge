@@ -21,8 +21,7 @@ import {
 
 /**
  * Connection state as seen by the simulated Socket.IO server (sockets that completed the handshake).
- * The footer indicator is not used for readiness: under load it can stay on "inativo" while the socket
- * is connected (see the fixme at the end of this file).
+ * Used for readiness; the footer indicator is asserted separately at the end of this file.
  */
 const realtimeStatus = (page: Page) => page.getByTestId('realtime-status')
 const serverSockets = (page: Page) => page.evaluate(() => window.__mocks!.connectedSockets().map((socket) => socket.userId))
@@ -199,6 +198,37 @@ test.describe('connection loss and pending order recovery', () => {
     expect(await page.evaluate(() => window.__mocks!.getState().orders.length)).toBe(1)
   })
 
+  test('with the socket still down, the pending order is reconciled by REST polling within ~3 s', async ({ page }) => {
+    const orders = countOrderRequests(page)
+    const { orderId } = await placePendingOrder(page)
+    await page.evaluate(() => window.__mocks!.dropSocket())
+    await waitDisconnected(page)
+
+    await page.evaluate((id) => window.__mocks!.resolveOrder(id, 'confirmed'), orderId)
+    // Poll interval 3 s + request latency; the socket stays down for the whole test.
+    await expect(main(page).getByRole('heading', { name: 'Compra confirmada' })).toBeVisible({ timeout: 4_000 })
+    expect(await serverSockets(page)).toEqual([])
+    expect(orders.value).toBe(1)
+  })
+
+  test('a reconnection attempt made during the outage does not delay recovery: catalog reconciled within 3 s', async ({ page }) => {
+    await openWithScenario(page, '/', 'instant')
+    await waitConnected(page, null)
+    const card = page.getByTestId('nft-card').first()
+    const id = await card.getAttribute('data-nft-id')
+
+    await page.evaluate(() => window.__mocks!.dropSocket())
+    await waitDisconnected(page)
+    await page.evaluate((nftId) => window.__mocks!.updateNft(nftId, { price: '0.0012' }), id!)
+    // Long enough for the client to start at least one reconnection attempt while the server is down.
+    await page.waitForTimeout(1_500)
+    await expect(card.getByTestId('nft-price')).not.toHaveText('0.0012 ETH')
+
+    await page.evaluate(() => window.__mocks!.restoreSocket())
+    await expect(card.getByTestId('nft-price')).toHaveText('0.0012 ETH', { timeout: 3_000 })
+    await expect(realtimeStatus(page)).toHaveAttribute('data-status', 'connected')
+  })
+
   test('reloading while the order is pending recovers the same order and later confirmation', async ({ page }) => {
     const orders = countOrderRequests(page)
     const { orderId } = await placePendingOrder(page)
@@ -235,10 +265,7 @@ test.describe('connection loss and pending order recovery', () => {
     expect(orders.value).toBe(1)
   })
 
-  // DEFECT (intermittent, ~4%): after `restoreSocket()` the client sometimes stays on "reconnecting" for 15 s+ with no socket
-  // connected on the server, so the catalog is never reconciled (src/shared/realtime/realtime-client.ts reconnection).
-  // The same step is part of smoke.spec.ts; the pending-order reconnection test above does not depend on it.
-  test.fixme('catalog prices missed while offline are reconciled by REST once the socket is back', async ({ page }) => {
+  test('catalog prices missed while offline are reconciled by REST once the socket is back', async ({ page }) => {
     await openWithScenario(page, '/', 'instant')
     await waitConnected(page, null)
     const card = page.getByTestId('nft-card').first()
@@ -253,12 +280,8 @@ test.describe('connection loss and pending order recovery', () => {
 })
 
 
-// DEFECT (src/shared/realtime/realtime-client.ts): `connectionId` is taken after `await import('socket.io-client')`.
-// On a reload with a session the provider connects twice (token, then token + user); when the two continuations run
-// in the opposite order, the discarded connection becomes "latest" and its `destroy()` sets the status to `idle`,
-// while the live socket can no longer report. Result: the server has the socket connected but the footer says
-// "Tempo real: inativo". Reproduces intermittently under CPU load (6 parallel workers).
-test.fixme('the footer indicator says "conectado" after loading a private page with a session', async ({ page }) => {
+// Regression: concurrent connections (token, then token + user) must not leave the indicator on "inativo".
+test('the footer indicator says "conectado" after loading a private page with a session', async ({ page }) => {
   await cartWith(page, 'instant', 1)
   await expect(realtimeStatus(page)).toHaveAttribute('data-status', 'connected')
 })
