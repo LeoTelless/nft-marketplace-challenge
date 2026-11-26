@@ -68,9 +68,10 @@ export function RelatedNfts({ nft }: { nft: Nft }) {
             ))}
           </ul>
           {/* The dots row always keeps its height (no shift when the page count is known). */}
-          <div className="mt-6 h-6">
+          {/* Frame: 12px dots 32px below the cards, 8px apart; the 24px hit areas sit side by side. */}
+          <div className="mt-[18px] h-6">
             {pages > 1 ? (
-              <div role="group" aria-label="Páginas do carrossel" className="flex justify-center gap-1">
+              <div role="group" aria-label="Páginas do carrossel" className="flex justify-center">
                 {Array.from({ length: pages }, (_, index) => (
                   <button
                     key={index}

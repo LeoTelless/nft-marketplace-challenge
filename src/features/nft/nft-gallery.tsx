@@ -44,7 +44,7 @@ export function NftGallery({ nft, overlay }: { nft: Nft; overlay?: ReactNode }) 
   const label = (index: number) => `Imagem ${index + 1} de ${nft.images.length}: ${nft.images[index].alt}`
 
   return (
-    <div className="relative max-md:-mx-6 max-md:bg-linear-135 max-md:from-surface max-md:to-surface-raised max-md:px-7 max-md:pt-[66px] md:flex md:flex-col-reverse md:gap-4 lg:flex-row lg:items-start lg:gap-7">
+    <div className="relative max-md:-mx-6 max-md:bg-linear-135 max-md:from-surface max-md:to-surface-raised max-md:pr-[25px] max-md:pl-7 max-md:pt-[66px] md:flex md:flex-col-reverse md:gap-4 lg:flex-row lg:items-start lg:gap-7">
       {overlay}
       {nft.images.length > 1 ? (
         <div
@@ -64,8 +64,8 @@ export function NftGallery({ nft, overlay }: { nft: Nft; overlay?: ReactNode }) 
               onClick={() => setSelected(index)}
               onKeyDown={(event) => onKey(event, index, thumbs.current)}
               className={cn(
-                'size-20 shrink-0 cursor-pointer overflow-hidden rounded-sm bg-surface p-0 transition-opacity lg:size-[100px]',
-                index === selected ? 'ring-1 ring-brand' : 'opacity-80 hover:opacity-100',
+                'size-20 shrink-0 cursor-pointer overflow-hidden rounded-sm bg-surface p-0 transition-shadow lg:size-[100px]',
+                index === selected ? 'ring-1 ring-brand' : 'hover:ring-1 hover:ring-line-soft',
               )}
             >
               <NftImage image={thumb} sizes="100px" alt="" className="rounded-md" />
@@ -74,7 +74,8 @@ export function NftGallery({ nft, overlay }: { nft: Nft; overlay?: ReactNode }) 
         </div>
       ) : null}
 
-      <div className="relative md:rounded-sm md:bg-surface md:p-4 lg:w-[444px] lg:shrink-0">
+      {/* Desktop frame: 444px box with the 404px artwork 20px inside. */}
+      <div className="relative md:rounded-sm md:bg-surface md:p-5 lg:w-[444px] lg:shrink-0">
         <div className="aspect-[361/356] overflow-hidden rounded-3xl md:aspect-square">
           <NftImage image={image} sizes="(min-width: 1024px) 404px, (min-width: 768px) 480px, 100vw" priority />
         </div>
@@ -82,7 +83,7 @@ export function NftGallery({ nft, overlay }: { nft: Nft; overlay?: ReactNode }) 
           <div
             role="group"
             aria-label="Imagens do NFT"
-            className="absolute inset-x-0 bottom-[57px] flex justify-center gap-1.5 md:hidden"
+            className="absolute inset-x-0 bottom-[42px] flex justify-center md:hidden"
           >
             {nft.images.map((dot, index) => (
               <button
@@ -101,7 +102,7 @@ export function NftGallery({ nft, overlay }: { nft: Nft; overlay?: ReactNode }) 
                   aria-hidden="true"
                   className={cn(
                     'block h-[7px] rounded-full bg-brand transition-all',
-                    index === selected ? 'w-7' : 'w-[7px] opacity-70',
+                    index === selected ? 'w-7' : 'w-[7px]',
                   )}
                 />
               </button>
@@ -115,7 +116,11 @@ export function NftGallery({ nft, overlay }: { nft: Nft; overlay?: ReactNode }) 
           >
             <SearchIcon className="size-4" />
           </DialogTrigger>
-          <DialogContent className="max-w-[min(90vw,800px)] p-3 sm:max-w-[min(90vw,800px)]" data-testid="zoom-dialog">
+          <DialogContent
+            className="max-w-[min(90vw,800px)] p-3 sm:max-w-[min(90vw,800px)]"
+            closeClassName="top-5 right-5 bg-ink/80"
+            data-testid="zoom-dialog"
+          >
             <DialogTitle className="sr-only">{nft.name}</DialogTitle>
             <DialogDescription className="sr-only">{image.alt}</DialogDescription>
             <div className="aspect-square overflow-hidden rounded-lg">

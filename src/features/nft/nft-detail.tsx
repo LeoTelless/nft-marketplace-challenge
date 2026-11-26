@@ -1,5 +1,4 @@
 import { Link, useNavigate, useRouter } from '@tanstack/react-router'
-import { ChevronLeft, Mail, ShoppingCart } from 'lucide-react'
 import { useEffect, useId, useState } from 'react'
 import type { Edition, Nft } from '@/contracts'
 import { CATEGORY_LABELS } from '@/features/catalog/catalog-search'
@@ -9,7 +8,7 @@ import { useFavorites } from '@/features/favorites/use-favorites'
 import { compareEth, formatEth } from '@/shared/lib/eth'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
-import { HeartIcon, LinkedinIcon, TwitterIcon } from '@/shared/ui/icons'
+import { ChevronLeftIcon, HeartIcon, LinkedinIcon, MessageIcon, ShopIcon, TwitterIcon } from '@/shared/ui/icons'
 import { editionLabel, initialEdition, tokenLabel } from './editions'
 import { NftGallery } from './nft-gallery'
 import { QuantityStepper } from './quantity-stepper'
@@ -37,7 +36,7 @@ export function NftDetail({
 
   return (
     <div className="container-page md:pt-8">
-      <Breadcrumb name={nft.name} />
+      <Breadcrumb />
 
       <div className="flex flex-col md:mt-3 md:gap-8 lg:flex-row lg:gap-8">
         <div className="relative md:max-lg:mx-auto md:max-lg:w-[480px] lg:w-[573px] lg:shrink-0">
@@ -56,7 +55,7 @@ export function NftDetail({
 
         <div className="flex min-w-0 flex-1 flex-col gap-3 max-md:relative max-md:z-10 max-md:-mx-6 max-md:-mt-[30px] max-md:rounded-t-[31px] max-md:bg-surface max-md:px-6 max-md:pt-8 max-md:pb-6 md:gap-5">
           <header className="flex flex-col gap-3">
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start justify-between gap-3 max-md:items-center">
               <h1 className="text-xl leading-6 font-bold text-foreground md:text-[28px] md:leading-[37px]">
                 {nft.name}
               </h1>
@@ -65,8 +64,9 @@ export function NftDetail({
                 por <span className="text-foreground">{nft.creator.name}</span>
               </p>
             </div>
+            {/* Frame: 20px row, 12px to the divider (y 210), "Sobre este NFT" 13px below it. */}
             <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-brand/30 pb-3 max-md:hidden">
-              <p className="text-[22px] leading-6 font-bold text-brand-accent">
+              <p className="text-[22px] leading-5 font-bold text-brand-accent">
                 <span className="sr-only">Preço da edição {editionLabel(edition)}: </span>
                 <span
                   data-testid="detail-price"
@@ -91,7 +91,7 @@ export function NftDetail({
             </p>
           ) : null}
 
-          <section aria-labelledby="about-title" className="flex flex-col gap-3">
+          <section aria-labelledby="about-title" className="flex flex-col gap-3 md:-mt-[7px]">
             <h2 id="about-title" className="text-[15px] leading-4 font-bold text-foreground max-md:sr-only">
               Sobre este NFT:
             </h2>
@@ -111,11 +111,11 @@ export function NftDetail({
           />
 
           <dl className="flex flex-col gap-3 text-[15px] leading-5 text-text-muted">
-            <div className="flex gap-1">
+            <div className="flex gap-[9px]">
               <dt>ID do token:</dt>
               <dd>{tokenLabel(nft.id)}</dd>
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-[9px]">
               <dt>Coleção:</dt>
               <dd>
                 <Link
@@ -129,7 +129,7 @@ export function NftDetail({
                 </Link>
               </dd>
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-[9px]">
               <dt>Edições:</dt>
               <dd>{nft.editions.map(editionLabel).join(', ')}</dd>
             </div>
@@ -141,7 +141,8 @@ export function NftDetail({
   )
 }
 
-function Breadcrumb({ name }: { name: string }) {
+/** "Início / Mercado", as in the frame (the page title is the h1 right below). */
+function Breadcrumb() {
   return (
     <nav aria-label="Trilha de navegação" className="max-md:hidden">
       <ol className="flex flex-wrap items-center gap-1.5 text-[15px] leading-4 font-bold text-foreground">
@@ -155,10 +156,6 @@ function Breadcrumb({ name }: { name: string }) {
           <Link to="/" hash="catalogo" activeOptions={{ includeHash: true }} className="hover:text-brand-accent">
             Mercado
           </Link>
-        </li>
-        <li aria-hidden="true">/</li>
-        <li aria-current="page" className="truncate font-normal text-text-secondary">
-          {name}
         </li>
       </ol>
     </nav>
@@ -182,14 +179,14 @@ function MobileImageActions({
   const circle =
     'grid size-[35px] cursor-pointer place-content-center rounded-full border border-line bg-surface-raised text-foreground'
   return (
-    <div className="pointer-events-none absolute inset-x-7 top-[23px] z-10 flex justify-between md:hidden">
+    <div className="pointer-events-none absolute top-[23px] right-[25px] left-7 z-10 flex justify-between md:hidden">
       <button
         type="button"
         aria-label="Voltar"
         className={cn(circle, 'pointer-events-auto')}
         onClick={() => (window.history.length > 1 ? router.history.back() : void navigate({ to: '/' }))}
       >
-        <ChevronLeft className="size-5" aria-hidden="true" />
+        <ChevronLeftIcon className="size-5 text-text-secondary" />
       </button>
       <FavoriteToggle
         compact
@@ -221,7 +218,7 @@ function FavoriteToggle({
   const icon = (
     <HeartIcon
       className={cn(
-        'size-5',
+        compact ? 'size-4' : 'size-5',
         isFavorite ? '[&_path]:fill-current' : '[&_path]:fill-none [&_path]:stroke-current [&_path]:stroke-[1.6]',
       )}
     />
@@ -354,9 +351,10 @@ function PurchasePanel({
   return (
     <div
       data-testid="purchase-panel"
-      className="flex flex-col gap-5 max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-40 max-md:rounded-t-[40px] max-md:bg-surface max-md:px-6 max-md:pt-5 max-md:pb-[max(env(safe-area-inset-bottom),24px)] max-md:shadow-bar md:gap-3"
+      className="flex flex-col gap-5 max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-40 max-md:rounded-t-[40px] max-md:bg-surface max-md:px-6 max-md:pt-5 max-md:pb-[max(env(safe-area-inset-bottom),36px)] max-md:shadow-[0_0_20px_0_#0a060473] md:gap-3"
     >
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+      {/* Desktop frame: COMPRAR and Favoritar aligned with the top of the stepper. */}
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-5 md:items-start">
         <div className="flex items-center gap-2">
           <span id={labelId} className="text-[15px] leading-4 font-medium text-text-secondary md:sr-only">
             Qtd.
@@ -397,9 +395,9 @@ function PurchasePanel({
             aria-disabled={pending || undefined}
             aria-busy={pending || undefined}
             aria-label={pending ? 'Adicionando ao carrinho…' : 'Adicionar ao carrinho'}
-            className="size-[60px] rounded-full text-text-secondary md:size-10 md:rounded-sm"
+            className="size-[60px] rounded-full text-text-muted md:size-10 md:rounded-sm md:text-text-secondary"
           >
-            <ShoppingCart className="size-5" aria-hidden="true" />
+            <ShopIcon className="size-5" />
           </Button>
           <FavoriteToggle
             isFavorite={isFavorite}
@@ -468,34 +466,38 @@ function ShareLinks({ nft }: { nft: Nft }) {
   const url = typeof window === 'undefined' ? '' : `${window.location.origin}/nft/${nft.id}`
   const text = `${nft.name} na KURIO`
   const link = 'grid size-6 place-content-center text-foreground hover:text-brand-accent'
+  // Not in the mobile frame: desktop/tablet only.
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 max-md:hidden">
       <p className="text-[15px] leading-4 font-bold text-foreground">Compartilhar este NFT:</p>
-      <a
-        className={link}
-        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Compartilhar no LinkedIn (abre em nova aba)"
-      >
-        <LinkedinIcon className="size-8" />
-      </a>
-      <a
-        className={link}
-        href={`mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}`}
-        aria-label="Compartilhar por e-mail"
-      >
-        <Mail className="size-[18px]" aria-hidden="true" />
-      </a>
-      <a
-        className={link}
-        href={`https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Compartilhar no X (abre em nova aba)"
-      >
-        <TwitterIcon className="size-8" />
-      </a>
+      {/* Frame: icons ~24px apart (the 24px targets sit side by side). */}
+      <div className="flex">
+        <a
+          className={link}
+          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Compartilhar no LinkedIn (abre em nova aba)"
+        >
+          <LinkedinIcon className="size-8" />
+        </a>
+        <a
+          className={link}
+          href={`mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}`}
+          aria-label="Compartilhar por e-mail"
+        >
+          <MessageIcon className="size-[18px]" />
+        </a>
+        <a
+          className={link}
+          href={`https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Compartilhar no X (abre em nova aba)"
+        >
+          <TwitterIcon className="size-8" />
+        </a>
+      </div>
     </div>
   )
 }
@@ -524,11 +526,13 @@ export function NftDetailsSection({ nft }: { nft: Nft }) {
         </div>
         <div>
           <h3 className="font-bold text-foreground">Contrato:</h3>
-          <p>0x7A42...19E8 • Contrato inteligente ERC-721 verificado (simulado).</p>
+          <p>0x7A42...19E8 • Contrato inteligente ERC-721 verificado.</p>
         </div>
         <div>
           <h3 className="font-bold text-foreground">Direitos autorais:</h3>
-          <p>5% para o criador nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.</p>
+          <p>
+            Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.
+          </p>
         </div>
       </div>
     </section>

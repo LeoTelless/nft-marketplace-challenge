@@ -27,8 +27,10 @@ export function QuantityStepper({
 }) {
   const canDecrease = !disabled && value > min
   const canIncrease = !disabled && value < max
+  // Mobile frame: 20x30 pills (an invisible 28px-wide area keeps the touch target >= 24px);
+  // desktop frame: 33x50 pills with the 0 6.6 19.8 -3.3 shadow.
   const button =
-    'grid h-[30px] w-5 cursor-pointer place-content-center rounded-[20px] border border-ink bg-brand text-ink shadow-button transition-colors hover:bg-brand-accent disabled:cursor-not-allowed disabled:opacity-40 md:h-[50px] md:w-[33px] md:rounded-[33px]'
+    "relative grid h-[30px] w-5 cursor-pointer place-content-center rounded-[20px] border border-ink bg-brand text-ink shadow-button transition-colors after:absolute after:inset-y-0 after:-inset-x-1 after:content-[''] hover:bg-brand-accent disabled:cursor-not-allowed disabled:opacity-40 md:h-[50px] md:w-[33px] md:rounded-[33px] md:shadow-[0_6.6px_19.8px_-3.3px_#140d0a26] md:after:hidden"
   return (
     <div
       role="group"
