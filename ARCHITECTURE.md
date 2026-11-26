@@ -334,7 +334,7 @@ Cobertura atual (`e2e/`):
 
 Cada arquivo roda nos dois projetos (`chromium-desktop` e `chromium-mobile`). Há 90 testes por projeto (180 no total), dos quais 8 são de regressão visual e 4 estão marcados com `test.fixme` (2 por projeto).
 
-Resultado da última execução (26/11/2026, `npx playwright test --reporter=line --grep-invert visual`, build de produção): **__PASSED__ passaram, 0 falharam, __SKIPPED__ ignorados** (os `test.fixme`), somando os dois projetos. A regressão visual (`npm run test:visual`) é executada à parte: __VISUAL__
+Resultado da última execução (26/11/2026, `npx playwright test --reporter=line --grep-invert visual`, build de produção): **168 passaram, 0 falharam, 4 ignorados** (os `test.fixme`), somando os dois projetos. A regressão visual (`npm run test:visual`) é executada à parte: 3 de 8 baselines conferem e 5 divergem das telas atuais (as baselines são anteriores a ajustes recentes de layout e ainda não foram regeneradas; a divergência existe com ou sem as mudanças de performance).
 
 Relatório HTML: `playwright-report/index.html`; traces e capturas das falhas: `test-results/`.
 
