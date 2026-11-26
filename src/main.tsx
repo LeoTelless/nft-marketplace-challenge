@@ -1,34 +1,12 @@
-import { QueryClientProvider } from '@tanstack/react-query'
-import { createRouter, RouterProvider } from '@tanstack/react-router'
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { createQueryClient } from '@/shared/api/query-client'
-import { parseSearch, stringifySearch } from '@/shared/lib/search-serialization'
-import { routeTree } from './routeTree.gen'
-import './index.css'
-
-const queryClient = createQueryClient()
-
-const router = createRouter({
-  routeTree,
-  context: { queryClient },
-  defaultPreload: 'intent',
-  // Route loaders reuse the Query cache; Router's own cache would only duplicate it.
-  defaultPreloadStaleTime: 0,
-  scrollRestoration: true,
-  parseSearch,
-  stringifySearch,
-})
-
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router
-  }
-}
-
 /**
- * Mocks must be running before the app renders: REST calls go through the Service Worker,
- * and the Socket.IO client (created by the app after render) must find the patched WebSocket.
+ * Tiny entry chunk: it only starts downloading the two big pieces in parallel, the application
+ * (React, Router, Query, routes) and the mock layer (MSW, handlers, fixtures; a separate chunk,
+ * loaded by dynamic `import()`), and renders once both are ready.
+ *
+ * Order guarantee: the mocks are running before the app renders, so before the first REST call
+ * (Service Worker) and before the app creates its Socket.IO client, which is itself loaded with a
+ * dynamic `import()` after render (engine.io captures `WebSocket` when the module loads).
+ * Importing `./app` only builds the router: it makes no request and creates no socket.
  */
 async function enableMocking() {
   if (import.meta.env.VITE_ENABLE_MOCKS !== 'true') return
@@ -36,12 +14,5 @@ async function enableMocking() {
   await startMocks()
 }
 
-void enableMocking().then(() => {
-  createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </StrictMode>,
-  )
-})
+const [{ mountApp }] = await Promise.all([import('./app'), enableMocking()])
+mountApp()
