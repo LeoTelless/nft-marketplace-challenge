@@ -49,19 +49,14 @@ const EDITION_TEMPLATES = [
   { key: 'legendary', name: 'Legendary', pricePercent: 600, supply: [1, 5], maxPerOrder: 1 },
 ] as const
 
-/** Local, self-contained artwork placeholder (until the Figma assets are exported). */
-function artwork(seedA: number, seedB: number, label: string): string {
-  const h1 = Math.floor(seedA * 360)
-  const h2 = (h1 + 60 + Math.floor(seedB * 180)) % 360
-  const svg =
-    `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">` +
-    `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
-    `<stop offset="0" stop-color="hsl(${h1} 70% 55%)"/><stop offset="1" stop-color="hsl(${h2} 70% 35%)"/>` +
-    `</linearGradient></defs><rect width="800" height="800" fill="url(#g)"/>` +
-    `<circle cx="${200 + Math.floor(seedB * 400)}" cy="${200 + Math.floor(seedA * 400)}" r="160" fill="hsl(${h2} 80% 75% / 0.45)"/>` +
-    `<text x="40" y="760" font-family="sans-serif" font-size="40" fill="white" fill-opacity="0.85">${label}</text></svg>`
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
-}
+/**
+ * Artwork exported from the Figma file (see `scripts/optimize-assets.mjs`): four portraits,
+ * each with a close-up crop used as the second gallery image. Served from `public/` in
+ * AVIF/WebP at 256/512/800 px; the URL points to the 800 px WebP and the UI derives the
+ * other sizes and formats (`shared/ui/nft-image.tsx`).
+ */
+const ARTWORK = ['emerald-ape', 'sage-nomad', 'ivory-baron', 'golden-beat'] as const
+const artworkUrl = (slug: string) => `/images/nft/${slug}-800.webp`
 
 export function deriveNftAggregates(editions: Edition[]): Pick<Nft, 'minPrice' | 'totalAvailable'> {
   const minPrice = editions.reduce((min, e) => (compareEth(e.price, min) < 0 ? e.price : min), editions[0].price)
@@ -102,17 +97,19 @@ export function createNftFixtures(): Nft[] {
       }
     })
 
-    const seedA = random()
-    const seedB = random()
+    // Two draws kept so the random sequence (and every value above) stays as before.
+    random()
+    random()
+    const art = ARTWORK[index % ARTWORK.length]
     return {
       id,
       name,
-      description: `${name} is a ${category} piece by ${creator.name}, minted as ${editionCount} edition${editionCount > 1 ? 's' : ''}.`,
+      description: `${name} é uma obra de ${creator.name}, cunhada em ${editionCount} ${editionCount > 1 ? 'edições' : 'edição'}, com procedência registrada na rede e arte em alta resolução para colecionadores.`,
       category,
       creator: { ...creator, avatarUrl: null },
       images: [
-        { url: artwork(seedA, seedB, name), alt: `${name}, artwork by ${creator.name}`, width: 800, height: 800 },
-        { url: artwork(seedB, seedA, `${name} (detail)`), alt: `${name}, detail view`, width: 800, height: 800 },
+        { url: artworkUrl(art), alt: `${name}, obra de ${creator.name}`, width: 800, height: 800 },
+        { url: artworkUrl(`${art}-detail`), alt: `${name}, detalhe da obra em close`, width: 800, height: 800 },
       ],
       editions,
       featured: index % 8 === 0,
