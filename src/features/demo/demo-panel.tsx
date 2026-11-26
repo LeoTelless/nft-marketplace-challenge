@@ -16,9 +16,10 @@ export function DemoPanel() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
-        // Mobile: an ordinary button at the end of the page (after the footer, inside its bottom-bar padding),
-        // so it never covers content, totals or fields. Desktop: discreet floating button.
-        className="z-30 mx-auto mt-4 mb-4 flex h-9 w-fit cursor-pointer items-center justify-center gap-1.5 rounded-full border border-line bg-surface-raised/95 px-3 text-xs font-medium text-text-secondary shadow-raised hover:border-brand hover:text-brand-accent md:fixed md:bottom-4 md:left-4 md:m-0"
+        // Below 1440 px: an ordinary button at the end of the page (after the footer, inside the bottom-bar padding on
+        // mobile), so it never covers cards, fields or totals. From 1440 px the page content is centred in 1200 px and
+        // the floating button fits in the empty left margin.
+        className="z-30 mx-auto mt-4 mb-4 flex h-9 w-fit cursor-pointer items-center justify-center gap-1.5 rounded-full border border-line bg-surface-raised/95 px-3 text-xs font-medium text-text-secondary shadow-raised hover:border-brand hover:text-brand-accent min-[1440px]:fixed min-[1440px]:bottom-4 min-[1440px]:left-4 min-[1440px]:m-0"
       >
         <FlaskConical className="size-4" aria-hidden="true" />
         <span>Demo</span>
