@@ -14,6 +14,7 @@ const MESSAGES: Partial<Record<ApiErrorCode, string>> = {
   idempotency_conflict: 'Esta tentativa de compra já foi usada com outros dados. Revise o pedido.',
   quote_outdated: 'Preços, disponibilidade ou taxas mudaram. Revise os novos valores.',
   wallet_conflict: 'Esta carteira conflita com uma já cadastrada.',
+  wallet_not_connected: 'A carteira não está conectada nesta rede. Conecte-a novamente para confirmar a compra.',
   validation_error: 'Alguns campos estão inválidos.',
   coupon_invalid: 'Cupom inválido.',
   coupon_expired: 'Este cupom expirou.',

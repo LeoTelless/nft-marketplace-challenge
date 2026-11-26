@@ -24,6 +24,8 @@ export interface MocksControl {
   resolveOrder(orderId: string, outcome: 'confirmed' | 'rejected'): Order
   /** Expires every session server-side: next authenticated request answers 401. */
   expireSessions(): void
+  /** Drops every wallet connection server-side (the wallet disconnected on its side): orders answer 409. */
+  disconnectWallets(): void
   /** Re-emits the last event (same `eventId`). */
   replayLastEvent(type?: RealtimeEvent['type']): RealtimeEvent | null
   /** Emits an `nft.updated` with an older version. */
@@ -65,6 +67,10 @@ export function createMocksControl(): MocksControl {
     expireSessions() {
       const past = new Date(Date.now() - 1_000).toISOString()
       for (const session of db().sessions) session.expiresAt = past
+      persist()
+    },
+    disconnectWallets() {
+      db().walletConnections = []
       persist()
     },
     replayLastEvent: (type) => replayLastEvent(type ? (e) => e.type === type : undefined),

@@ -12,7 +12,7 @@ import type { DbState } from './types'
  * resource version and notify `onDbChange` listeners: the socket server turns those into
  * `nft.updated` / `order.updated` events, so REST and events never diverge.
  */
-const STORAGE_KEY = 'nft-mocks:db:v3'
+const STORAGE_KEY = 'nft-mocks:db:v4'
 const MAX_QUOTES = 100
 
 export type DbChange =
@@ -40,6 +40,7 @@ export function createSeedState(): DbState {
     quotes: [],
     orders: [],
     wallets: structuredClone(WALLET_FIXTURES),
+    walletConnections: [],
     coupons: structuredClone(COUPON_FIXTURES),
   }
 }

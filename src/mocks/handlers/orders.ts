@@ -1,17 +1,17 @@
 import { http, HttpResponse } from 'msw'
 import { createOrderRequestSchema, endpoints, HEADERS, type OrderList } from '@/contracts'
 import { percentOfEth } from '@/shared/lib/eth'
-import { computeQuote, createPendingOrder, getOrCreateCart, publicQuote, resolutionTime } from '../db/commerce'
+import { computeQuote, createPendingOrder, findWalletConnection, getOrCreateCart, publicQuote, resolutionTime } from '../db/commerce'
 import { db, mutateNft } from '../db/store'
 import { consumeOneShot, is } from '../scenarios'
-import { api, hashString, MockHttpError, parseBody, requireUser, route, stableStringify, validationError } from './utils'
+import { api, hashString, MockHttpError, parseBody, requireSession, requireUser, route, stableStringify, validationError } from './utils'
 
 export const orderHandlers = [
   http.post(
     api(endpoints.orders),
     route(
       async (ctx) => {
-        const user = requireUser(ctx)
+        const { user, session } = requireSession(ctx)
         const key = ctx.request.headers.get(HEADERS.idempotencyKey)
         if (!key || key.length < 8 || key.length > 128) {
           throw new MockHttpError(400, 'idempotency_key_required', `Header ${HEADERS.idempotencyKey} is required`)
@@ -31,6 +31,17 @@ export const orderHandlers = [
 
         if (is('validation-error')) validationError({ 'collector.displayName': ['O nome não confere com o titular da carteira (simulado)'] })
 
+        // Registered wallet of this user, operating on the chosen network and connected in this session
+        // (`POST /wallets/:id/connect`). Checked before any scenario hook so nothing changes when it fails.
+        const wallet = state.wallets.find((w) => w.id === body.walletId && w.userId === user.id)
+        if (!wallet) validationError({ walletId: ['Selecione uma das suas carteiras'] })
+        if (!wallet.networks.includes(body.network)) {
+          validationError({ network: [`${wallet.label} não opera na rede ${body.network}`] })
+        }
+        const connection = findWalletConnection(session.token)
+        if (!connection || connection.walletId !== wallet.id || connection.network !== body.network) {
+          throw new MockHttpError(409, 'wallet_not_connected', `${wallet.label} is not connected on ${body.network}`)
+        }
         const cart = getOrCreateCart({ userId: user.id })
         const firstLine = cart.lines[0]
         // Scenario hooks: the catalog changes *during* the purchase, through the regular
@@ -63,11 +74,6 @@ export const orderHandlers = [
           })
         }
 
-        const wallet = state.wallets.find((w) => w.id === body.walletId && w.userId === user.id)
-        if (!wallet) validationError({ walletId: ['Selecione uma das suas carteiras'] })
-        if (!wallet.networks.includes(body.network)) {
-          validationError({ network: [`${wallet.label} não opera na rede ${body.network}`] })
-        }
 
         const record = createPendingOrder({
           userId: user.id,

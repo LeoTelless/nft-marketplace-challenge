@@ -155,6 +155,12 @@ export function requireUser(ctx: { user: DbUser | null }): DbUser {
   return ctx.user
 }
 
+export function requireSession(ctx: { user: DbUser | null; session: DbSession | null }): { user: DbUser; session: DbSession } {
+  const user = requireUser(ctx)
+  if (!ctx.session) throw new MockHttpError(401, 'unauthorized', 'Authentication required')
+  return { user, session: ctx.session }
+}
+
 export function now(): string {
   return new Date().toISOString()
 }

@@ -25,12 +25,14 @@ export interface MocksControl {
     orders: Array<{ order: { id: string; status: string }; userId: string; idempotencyKey: string }>
     users: Array<{ id: string; email: string; name: string }>
     wallets: Array<{ id: string; userId: string; label: string; address: string; role: 'primary' | 'secondary'; networks: string[] }>
+    walletConnections: Array<{ userId: string; walletId: string; network: string }>
     favorites: Record<string, string[]>
     carts: Array<{ id: string; userId: string | null; lines: Array<{ nftId: string; editionId: string; quantity: number }> }>
   }
   updateNft(nftId: string, patch: { editionId?: string; price?: string; available?: number }): unknown
   resolveOrder(orderId: string, outcome: 'confirmed' | 'rejected'): unknown
   expireSessions(): void
+  disconnectWallets(): void
   replayLastEvent(type?: 'nft.updated' | 'order.updated'): unknown
   emitStaleNftEvent(nftId: string): unknown
   dropSocket(): void

@@ -7,7 +7,7 @@ import {
   type CreateWalletRequest,
   type UpdateWalletRequest,
 } from '@/contracts'
-import { request, type RequestOptions } from '@/shared/api/http'
+import { request, requestVoid, type RequestOptions } from '@/shared/api/http'
 
 export const walletsApi = {
   list: (options?: RequestOptions) => request(walletListSchema, { url: endpoints.wallets, ...options }),
@@ -16,4 +16,5 @@ export const walletsApi = {
     request(walletSchema, { method: 'PATCH', url: endpoints.wallet(id), data: body }),
   connect: (id: string, body: ConnectWalletRequest) =>
     request(walletConnectionSchema, { method: 'POST', url: endpoints.walletConnect(id), data: body }),
+  disconnect: (id: string) => requestVoid({ method: 'DELETE', url: endpoints.walletConnect(id) }),
 }

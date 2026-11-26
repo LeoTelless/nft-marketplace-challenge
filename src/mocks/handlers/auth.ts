@@ -92,6 +92,7 @@ export const authHandlers = [
     route(
       ({ session }) => {
         db().sessions = db().sessions.filter((s) => s.token !== session?.token)
+        db().walletConnections = db().walletConnections.filter((c) => c.sessionToken !== session?.token)
         persist()
         return new HttpResponse(null, { status: 204 })
       },

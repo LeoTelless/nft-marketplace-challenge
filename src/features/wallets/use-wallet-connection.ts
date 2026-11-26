@@ -13,7 +13,10 @@ export type WalletConnectionState =
   | { status: 'error'; walletId: string; network: Network; message: string }
 
 /**
- * Simulated wallet connection for the checkout (`POST /wallets/:id/connect`).
+ * Simulated wallet connection for the checkout (`POST /wallets/:id/connect`). The server keeps
+ * one connection per session and `POST /orders` requires it (409 `wallet_not_connected`), so
+ * this state mirrors the server: connecting another wallet or network replaces the connection,
+ * a declined request removes it, `disconnect` removes it on the server too.
  * Connecting is per (wallet, network): selecting another wallet or network means the current
  * connection no longer applies (`isConnectedTo` is false) until the user connects again.
  * A late answer for a previous selection is ignored.
@@ -41,7 +44,15 @@ export function useWalletConnection() {
     }
   }, [])
 
+  /** Disconnects on the server (`DELETE /wallets/:id/connect`, best effort) and locally right away. */
   const disconnect = useCallback(() => {
+    attempt.current++
+    if (state.status === 'connected') void walletsApi.disconnect(state.connection.walletId).catch(() => undefined)
+    setState({ status: 'disconnected' })
+  }, [state])
+
+  /** The server says the wallet is not connected (409 `wallet_not_connected`): mirror it without a request. */
+  const markDisconnected = useCallback(() => {
     attempt.current++
     setState({ status: 'disconnected' })
   }, [])
@@ -52,5 +63,5 @@ export function useWalletConnection() {
     [state],
   )
 
-  return { state, connect, disconnect, isConnectedTo }
+  return { state, connect, disconnect, markDisconnected, isConnectedTo }
 }

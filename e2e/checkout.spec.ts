@@ -93,6 +93,37 @@ test('declined payment shows the refusal and keeps the cart intact', async ({ pa
   await expect(lineQuantity(page, pick)).toHaveText('1')
 })
 
+test('the server only accepts the order with the wallet connected on the chosen network', async ({ page }) => {
+  await startCheckout(page, 'instant')
+  const connections = () => page.evaluate(() => window.__mocks!.getState().walletConnections)
+  expect(await connections()).toEqual([expect.objectContaining({ userId: USERS.ana.id })])
+
+  // The wallet disconnects on its side: the client still shows it connected, the server refuses the order.
+  await page.evaluate(() => window.__mocks!.disconnectWallets())
+  await confirmPurchase(page).click()
+  await expect(reviewDialog(page)).toHaveCount(0)
+  await expect(main(page).getByText('A carteira não está conectada nesta rede. Conecte-a novamente para confirmar a compra.')).toBeVisible()
+  await expect(main(page).getByText('Carteira desconectada.')).toBeVisible()
+  expect(await page.evaluate(() => window.__mocks!.getState().orders.length)).toBe(0)
+
+  // Connecting again (recorded by the server) lets the same purchase go through.
+  await main(page).getByRole('button', { name: 'Conectar carteira' }).click()
+  await expect(main(page).getByText(/Carteira .+ conectada\./)).toBeVisible()
+  await main(page).getByRole('button', { name: 'Confirmar compra' }).click()
+  await confirmPurchase(page).click()
+  await expect(page).toHaveURL(/\/orders\/[\w-]+$/)
+  expect(await page.evaluate(() => window.__mocks!.getState().orders.length)).toBe(1)
+})
+
+test('disconnecting the wallet in the checkout disconnects it on the server', async ({ page }) => {
+  await startCheckout(page, 'instant')
+  await page.keyboard.press('Escape')
+  await expect(reviewDialog(page)).toHaveCount(0)
+  await main(page).getByRole('button', { name: 'Desconectar carteira' }).click()
+  await expect(main(page).getByText('Carteira desconectada.')).toBeVisible()
+  await expect.poll(() => page.evaluate(() => window.__mocks!.getState().walletConnections.length)).toBe(0)
+})
+
 test('repeated clicks and a lost response recover the same order (retry with the same key)', async ({ page }) => {
   const keys = trackOrderRequests(page)
   await startCheckout(page, 'order-timeout')

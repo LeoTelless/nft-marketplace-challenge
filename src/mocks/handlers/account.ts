@@ -11,10 +11,11 @@ import {
   type WalletConnection,
   type WalletList,
 } from '@/contracts'
+import { findWalletConnection, setWalletConnection } from '../db/commerce'
 import { db, nextId, persist } from '../db/store'
 import type { DbUser, DbWallet } from '../db/types'
 import { is } from '../scenarios'
-import { api, hashPassword, MockHttpError, now, parseBody, randomHex, requireUser, route, validationError } from './utils'
+import { api, hashPassword, MockHttpError, now, parseBody, randomHex, requireSession, requireUser, route, validationError } from './utils'
 
 function profileOf(user: DbUser): Profile {
   return {
@@ -181,17 +182,33 @@ export const accountHandlers = [
     api(endpoints.walletConnect(':id')),
     route<{ id: string }>(
       async (ctx) => {
-        const user = requireUser(ctx)
+        const { user, session } = requireSession(ctx)
         const wallet = findWallet(user.id, ctx.params.id)
         const body = await parseBody(ctx.request, connectWalletRequestSchema)
         if (is('wallet-declined')) {
+          // Declining in the wallet leaves the session without a connected wallet.
+          setWalletConnection(session.token, null)
           throw new MockHttpError(422, 'wallet_rejected', 'The connection request was declined in the wallet (simulated)')
         }
         if (!wallet.networks.includes(body.network)) {
           validationError({ network: [`${wallet.label} não opera na rede ${body.network}`] })
         }
         const connection: WalletConnection = { walletId: wallet.id, network: body.network, connectedAt: now() }
+        setWalletConnection(session.token, { userId: user.id, ...connection })
         return HttpResponse.json(connection)
+      },
+      { auth: true },
+    ),
+  ),
+
+  http.delete(
+    api(endpoints.walletConnect(':id')),
+    route<{ id: string }>(
+      (ctx) => {
+        const { user, session } = requireSession(ctx)
+        const wallet = findWallet(user.id, ctx.params.id)
+        if (findWalletConnection(session.token)?.walletId === wallet.id) setWalletConnection(session.token, null)
+        return new HttpResponse(null, { status: 204 })
       },
       { auth: true },
     ),

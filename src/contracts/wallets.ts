@@ -38,7 +38,12 @@ export type CreateWalletRequest = z.infer<typeof createWalletRequestSchema>
 export const updateWalletRequestSchema = createWalletRequestSchema.partial()
 export type UpdateWalletRequest = z.infer<typeof updateWalletRequestSchema>
 
-/** `POST /wallets/:id/connect`: simulated wallet connection. 422 `wallet_rejected` when the user declines. */
+/**
+ * `POST /wallets/:id/connect`: simulated wallet connection for the current session. 422 `wallet_rejected` when the
+ * user declines (any previous connection is dropped). One connection per session: connecting another wallet or
+ * network replaces it. `DELETE /wallets/:id/connect` (204) disconnects. `POST /orders` answers 409
+ * `wallet_not_connected` unless the order's wallet is connected on the order's network.
+ */
 export const connectWalletRequestSchema = z.object({ network: networkSchema })
 export type ConnectWalletRequest = z.infer<typeof connectWalletRequestSchema>
 export const walletConnectionSchema = z.object({

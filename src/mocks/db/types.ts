@@ -67,6 +67,19 @@ export interface DbWallet extends Wallet {
   userId: string
 }
 
+/**
+ * Simulated wallet connection (`POST /wallets/:id/connect`). One active connection per session, as in a
+ * browser wallet (one account on one chain at a time): connecting again replaces it, a declined request or
+ * `DELETE /wallets/:id/connect` removes it, and it ends with the session. `POST /orders` requires it.
+ */
+export interface DbWalletConnection {
+  sessionToken: string
+  userId: string
+  walletId: string
+  network: Network
+  connectedAt: string
+}
+
 export interface DbState {
   schemaVersion: 1
   seq: number
@@ -79,6 +92,7 @@ export interface DbState {
   quotes: DbQuote[]
   orders: DbOrder[]
   wallets: DbWallet[]
+  walletConnections: DbWalletConnection[]
   coupons: DbCoupon[]
 }
 

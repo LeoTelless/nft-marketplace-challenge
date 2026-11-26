@@ -9,7 +9,7 @@ import { z } from 'zod'
  * | 401    | `invalid_credentials`, `unauthorized`, `session_expired` | missing or invalid session                |
  * | 403    | `forbidden`                                              | authenticated but not allowed             |
  * | 404    | `not_found`                                              | resource does not exist                   |
- * | 409    | `availability_conflict`, `email_conflict`, `idempotency_conflict`, `quote_outdated`, `wallet_conflict` | state conflict |
+ * | 409    | `availability_conflict`, `email_conflict`, `idempotency_conflict`, `quote_outdated`, `wallet_conflict`, `wallet_not_connected` | state conflict |
  * | 422    | `validation_error`, `coupon_invalid`, `coupon_expired`, `wallet_rejected` | semantic validation (field errors) |
  * | 5xx    | `server_error`, `service_unavailable`                    | transient failure                         |
  */
@@ -26,6 +26,7 @@ export const apiErrorCodeSchema = z.enum([
   'idempotency_conflict',
   'quote_outdated',
   'wallet_conflict',
+  'wallet_not_connected',
   'validation_error',
   'coupon_invalid',
   'coupon_expired',

@@ -106,6 +106,15 @@ export function CheckoutPage() {
         setResult({ tone: 'error', message: outcome.message })
         return
       case 'failed':
+        if (isApiError(outcome.error) && outcome.error.code === 'wallet_not_connected') {
+          // The server has no connection for this wallet/network (declined, disconnected, new session).
+          connection.markDisconnected()
+          checkout.backToForm()
+          focusAfterClose.current = 'walletId'
+          form.setError('walletId', { type: 'server', message: outcome.message })
+          setResult(null)
+          return
+        }
         if (applyFieldErrors(outcome.error)) checkout.backToForm()
         setResult({ tone: 'error', message: outcome.message })
         return

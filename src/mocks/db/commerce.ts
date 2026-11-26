@@ -3,7 +3,7 @@ import { addEth, multiplyEth, percentOfEth, subtractEth } from '@/shared/lib/eth
 import { hashString, MockHttpError, now, randomHex, stableStringify } from '../handlers/utils'
 import { ORDER_RESOLUTION_DELAY_MS } from '../scenarios'
 import { announceOrder, db, findNft, mutateNft, mutateOrder, nextId, persist } from './store'
-import { NETWORK_FEES, type DbCart, type DbOrder, type DbQuote } from './types'
+import { NETWORK_FEES, type DbCart, type DbOrder, type DbQuote, type DbWalletConnection } from './types'
 
 const QUOTE_TTL_MS = 10 * 60_000
 
@@ -108,6 +108,20 @@ export function mergeGuestCart(guestCartId: string | null | undefined, userId: s
   }
   state.carts = state.carts.filter((c) => c !== guest)
   touchCart(target)
+}
+
+// ---------------------------------------------------------------- wallet connections
+
+/** Replaces the session's wallet connection (`null` disconnects). See `DbWalletConnection`. */
+export function setWalletConnection(sessionToken: string, connection: Omit<DbWalletConnection, 'sessionToken'> | null) {
+  const state = db()
+  state.walletConnections = state.walletConnections.filter((c) => c.sessionToken !== sessionToken)
+  if (connection) state.walletConnections.push({ sessionToken, ...connection })
+  persist()
+}
+
+export function findWalletConnection(sessionToken: string): DbWalletConnection | undefined {
+  return db().walletConnections.find((c) => c.sessionToken === sessionToken)
 }
 
 // ---------------------------------------------------------------- quotes
