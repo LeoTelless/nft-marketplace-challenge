@@ -4,6 +4,8 @@ export interface DbUser {
   id: string
   name: string
   email: string
+  username: string
+  ensName: string
   bio: string
   avatarUrl: string | null
   /** SHA-256(`${salt}:${password}`), hex. Passwords are never stored in clear. */

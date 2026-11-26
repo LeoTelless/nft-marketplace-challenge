@@ -31,7 +31,10 @@ declare global {
   }
 }
 
-/** Opens a page with a fresh seed database and the given scenario. */
+/**
+ * Opens a page with a fresh seed database and the given scenario. The app removes the
+ * control params from the URL once applied, so `page.reload()` afterwards keeps the data.
+ */
 export async function openWithScenario(page: Page, path: string, scenario = 'instant') {
   const separator = path.includes('?') ? '&' : '?'
   await page.goto(`${path}${separator}mocks=reset&scenario=${scenario}`)

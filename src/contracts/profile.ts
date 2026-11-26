@@ -7,15 +7,30 @@ export const profileSchema = z.object({
   id: idSchema,
   name: z.string(),
   email: z.email(),
+  /** Public handle (`@username`). */
+  username: z.string(),
+  /** ENS name without the `.eth` suffix; empty when not set. */
+  ensName: z.string(),
   bio: z.string(),
   avatarUrl: z.string().nullable(),
 })
+
+export const usernameSchema = z
+  .string()
+  .trim()
+  .regex(/^[a-z0-9_.]{3,30}$/i, 'Use de 3 a 30 letras, números, "_" ou "."')
+export const ensNameSchema = z
+  .string()
+  .trim()
+  .regex(/^([a-z0-9-]{3,63})?$/i, 'Use de 3 a 63 letras, números ou "-" (sem .eth)')
 export type Profile = z.infer<typeof profileSchema>
 
 /** `PATCH /profile` returns Profile. 409 `email_conflict`, 422 `validation_error`. */
 export const updateProfileRequestSchema = z.object({
-  name: z.string().trim().min(2).max(60),
-  email: z.email(),
+  name: z.string().trim().min(2, 'Informe o nome de exibição').max(60),
+  email: z.email('Informe um e-mail válido'),
+  username: usernameSchema,
+  ensName: ensNameSchema,
   bio: z.string().max(280),
 })
 export type UpdateProfileRequest = z.infer<typeof updateProfileRequestSchema>

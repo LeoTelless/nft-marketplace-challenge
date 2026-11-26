@@ -17,7 +17,15 @@ import { is } from '../scenarios'
 import { api, hashPassword, MockHttpError, now, parseBody, randomHex, requireUser, route, validationError } from './utils'
 
 function profileOf(user: DbUser): Profile {
-  return { id: user.id, name: user.name, email: user.email, bio: user.bio, avatarUrl: user.avatarUrl }
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    username: user.username ?? '',
+    ensName: user.ensName ?? '',
+    bio: user.bio,
+    avatarUrl: user.avatarUrl,
+  }
 }
 
 function publicWallet(wallet: DbWallet) {
@@ -64,7 +72,7 @@ export const accountHandlers = [
             fieldErrors: { email: ['Este e-mail é usado por outra conta'] },
           })
         }
-        Object.assign(user, { name: body.name, email: body.email, bio: body.bio })
+        Object.assign(user, { name: body.name, email: body.email, username: body.username, ensName: body.ensName, bio: body.bio })
         persist()
         return HttpResponse.json(profileOf(user))
       },

@@ -23,7 +23,7 @@ export const handlers = [
 /**
  * Starts MSW (REST through the Service Worker, WebSocket through in-page interception).
  * URL controls: `?scenario=<id>` selects (and persists) a scenario; `?mocks=reset` restores
- * the seed database. Must resolve before the app creates its Socket.IO client.
+ * the seed database. Both are removed from the URL once applied. Must resolve before the app creates its Socket.IO client.
  */
 export async function startMocks() {
   const params = new URLSearchParams(location.search)
@@ -38,6 +38,15 @@ export async function startMocks() {
     } else {
       console.warn(`[mocks] unknown scenario "${scenario}", keeping "${getScenario()}"`)
     }
+  }
+
+  // Applied once: drop the control params from the URL (the scenario stays persisted), so a
+  // refresh does not reset the simulated database again. Runs before the router reads the URL.
+  if (params.has('mocks') || params.has('scenario')) {
+    params.delete('mocks')
+    params.delete('scenario')
+    const query = params.toString()
+    history.replaceState(history.state, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`)
   }
 
   startRealtimeBridge()

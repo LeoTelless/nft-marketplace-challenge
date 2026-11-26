@@ -25,6 +25,12 @@ function openSession(user: DbUser): Session {
   return { token: session.token, expiresAt: session.expiresAt, user: publicUser(user) }
 }
 
+/** Initial handle derived from the e-mail (editable in the profile). */
+function usernameFrom(email: string) {
+  const base = email.split('@')[0].toLowerCase().replace(/[^a-z0-9_.]/g, '').slice(0, 24)
+  return base.length >= 3 ? base : `user.${base}`.slice(0, 30)
+}
+
 export const authHandlers = [
   http.post(
     api(endpoints.login),
@@ -54,6 +60,8 @@ export const authHandlers = [
         id: nextId('user'),
         name: body.name,
         email: body.email,
+        username: usernameFrom(body.email),
+        ensName: '',
         bio: '',
         avatarUrl: null,
         salt,
