@@ -21,6 +21,8 @@ export function orderQueryOptions(queryClient: QueryClient, userId: string, orde
   })
 }
 
+export const PENDING_ORDER_POLL_MS = 3_000
+
 export function isTerminalOrder(order: Pick<Order, 'status'>): boolean {
   return TERMINAL_ORDER_STATUSES.includes(order.status)
 }
@@ -31,6 +33,9 @@ export function useOrder(orderId: string) {
   return useQuery({
     ...orderQueryOptions(queryClient, user?.id ?? '', orderId),
     enabled: Boolean(user),
+    // Safety net independent of the socket: while the order is pending, poll REST every 3 s
+    // (stops on `confirmed`/`rejected`), so a missed `order.updated` never leaves it stuck.
+    refetchInterval: (query) => (query.state.data?.status === 'pending' ? PENDING_ORDER_POLL_MS : false),
   })
 }
 
