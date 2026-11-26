@@ -41,7 +41,7 @@ const soonItem = cn(columnItem, 'text-text-secondary')
 /** Same "em breve" mark as the header: visible text, kept on the item's line. */
 function SoonMark() {
   return (
-    <span className="ml-1.5 rounded-xs border border-line-soft px-1 align-[1px] text-[10px] leading-[14px] whitespace-nowrap text-text-muted">
+    <span className="ml-1.5 rounded-xs border border-line-soft px-1 align-[1px] text-[10px] leading-3 whitespace-nowrap text-text-muted">
       <span className="sr-only">(</span>em breve<span className="sr-only">)</span>
     </span>
   )
@@ -144,7 +144,7 @@ export function SiteFooter() {
         </p>
       </div>
 
-      <div className="grid gap-10 bg-surface px-6 py-8 sm:grid-cols-2 md:px-8 xl:grid-cols-[211px_211px_211px_1fr] xl:gap-x-[91px]">
+      <div className="grid gap-10 bg-surface px-6 py-8 sm:grid-cols-2 md:px-8 xl:grid-cols-[211px_211px_211px_1fr] xl:gap-x-[91px] xl:pb-[29px]">
         <nav aria-labelledby="footer-profile" className="flex flex-col gap-2">
           <h2 id="footer-profile" className={columnTitle}>
             Meu perfil
@@ -177,7 +177,8 @@ export function SiteFooter() {
           </ul>
         </nav>
         <div className="flex flex-col gap-2">
-          <h2 className={columnTitle}>
+          {/* One line, as in the frame: the mark may run into the 91px gap between columns. */}
+          <h2 className={cn(columnTitle, 'whitespace-nowrap')}>
             Central de ajuda
             <SoonMark />
           </h2>
