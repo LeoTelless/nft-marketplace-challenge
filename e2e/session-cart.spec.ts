@@ -61,6 +61,8 @@ test('the login dialog traps focus, maps API errors and closes back to the page'
   await dialog.getByLabel('Senha', { exact: true }).fill('wrong-password-1')
   await dialog.getByRole('button', { name: 'Entrar', exact: true }).click()
   await expect(dialog.getByRole('alert')).toHaveText('E-mail ou senha incorretos.')
+  // Focus stays in the dialog (back on the first field), never dropped on <body>.
+  await expect(dialog.getByLabel('E-mail', { exact: true })).toBeFocused()
 
   await page.keyboard.press('Escape')
   await expect(dialog).toBeHidden()
