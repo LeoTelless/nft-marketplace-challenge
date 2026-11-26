@@ -1,6 +1,6 @@
 # Índice do design (cache do Figma)
 
-Gerado por `scripts/figma-dump.mjs`. PNG @2x em `design/frames`, árvore simplificada em `design/nodes`, tokens em `design/tokens.json`, assets em `design/assets`.
+Gerado por `scripts/figma-dump.mjs`. Versionados: tokens em `design/tokens.json`, assets em `design/assets` e as decisões em `design/DECISOES.md`. Os dados brutos usados durante o desenvolvimento (PNG @2x em `design/frames`, árvore simplificada em `design/nodes` e comentários do arquivo) **não fazem parte do repositório**; as colunas PNG e JSON abaixo indicam onde o script os grava. Para regenerá-los, use um token próprio da API do Figma: `FIGMA_TOKEN=<token> FIGMA_FILE_KEY=<chave de uma cópia do arquivo> node scripts/figma-dump.mjs`.
 
 ## Frames
 

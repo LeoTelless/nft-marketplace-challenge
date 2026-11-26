@@ -61,7 +61,7 @@ const ethParam = z
  * Defaults are stripped from the URL (see the route), keeping links short and canonical.
  */
 export const catalogSearchSchema = z.object({
-  // "true"/"false" come back from the URL as booleans (see `searchSerialization` in main.tsx).
+  // "true"/"false" come back from the URL as booleans (see `shared/lib/search-serialization.ts`, registered in `app.tsx`).
   q: z
     .union([z.string(), z.number(), z.boolean()])
     .transform((value) => String(value).trim())

@@ -26,7 +26,6 @@ export class EventGuard {
     return true
   }
 
-
   clear() {
     this.seenIds.clear()
     this.versions.clear()
