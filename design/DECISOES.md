@@ -28,9 +28,9 @@ O Figma tem inconsistências (várias delas apontadas nos comentários do própr
 - Mobile (< 768 px): no Início e no Detalhe não há header, como nos frames. A aba "Conta" da barra inferior abre o menu de navegação e de conta (entrar ou perfil, carteiras, pedidos, sair). Telas sem frame mobile mantêm um header compacto. A barra inferior tem rótulos visíveis (ganho de a11y) e não tem o botão central de "scan" (sem função no escopo).
 - Início: as 3 abas do frame foram mantidas. "Novos lançamentos" filtra os NFTs listados até 30 dias antes da listagem mais recente (`recent=true`) e "Em alta" filtra os destaques (`featured`). O filtro "Rede" (Ethereum/Polygon/Solana) não existe nos dados e virou "Disponibilidade", no mesmo estilo de lista. Coleções = categorias da API em português, com contagem real.
 - Início: a busca é obrigatória pelo enunciado, mas a linha das abas não tem espaço (abas 376 px + ordenação 315 px em 842 px). Por isso o campo "Buscar" fica no topo da lateral de filtros no desktop, e grid e abas ficam na posição do frame (abas y=647, grid y≈701). No mobile/tablet, a barra "Explorar coleções" + filtros fica acima do hero, como no frame, e a ordenação vai para a sheet de filtros. A linha "N NFTs encontrados · Limpar filtros" só aparece com filtros ativos (a contagem é sempre anunciada por aria-live). O indicador "Atualizando…" é uma pílula sobreposta, fora do fluxo.
-- Início: 9 por página (grid 3×3 do frame; 48 NFTs = 6 páginas). Coração de favorito também nos cards desktop (vem do card mobile). Selo "ESGOTADO" no estilo do selo "RARO", com preço riscado. Nomes quebram em até 2 linhas no mobile em vez de cortar o número do token. Pontos do hero: o ativo é uma pílula, como no detalhe mobile do próprio Figma, para o estado não depender só de cor.
+- Início: 9 por página (grid 3×3 do frame; 48 NFTs = 6 páginas). Coração de favorito também nos cards desktop (vem do card mobile). Selo "ESGOTADO" no estilo do selo "RARO", com preço riscado. O nome do NFT nunca é cortado: cabe numa linha, como no frame, e só quebra quando não cabe (o número do token fica junto da última palavra); apenas aquela linha da grade cresce, sem espaço reservado nos outros cards. Pontos do hero: o ativo é uma pílula, como no detalhe mobile do próprio Figma, para o estado não depender só de cor.
 - URL legível: `?category=art,music&minPrice=0.5` (serialização própria em `shared/lib/search-serialization.ts`) em vez do JSON padrão do router.
-- Blog "Diário da Cunhagem" e itens editoriais do footer ("Estúdio do criador", "Central de ajuda"): fora do escopo, exibidos sem link com "Em breve". "Minha coleção" e "Atividade" levam a `/orders`, e "Lista de interesse" a `/account/favorites`. A newsletter valida o e-mail e informa que não está disponível (não finge sucesso). As coleções do footer apontam para o catálogo filtrado (Arte 3D e Utilidade, que não existem nos dados, trocadas por Jogos e Colecionáveis). O indicador "Tempo real: conectado" na linha do copyright dá feedback do canal Socket.IO (A11Y-12). As letras W/C/D foram trocadas por ícones.
+- Blog "Diário da Cunhagem" e itens editoriais do footer ("Estúdio do criador", "Central de ajuda"): fora do escopo, exibidos sem link com o selo "em breve" (na coluna "Central de ajuda" o selo fica no título, sem a linha extra). "Atividade" leva a `/orders` e "Lista de interesse" a `/account/favorites`; "Minha coleção" (NFTs possuídos) não tem página no escopo e aparece como "em breve", em vez de repetir o destino de "Atividade". O e-mail e o telefone do rodapé são os exemplos do layout: ficam como texto, sem `mailto:`/`tel:`, para não abrir o app de e-mail ou de telefone com um contato fictício. A newsletter valida o e-mail e informa que não está disponível (não finge sucesso). As coleções do footer apontam para o catálogo filtrado (Arte 3D e Utilidade, que não existem nos dados, trocadas por Jogos e Colecionáveis). O indicador "Tempo real: conectado" dá feedback do canal Socket.IO (A11Y-12): fica na borda direita da linha do copyright (que continua centralizada, como no frame) e, abaixo de 1024 px, numa linha própria. As letras W/C/D foram trocadas por ícones.
 - Detalhe: as estrelas, as avaliações e a aba "Avaliações de colecionadores" foram removidas (não há dados de avaliação e não inventamos números). No mobile, o selo do criador ("por …") ocupa o lugar do selo de avaliação. As pílulas de edição mostram o nome (Padrão/Rara/Lendária), e a tiragem e a disponibilidade vêm na linha abaixo. A edição esgotada aparece riscada e desabilitada. "Atributos" virou "Edições" (não há atributos nos dados). Foi acrescentado o botão "Adicionar ao carrinho" (ícone do frame mobile) ao lado de "COMPRAR" no desktop. A lupa abre a imagem ampliada em diálogo.
 - Detalhe: 4 vistas por NFT geradas do mesmo arquivo do Figma (inteira, rosto, tronco/acessório, enquadramento alternativo) via `scripts/optimize-assets.mjs`. "Mais desta coleção" é um carrossel com scroll nativo e os pontos do frame. O número de páginas depende da coleção (8 NFTs por categoria resultam em 2 páginas, não 3).
 - Imagens: as 4 artes do Figma (PNG de 1254 px, ~2 MB) foram convertidas para AVIF/WebP em 256/512/800 px e distribuídas entre as 48 fixtures. Os ícones SVG do Figma viraram componentes (`scripts/generate-icons.mjs`).
@@ -50,3 +50,51 @@ O Figma tem inconsistências (várias delas apontadas nos comentários do própr
 - Resumo (carrinho, pagamento): o desconto zero aparece como `(-) 0 ETH`, no mesmo formato dos demais valores da cotação, em vez do texto fixo `(-) 00.00` do Figma.
 - Detalhe, mobile: a descrição do NFT já é o primeiro parágrafo da área de compra; em "Detalhes do NFT" ela não é repetida (só no desktop, onde as duas seções ficam distantes). Em "Detalhes do NFT", os textos de "Contrato" e "Direitos autorais" estavam trocados no layout e foram colocados sob o título correto.
 - Rodapé: as colunas fixas do frame (265/211 px) só valem a partir de 1280 px; entre 768 e 1279 px os blocos ficam em 2 colunas, para não estourar a largura em 1024 px.
+
+## Início, Detalhe e layout base: o que ainda difere do Figma
+
+Medido no app (Chromium, área útil de 1440 e 414 px, dados das fixtures) contra `design/nodes`. Tudo o que não está aqui segue o valor do frame (diferença ≤ 2 px de posição/tamanho, ≤ 1 px de fonte, mesma cor, peso, raio e sombra). Diferenças que são só consequência de outra (um bloco acima mais alto empurra os de baixo) não são repetidas.
+
+### Acessibilidade e responsividade (todas as telas)
+- **Campos**: a borda é a Color/Border do layout (#3F2319, 1,34:1 sobre o fundo). O campo nunca é identificado só pela borda: todos têm rótulo ou placeholder visível (≥ 6:1), borda mais clara no hover e contorno de foco de 2 px (8,5:1). Com `prefers-contrast: more` a borda passa a #8B6A50 (3,9:1), atendendo ao WCAG 1.4.11; no tema padrão fica a cor do layout.
+- **Barras fixas no mobile** (< 768 px): `scroll-padding-bottom` igual à altura da barra de abas (76 px), da barra de compra do detalhe (~166 px) ou da barra do pagamento, para o elemento focado ou rolado nunca ficar escondido (WCAG 2.4.11).
+- **Alvos de toque**: pontos de carrossel/galeria e botões do stepper mantêm o desenho do frame, mas a área clicável tem pelo menos 24 px (WCAG 2.5.8). Por isso os pontos ficam a 24 px de passo em vez de 13–20 px (ver cada tela). O polegar do slider de preço tem 15 px como no frame, com área invisível de 31 px.
+- **Ícones**: os do próprio Figma (Iconly, `design/assets`) viram componentes em `src/shared/ui/icons.tsx` (`scripts/generate-icons.mjs`): X dos diálogos e da sheet, lupa, carrinho, logout, usuário, carteira, atividade, coração, seta do select, setas da paginação e do voltar, mensagem e alerta. Continuam no lucide só ícones sem equivalente nos frames: menu (hambúrguer), carregamento, busca sem resultado, check do checkbox, página 404 e os três serviços do rodapé.
+- **X dos diálogos**: ícone de 18 px #D28A4C a 11 px do topo e 12 px da direita, sem caixa, como no frame; a área de toque invisível tem 40 px e o nome acessível é "Fechar". O fundo do diálogo é só escurecido (sem desfoque), como no layout.
+
+### Início desktop (1440)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Pontos do hero | 3 círculos de 8 px, 8 px entre eles | pílula de 20 px no ativo; passo de 24 px | estado não só por cor; alvo de 24 px |
+| Texto da faixa de preço | "Preço: 0,02 - 12,30 ETH" | "Preço: 0 - 13+ ETH" | mostra os limites do filtro (o frame mostra preços de exemplo) |
+| Sublinhado da aba ativa | 101 px (mais curto que o texto de 118) | largura do texto | o traço mais curto que a palavra é defeito do frame |
+| "Ordenar por:" | x 1020, valor sobreposto à seta | x 987, valor e seta alinhados à direita | corrige a sobreposição do frame |
+| Preço secundário do card 3 ("2.29 ETH") | presente | ausente | a API tem um preço por edição, sem preço anterior |
+| Paginação | 1 2 3 4 › | 1 2 … 6 › | a última página fica sempre a um clique; o total vem dos dados |
+| Promoção 2: margem direita | 35 px (card 1: 30) | 30 px nos dois | alinha os dois cards |
+| Botão "Explorar" das promoções | +164 do topo, sobre o parágrafo | +180 (30 px da base) | corrige a sobreposição do frame; abaixo de 1280 px o card cresce em vez de cortar o texto |
+| Cards do blog | 268 px, meta em 2 linhas, card 369 px | 282 px (ocupam os 1200), meta em 1 linha, card 351 px | alinhamento à grade (decisão de layout acima) |
+| Rodapé: coluna "Central de ajuda" | itens #F5F1EB | itens #CFB28C + selo "em breve" no título | itens sem destino não parecem links |
+
+### Início mobile (414)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Pontos do hero | 3 × 7 px, 6 px entre eles | pílula de 20 px no ativo; passo de 24 px | estado não só por cor; alvo de 24 px |
+| Abaixo de 360 px | artes de 138/58 px | 112/48 px, título em 16 px | o título continua legível em 320 px; o banner cresce em vez de cortar |
+| Abas | 4 px entre "Todos os NFTs" e "Novos lançamentos", 16 px depois | 16 px entre todas | espaçamento uniforme |
+| Nome longo no card | 1 linha (nomes curtos no frame) | quebra em 2 linhas quando não cabe (card 264 px) | nada cortado em 320–414 px |
+| Coração do card | sempre preenchido | contorno quando não favoritado, preenchido quando favoritado | o estado precisa ser visível |
+| Selo "RARO" | no card P-3 | ausente | as fixtures não têm raridade por NFT (as edições têm nome próprio no detalhe) |
+| Barra inferior | já registrada acima (rótulos, sem "scan") | — | — |
+
+### Detalhe desktop (1440)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Pontos de "Mais desta coleção" | 12 px, 8 px entre eles | 12 px, 12 px entre eles (passo de 24) | alvo de 24 px |
+| Linha "Tiragem… disponíveis… máx." e selo do criador | — | presentes | já registrados acima; empurram stepper, botões e seções ~50 px para baixo |
+
+### Detalhe mobile (414)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Pontos da galeria | atrás da arte (invisíveis), 3 pontos, 7 px entre eles | sobre a arte, 4 pontos, passo de 24 px | a galeria precisa ser visível e operável (4 vistas); alvo de 24 px |
+| "Compartilhar este NFT" | ausente | ausente no mobile (só desktop/tablet) | igual ao frame |
