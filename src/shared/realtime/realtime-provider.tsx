@@ -1,0 +1,39 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect, useSyncExternalStore, type ReactNode } from 'react'
+import { connectRealtime, realtimeStatus, type RealtimeConnection } from './realtime-client'
+
+/**
+ * Owns the socket lifecycle: one connection per (token, userId). Changing either
+ * (login, logout, user switch) destroys the previous socket and its listeners
+ * before a new one is created.
+ */
+export function RealtimeProvider({
+  token,
+  userId,
+  children,
+}: {
+  token: string | null
+  userId: string | null
+  children: ReactNode
+}) {
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    let connection: RealtimeConnection | null = null
+    let disposed = false
+    void connectRealtime({ queryClient, token, userId }).then((created) => {
+      if (disposed) created.destroy()
+      else connection = created
+    })
+    return () => {
+      disposed = true
+      connection?.destroy()
+    }
+  }, [queryClient, token, userId])
+
+  return children
+}
+
+export function useRealtimeStatus() {
+  return useSyncExternalStore(realtimeStatus.subscribe, realtimeStatus.get, realtimeStatus.get)
+}
