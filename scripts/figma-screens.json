@@ -1,0 +1,11 @@
+[
+  {"match": "início", "screen": "Início"},
+  {"match": "detalhes", "screen": "Detalhes do NFT"},
+  {"match": "carrinho", "screen": "Carrinho de NFTs"},
+  {"match": "pagamento", "screen": "Pagamento"},
+  {"match": "confirma", "screen": "Confirmação de pedido"},
+  {"match": "login", "screen": "Login"},
+  {"match": "cadastro", "screen": "Cadastro"},
+  {"match": "perfil", "screen": "Perfil do colecionador"},
+  {"match": "carteiras", "screen": "Carteiras"}
+]

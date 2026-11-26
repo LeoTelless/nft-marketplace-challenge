@@ -1,0 +1,1220 @@
+{
+  "svgs": [
+    {
+      "key": "n:Active Underline:58x0",
+      "file": "assets/active-underline.svg",
+      "name": "Active Underline",
+      "size": "58x0",
+      "uses": 5,
+      "nodeIds": [
+        "I70522:3240;70504:3015;70486:514",
+        "I70522:3671;70529:3617;70504:3015;70486:514",
+        "I70522:3841;70529:3617;70504:3015;70486:514",
+        "I70522:3267;70504:3015;70486:514",
+        "I70522:3294;70504:3015;70486:514"
+      ]
+    },
+    {
+      "key": "n:Search Icon:20x20",
+      "file": "assets/search-icon.svg",
+      "name": "Search Icon",
+      "size": "20x20",
+      "uses": 9,
+      "nodeIds": [
+        "I70522:3240;70504:3015;70486:519",
+        "I70488:626;70486:545",
+        "I70488:651;70486:545",
+        "I70522:3321;70504:3043;70486:545",
+        "I70522:3496;70504:3043;70486:545",
+        "I70522:3671;70529:3617;70504:3015;70486:519",
+        "I70522:3841;70529:3617;70504:3015;70486:519",
+        "I70522:3267;70504:3015;70486:519",
+        "I70522:3294;70504:3015;70486:519"
+      ]
+    },
+    {
+      "key": "n:Cart Icon:24x24",
+      "file": "assets/cart-icon.svg",
+      "name": "Cart Icon",
+      "size": "24x24",
+      "uses": 9,
+      "nodeIds": [
+        "I70522:3240;70504:3015;70486:521",
+        "I70488:626;70486:547",
+        "I70488:651;70486:547",
+        "I70522:3321;70504:3043;70486:547",
+        "I70522:3496;70504:3043;70486:547",
+        "I70522:3671;70529:3617;70504:3015;70486:521",
+        "I70522:3841;70529:3617;70504:3015;70486:521",
+        "I70522:3267;70504:3015;70486:521",
+        "I70522:3294;70504:3015;70486:521"
+      ]
+    },
+    {
+      "key": "c:2:36",
+      "file": "assets/iconly-curved-logout.svg",
+      "name": "Iconly/Curved/Logout",
+      "size": "20x20",
+      "uses": 11,
+      "nodeIds": [
+        "I70522:3240;70504:3015;70486:527",
+        "I70488:626;70486:553",
+        "I70488:651;70486:553",
+        "I70522:3321;70504:3043;70486:553",
+        "I70522:3496;70504:3043;70486:553",
+        "I70522:3671;70529:3617;70504:3015;70486:527",
+        "I70522:3841;70529:3617;70504:3015;70486:527",
+        "I70522:3267;70504:3015;70486:527",
+        "70420:4565",
+        "I70522:3294;70504:3015;70486:527",
+        "70420:4623"
+      ]
+    },
+    {
+      "key": "n:Line 5:55x0",
+      "file": "assets/line-5.svg",
+      "name": "Line 5",
+      "size": "55x0",
+      "uses": 3,
+      "nodeIds": [
+        "I70485:382;70485:364",
+        "I70522:3671;70504:3296;70485:364",
+        "I70522:3841;70504:3296;70485:364"
+      ]
+    },
+    {
+      "key": "c:4:153",
+      "file": "assets/iconly-two-tone-arrow-down-2.svg",
+      "name": "Iconly/Two-tone/Arrow - Down 2",
+      "size": "16x16",
+      "uses": 3,
+      "nodeIds": [
+        "4:152",
+        "I70522:3671;70504:3243",
+        "I70522:3841;70504:3243"
+      ]
+    },
+    {
+      "key": "n:Line 3:101x0",
+      "file": "assets/line-3.svg",
+      "name": "Line 3",
+      "size": "101x0",
+      "uses": 1,
+      "nodeIds": [
+        "4:146"
+      ]
+    },
+    {
+      "key": "n:Frame 228:35x35",
+      "file": "assets/frame-228.svg",
+      "name": "Frame 228",
+      "size": "35x35",
+      "uses": 1,
+      "nodeIds": [
+        "70342:2824"
+      ]
+    },
+    {
+      "key": "c:5:100",
+      "file": "assets/iconly-curved-arrow-right.svg",
+      "name": "Iconly/Curved/Arrow - Right",
+      "size": "18x18",
+      "uses": 3,
+      "nodeIds": [
+        "5:99",
+        "70304:393",
+        "15:5295"
+      ]
+    },
+    {
+      "key": "n:Frame 108:30x30",
+      "file": "assets/frame-108.svg",
+      "name": "Frame 108",
+      "size": "30x30",
+      "uses": 5,
+      "nodeIds": [
+        "I70492:696;70491:1269",
+        "I70493:1151;70491:1269",
+        "I70493:1607;70491:1269",
+        "I70493:2063;70491:1269",
+        "I70493:2519;70491:1269"
+      ]
+    },
+    {
+      "key": "n:Frame 109:30x30",
+      "file": "assets/frame-109.svg",
+      "name": "Frame 109",
+      "size": "30x30",
+      "uses": 5,
+      "nodeIds": [
+        "I70492:696;70491:1271",
+        "I70493:1151;70491:1271",
+        "I70493:1607;70491:1271",
+        "I70493:2063;70491:1271",
+        "I70493:2519;70491:1271"
+      ]
+    },
+    {
+      "key": "n:Frame 110:30x30",
+      "file": "assets/frame-110.svg",
+      "name": "Frame 110",
+      "size": "30x30",
+      "uses": 5,
+      "nodeIds": [
+        "I70492:696;70491:1273",
+        "I70493:1151;70491:1273",
+        "I70493:1607;70491:1273",
+        "I70493:2063;70491:1273",
+        "I70493:2519;70491:1273"
+      ]
+    },
+    {
+      "key": "n:Frame 111:30x30",
+      "file": "assets/frame-111.svg",
+      "name": "Frame 111",
+      "size": "30x30",
+      "uses": 5,
+      "nodeIds": [
+        "I70492:696;70491:1275",
+        "I70493:1151;70491:1275",
+        "I70493:1607;70491:1275",
+        "I70493:2063;70491:1275",
+        "I70493:2519;70491:1275"
+      ]
+    },
+    {
+      "key": "n:Frame 112:30x30",
+      "file": "assets/frame-112.svg",
+      "name": "Frame 112",
+      "size": "30x30",
+      "uses": 5,
+      "nodeIds": [
+        "I70492:696;70491:1277",
+        "I70493:1151;70491:1277",
+        "I70493:1607;70491:1277",
+        "I70493:2063;70491:1277",
+        "I70493:2519;70491:1277"
+      ]
+    },
+    {
+      "key": "n:Active Underline:68x0",
+      "file": "assets/active-underline-68x0.svg",
+      "name": "Active Underline",
+      "size": "68x0",
+      "uses": 4,
+      "nodeIds": [
+        "I70488:626;70486:541",
+        "I70488:651;70486:541",
+        "I70522:3321;70504:3043;70486:541",
+        "I70522:3496;70504:3043;70486:541"
+      ]
+    },
+    {
+      "key": "n:Frame 399:30x30",
+      "file": "assets/frame-399.svg",
+      "name": "Frame 399",
+      "size": "30x30",
+      "uses": 1,
+      "nodeIds": [
+        "70410:3937"
+      ]
+    },
+    {
+      "key": "c:11:1192",
+      "file": "assets/iconly-bold-star.svg",
+      "name": "Iconly/Bold/Star",
+      "size": "15x15",
+      "uses": 6,
+      "nodeIds": [
+        "11:1195",
+        "11:1198",
+        "11:1201",
+        "11:1204",
+        "11:1207",
+        "15:5663"
+      ]
+    },
+    {
+      "key": "n:Add Button:33x50",
+      "file": "assets/add-button.svg",
+      "name": "Add Button",
+      "size": "33x50",
+      "uses": 2,
+      "nodeIds": [
+        "70410:4190",
+        "70410:4194"
+      ]
+    },
+    {
+      "key": "n:heart 1:20x20",
+      "file": "assets/heart-1.svg",
+      "name": "heart 1",
+      "size": "20x20",
+      "uses": 3,
+      "nodeIds": [
+        "70410:3940",
+        "I70522:3671;70504:3286",
+        "I70522:3841;70504:3286"
+      ]
+    },
+    {
+      "key": "n:Linkedin:15x14",
+      "file": "assets/linkedin.svg",
+      "name": "Linkedin",
+      "size": "15x14",
+      "uses": 1,
+      "nodeIds": [
+        "11:1245"
+      ]
+    },
+    {
+      "key": "n:Message:18x18",
+      "file": "assets/message.svg",
+      "name": "Message",
+      "size": "18x18",
+      "uses": 1,
+      "nodeIds": [
+        "11:1248"
+      ]
+    },
+    {
+      "key": "n:Twitter:16x12",
+      "file": "assets/twitter.svg",
+      "name": "Twitter",
+      "size": "16x12",
+      "uses": 1,
+      "nodeIds": [
+        "11:1247"
+      ]
+    },
+    {
+      "key": "n:Add Button:20x30",
+      "file": "assets/add-button-20x30.svg",
+      "name": "Add Button",
+      "size": "20x30",
+      "uses": 8,
+      "nodeIds": [
+        "70402:3303",
+        "70402:3307",
+        "70402:3299",
+        "70402:3295",
+        "70402:3275",
+        "70402:3239",
+        "70410:4202",
+        "70410:4206"
+      ]
+    },
+    {
+      "key": "n:Frame 341:24x24",
+      "file": "assets/frame-341.svg",
+      "name": "Frame 341",
+      "size": "24x24",
+      "uses": 1,
+      "nodeIds": [
+        "70402:3316"
+      ]
+    },
+    {
+      "key": "n:Frame 340:24x24",
+      "file": "assets/frame-340.svg",
+      "name": "Frame 340",
+      "size": "24x24",
+      "uses": 1,
+      "nodeIds": [
+        "70402:3315"
+      ]
+    },
+    {
+      "key": "n:Frame 332:24x24",
+      "file": "assets/frame-332.svg",
+      "name": "Frame 332",
+      "size": "24x24",
+      "uses": 1,
+      "nodeIds": [
+        "70402:3274"
+      ]
+    },
+    {
+      "key": "c:9:1589",
+      "file": "assets/arrow-down.svg",
+      "name": "Arrow-Down",
+      "size": "18x18",
+      "uses": 9,
+      "nodeIds": [
+        "I70522:3321;70504:3064",
+        "I70522:3321;70504:3078",
+        "I70522:3321;70504:3110",
+        "I70522:3496;70504:3064",
+        "I70522:3496;70504:3078",
+        "I70522:3496;70504:3110",
+        "9:1837",
+        "9:1854",
+        "9:1758"
+      ]
+    },
+    {
+      "key": "n:thank-you 1:80x80",
+      "file": "assets/thank-you-1.svg",
+      "name": "thank-you 1",
+      "size": "80x80",
+      "uses": 1,
+      "nodeIds": [
+        "11:5150"
+      ]
+    },
+    {
+      "key": "n:Line 10:0x31",
+      "file": "assets/line-10.svg",
+      "name": "Line 10",
+      "size": "0x31",
+      "uses": 1,
+      "nodeIds": [
+        "11:5145"
+      ]
+    },
+    {
+      "key": "n:Line 11:0x31",
+      "file": "assets/line-11.svg",
+      "name": "Line 11",
+      "size": "0x31",
+      "uses": 1,
+      "nodeIds": [
+        "11:5146"
+      ]
+    },
+    {
+      "key": "n:Line 12:0x31",
+      "file": "assets/line-12.svg",
+      "name": "Line 12",
+      "size": "0x31",
+      "uses": 1,
+      "nodeIds": [
+        "11:5147"
+      ]
+    },
+    {
+      "key": "c:9:947",
+      "file": "assets/x.svg",
+      "name": "X",
+      "size": "18x17",
+      "uses": 2,
+      "nodeIds": [
+        "12:5223",
+        "9:1147"
+      ]
+    },
+    {
+      "key": "n:Line 3:104x0",
+      "file": "assets/line-3-104x0.svg",
+      "name": "Line 3",
+      "size": "104x0",
+      "uses": 2,
+      "nodeIds": [
+        "I70522:3671;70504:3242",
+        "I70522:3841;70504:3242"
+      ]
+    },
+    {
+      "key": "n:Line 4:65x0",
+      "file": "assets/line-4.svg",
+      "name": "Line 4",
+      "size": "65x0",
+      "uses": 2,
+      "nodeIds": [
+        "I70522:3671;70504:3277",
+        "I70522:3841;70504:3277"
+      ]
+    },
+    {
+      "key": "n:shopping 1:20x20",
+      "file": "assets/shopping-1.svg",
+      "name": "shopping 1",
+      "size": "20x20",
+      "uses": 2,
+      "nodeIds": [
+        "I70522:3671;70504:3284",
+        "I70522:3841;70504:3284"
+      ]
+    },
+    {
+      "key": "n:Frame:20x20",
+      "file": "assets/frame.svg",
+      "name": "Frame",
+      "size": "20x20",
+      "uses": 2,
+      "nodeIds": [
+        "I70522:3671;70504:3288",
+        "I70522:3841;70504:3288"
+      ]
+    },
+    {
+      "key": "c:9:964",
+      "file": "assets/iconly-curved-hide.svg",
+      "name": "Iconly/Curved/Hide",
+      "size": "23x20",
+      "uses": 5,
+      "nodeIds": [
+        "9:963",
+        "9:1167",
+        "16:1191",
+        "16:1292",
+        "16:1302"
+      ]
+    },
+    {
+      "key": "n:google 1:20x20",
+      "file": "assets/google-1.svg",
+      "name": "google 1",
+      "size": "20x20",
+      "uses": 4,
+      "nodeIds": [
+        "I70484:260;70483:242",
+        "I70484:276;70483:242",
+        "I70522:3186;70504:2992;70483:242",
+        "I70522:3213;70504:2992;70483:242"
+      ]
+    },
+    {
+      "key": "n:facebook 1:20x20",
+      "file": "assets/facebook-1.svg",
+      "name": "facebook 1",
+      "size": "20x20",
+      "uses": 4,
+      "nodeIds": [
+        "I70484:240;70483:259",
+        "I70484:245;70483:259",
+        "I70522:3186;70504:2993;70483:259",
+        "I70522:3213;70504:2993;70483:259"
+      ]
+    },
+    {
+      "key": "n:X:18x18",
+      "file": "assets/x-18x18.svg",
+      "name": "X",
+      "size": "18x18",
+      "uses": 1,
+      "nodeIds": [
+        "9:947"
+      ]
+    },
+    {
+      "key": "c:9:1443",
+      "file": "assets/user.svg",
+      "name": "User",
+      "size": "18x18",
+      "uses": 2,
+      "nodeIds": [
+        "70420:4541",
+        "70420:4599"
+      ]
+    },
+    {
+      "key": "c:9:1651",
+      "file": "assets/iconly-light-outline-location.svg",
+      "name": "Iconly/Light-Outline/Location",
+      "size": "20x20",
+      "uses": 2,
+      "nodeIds": [
+        "70420:4544",
+        "70420:4602"
+      ]
+    },
+    {
+      "key": "n:shopping 1:18x18",
+      "file": "assets/shopping-1-18x18.svg",
+      "name": "shopping 1",
+      "size": "18x18",
+      "uses": 2,
+      "nodeIds": [
+        "70420:4547",
+        "70420:4605"
+      ]
+    },
+    {
+      "key": "n:heart 1:16x16",
+      "file": "assets/heart-1-16x16.svg",
+      "name": "heart 1",
+      "size": "16x16",
+      "uses": 2,
+      "nodeIds": [
+        "70420:4551",
+        "70420:4609"
+      ]
+    },
+    {
+      "key": "c:9:1467",
+      "file": "assets/iconly-curved-activity.svg",
+      "name": "Iconly/Curved/Activity",
+      "size": "18x18",
+      "uses": 2,
+      "nodeIds": [
+        "70420:4555",
+        "70420:4613"
+      ]
+    },
+    {
+      "key": "c:9:1477",
+      "file": "assets/iconly-curved-download.svg",
+      "name": "Iconly/Curved/Download",
+      "size": "18x18",
+      "uses": 2,
+      "nodeIds": [
+        "70420:4558",
+        "70420:4616"
+      ]
+    },
+    {
+      "key": "c:9:1487",
+      "file": "assets/iconly-curved-danger-triangle.svg",
+      "name": "Iconly/Curved/Danger Triangle",
+      "size": "18x18",
+      "uses": 2,
+      "nodeIds": [
+        "70420:4561",
+        "70420:4619"
+      ]
+    },
+    {
+      "key": "n:Arrow-Down:20x20",
+      "file": "assets/arrow-down-20x20.svg",
+      "name": "Arrow-Down",
+      "size": "20x20",
+      "uses": 1,
+      "nodeIds": [
+        "9:1589"
+      ]
+    },
+    {
+      "key": "n:Frame 32:50x50",
+      "file": "assets/frame-32.svg",
+      "name": "Frame 32",
+      "size": "50x50",
+      "uses": 1,
+      "nodeIds": [
+        "9:1581"
+      ]
+    },
+    {
+      "key": "c:9:1592",
+      "file": "assets/iconly-light-outline-hide.svg",
+      "name": "Iconly/Light-Outline/Hide",
+      "size": "20x20",
+      "uses": 3,
+      "nodeIds": [
+        "I70522:3144;70504:2972",
+        "I70522:3158;70504:2972",
+        "I70522:3172;70504:2972"
+      ]
+    },
+    {
+      "key": "n:Search:22x22",
+      "file": "assets/search.svg",
+      "name": "Search",
+      "size": "22x22",
+      "uses": 1,
+      "nodeIds": [
+        "15:5331"
+      ]
+    },
+    {
+      "key": "n:Frame 402:45x45",
+      "file": "assets/frame-402.svg",
+      "name": "Frame 402",
+      "size": "45x45",
+      "uses": 1,
+      "nodeIds": [
+        "70410:4122"
+      ]
+    },
+    {
+      "key": "n:Line 3:110x0",
+      "file": "assets/line-3-110x0.svg",
+      "name": "Line 3",
+      "size": "110x0",
+      "uses": 1,
+      "nodeIds": [
+        "15:5366"
+      ]
+    },
+    {
+      "key": "n:Frame 57:28x28",
+      "file": "assets/frame-57.svg",
+      "name": "Frame 57",
+      "size": "28x28",
+      "uses": 1,
+      "nodeIds": [
+        "15:5464"
+      ]
+    },
+    {
+      "key": "n:Group 58:28x28",
+      "file": "assets/group-58.svg",
+      "name": "Group 58",
+      "size": "28x28",
+      "uses": 1,
+      "nodeIds": [
+        "15:5465"
+      ]
+    },
+    {
+      "key": "n:Group 60:28x28",
+      "file": "assets/group-60.svg",
+      "name": "Group 60",
+      "size": "28x28",
+      "uses": 1,
+      "nodeIds": [
+        "15:5477"
+      ]
+    },
+    {
+      "key": "c:15:5516",
+      "file": "assets/iconly-bold-home.svg",
+      "name": "Iconly/Bold/Home",
+      "size": "20x20",
+      "uses": 1,
+      "nodeIds": [
+        "15:5519"
+      ]
+    },
+    {
+      "key": "n:User:20x20",
+      "file": "assets/user-20x20.svg",
+      "name": "User",
+      "size": "20x20",
+      "uses": 1,
+      "nodeIds": [
+        "15:5522"
+      ]
+    },
+    {
+      "key": "n:Shop:20x20",
+      "file": "assets/shop.svg",
+      "name": "Shop",
+      "size": "20x20",
+      "uses": 1,
+      "nodeIds": [
+        "15:5524"
+      ]
+    },
+    {
+      "key": "n:Vector:20x18",
+      "file": "assets/vector.svg",
+      "name": "Vector",
+      "size": "20x18",
+      "uses": 1,
+      "nodeIds": [
+        "15:5527"
+      ]
+    },
+    {
+      "key": "n:Group:27x24",
+      "file": "assets/group.svg",
+      "name": "Group",
+      "size": "27x24",
+      "uses": 1,
+      "nodeIds": [
+        "15:5529"
+      ]
+    },
+    {
+      "key": "n:Back:35x35",
+      "file": "assets/back.svg",
+      "name": "Back",
+      "size": "35x35",
+      "uses": 3,
+      "nodeIds": [
+        "15:5754",
+        "16:393",
+        "16:757"
+      ]
+    },
+    {
+      "key": "n:Heart:35x35",
+      "file": "assets/heart.svg",
+      "name": "Heart",
+      "size": "35x35",
+      "uses": 1,
+      "nodeIds": [
+        "15:5755"
+      ]
+    },
+    {
+      "key": "n:Frame 436:60x60",
+      "file": "assets/frame-436.svg",
+      "name": "Frame 436",
+      "size": "60x60",
+      "uses": 1,
+      "nodeIds": [
+        "70410:4212"
+      ]
+    },
+    {
+      "key": "n:Group 65:24x24",
+      "file": "assets/group-65.svg",
+      "name": "Group 65",
+      "size": "24x24",
+      "uses": 2,
+      "nodeIds": [
+        "16:399",
+        "22:1321"
+      ]
+    },
+    {
+      "key": "n:Group 72:24x24",
+      "file": "assets/group-72.svg",
+      "name": "Group 72",
+      "size": "24x24",
+      "uses": 2,
+      "nodeIds": [
+        "16:540",
+        "22:1349"
+      ]
+    },
+    {
+      "key": "c:11:2030",
+      "file": "assets/iconly-curved-delete.svg",
+      "name": "Iconly/Curved/Delete",
+      "size": "24x24",
+      "uses": 1,
+      "nodeIds": [
+        "16:463"
+      ]
+    },
+    {
+      "key": "c:23:1373",
+      "file": "assets/iconly-curved-wallet.svg",
+      "name": "Iconly/Curved/Wallet",
+      "size": "24x24",
+      "uses": 1,
+      "nodeIds": [
+        "23:1379"
+      ]
+    },
+    {
+      "key": "n:Line 7:110x0",
+      "file": "assets/line-7.svg",
+      "name": "Line 7",
+      "size": "110x0",
+      "uses": 2,
+      "nodeIds": [
+        "I70522:3186;70504:2988",
+        "I70522:3213;70504:2988"
+      ]
+    },
+    {
+      "key": "n:Line 8:110x0",
+      "file": "assets/line-8.svg",
+      "name": "Line 8",
+      "size": "110x0",
+      "uses": 2,
+      "nodeIds": [
+        "I70522:3186;70504:2990",
+        "I70522:3213;70504:2990"
+      ]
+    }
+  ],
+  "images": [
+    {
+      "imageRef": "8459204731e6eba9d474cbc8ebc37071360d3ba5",
+      "file": "assets/images/8459204731e6eba9d474cbc8ebc37071360d3ba5.png",
+      "bytes": 1885435,
+      "nodes": [
+        {
+          "id": "70342:2673",
+          "name": "Frame 136",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "4:137",
+          "name": "NFT Artwork 03",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "4:428",
+          "name": "NFT Artwork 17",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "70343:268",
+          "name": "Image",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "11:1181",
+          "name": "NFT Collection Artwork 04",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:1188",
+          "name": "NFT Collection Artwork 02",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:1189",
+          "name": "NFT Collection Artwork 05",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:1190",
+          "name": "NFT Collection Artwork 03",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:1161",
+          "name": "NFT Collection Artwork 01",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:1900",
+          "name": "NFT Cart Artwork 6",
+          "frame": "Desktop / Carrinho de NFTs"
+        },
+        {
+          "id": "I70522:3321;70504:3128",
+          "name": "NFT Receipt Artwork 1",
+          "frame": "Desktop / Pagamento"
+        },
+        {
+          "id": "I70522:3496;70504:3128",
+          "name": "NFT Receipt Artwork 1",
+          "frame": "Desktop / Confirmação de Pedido"
+        },
+        {
+          "id": "11:5194",
+          "name": "NFT Receipt Artwork 4",
+          "frame": "Desktop / Confirmação de Pedido"
+        },
+        {
+          "id": "I70522:3671;70504:3225",
+          "name": "NFT Auth Artwork 1",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3671;70504:3226",
+          "name": "NFT Auth Artwork 2",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3671;70504:3276",
+          "name": "NFT Auth Artwork 5",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3671;70504:3293",
+          "name": "NFT Auth Artwork 9",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3841;70504:3225",
+          "name": "NFT Auth Artwork 1",
+          "frame": "Desktop / Cadastro"
+        },
+        {
+          "id": "I70522:3841;70504:3226",
+          "name": "NFT Auth Artwork 2",
+          "frame": "Desktop / Cadastro"
+        },
+        {
+          "id": "I70522:3841;70504:3276",
+          "name": "NFT Auth Artwork 5",
+          "frame": "Desktop / Cadastro"
+        }
+      ],
+      "uses": 26
+    },
+    {
+      "imageRef": "2986a7cb16d09de8970824d2dd58bf0bb021702c",
+      "file": "assets/images/2986a7cb16d09de8970824d2dd58bf0bb021702c.png",
+      "bytes": 2068526,
+      "nodes": [
+        {
+          "id": "70410:3798",
+          "name": "NFT Artwork 18",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "4:162",
+          "name": "NFT Artwork 04",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "4:280",
+          "name": "NFT Artwork 06",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "4:282",
+          "name": "NFT Artwork 07",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "70343:277",
+          "name": "Image",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "11:1177",
+          "name": "NFT Collection Artwork 06",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:1178",
+          "name": "NFT Collection Artwork 07",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:2092",
+          "name": "NFT Cart Artwork 7",
+          "frame": "Desktop / Carrinho de NFTs"
+        },
+        {
+          "id": "11:1976",
+          "name": "NFT Cart Artwork 1",
+          "frame": "Desktop / Carrinho de NFTs"
+        },
+        {
+          "id": "11:1979",
+          "name": "NFT Cart Artwork 2",
+          "frame": "Desktop / Carrinho de NFTs"
+        },
+        {
+          "id": "I70522:3321;70504:3137",
+          "name": "NFT Receipt Artwork 2",
+          "frame": "Desktop / Pagamento"
+        },
+        {
+          "id": "I70522:3496;70504:3137",
+          "name": "NFT Receipt Artwork 2",
+          "frame": "Desktop / Confirmação de Pedido"
+        },
+        {
+          "id": "11:5208",
+          "name": "NFT Receipt Artwork 5",
+          "frame": "Desktop / Confirmação de Pedido"
+        },
+        {
+          "id": "I70522:3671;70504:3290",
+          "name": "NFT Auth Artwork 6",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3671;70504:3294",
+          "name": "NFT Auth Artwork 10",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3841;70504:3290",
+          "name": "NFT Auth Artwork 6",
+          "frame": "Desktop / Cadastro"
+        },
+        {
+          "id": "I70522:3841;70504:3294",
+          "name": "NFT Auth Artwork 10",
+          "frame": "Desktop / Cadastro"
+        },
+        {
+          "id": "14:5239",
+          "name": "Mobile NFT Artwork 2",
+          "frame": "Mobile / Início"
+        },
+        {
+          "id": "15:5415",
+          "name": "Mobile NFT Artwork 4",
+          "frame": "Mobile / Início"
+        },
+        {
+          "id": "22:1318",
+          "name": "Rectangle 108",
+          "frame": "Mobile / Carrinho de NFTs"
+        }
+      ],
+      "uses": 21
+    },
+    {
+      "imageRef": "9df2ff42dd27ba657621c304557d1a855a4be6a5",
+      "file": "assets/images/9df2ff42dd27ba657621c304557d1a855a4be6a5.png",
+      "bytes": 2027336,
+      "nodes": [
+        {
+          "id": "4:164",
+          "name": "NFT Artwork 05",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "4:284",
+          "name": "NFT Artwork 08",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "4:423",
+          "name": "NFT Artwork 16",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "70343:259",
+          "name": "Image",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "11:1179",
+          "name": "NFT Collection Artwork 08",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:2094",
+          "name": "NFT Cart Artwork 8",
+          "frame": "Desktop / Carrinho de NFTs"
+        },
+        {
+          "id": "11:1982",
+          "name": "NFT Cart Artwork 3",
+          "frame": "Desktop / Carrinho de NFTs"
+        },
+        {
+          "id": "I70522:3321;70504:3146",
+          "name": "NFT Receipt Artwork 3",
+          "frame": "Desktop / Pagamento"
+        },
+        {
+          "id": "I70522:3496;70504:3146",
+          "name": "NFT Receipt Artwork 3",
+          "frame": "Desktop / Confirmação de Pedido"
+        },
+        {
+          "id": "11:5209",
+          "name": "NFT Receipt Artwork 6",
+          "frame": "Desktop / Confirmação de Pedido"
+        },
+        {
+          "id": "I70522:3671;70504:3275",
+          "name": "NFT Auth Artwork 4",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3671;70504:3292",
+          "name": "NFT Auth Artwork 8",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3841;70504:3275",
+          "name": "NFT Auth Artwork 4",
+          "frame": "Desktop / Cadastro"
+        },
+        {
+          "id": "I70522:3841;70504:3292",
+          "name": "NFT Auth Artwork 8",
+          "frame": "Desktop / Cadastro"
+        },
+        {
+          "id": "15:5416",
+          "name": "Mobile NFT Artwork 5",
+          "frame": "Mobile / Início"
+        },
+        {
+          "id": "22:1332",
+          "name": "Rectangle 110",
+          "frame": "Mobile / Carrinho de NFTs"
+        },
+        {
+          "id": "22:1358",
+          "name": "Mobile Cart NFT 4",
+          "frame": "Mobile / Carrinho de NFTs"
+        }
+      ],
+      "uses": 17
+    },
+    {
+      "imageRef": "87580f2def9af0ce13f4b6f6ce17bb2449bcfc16",
+      "file": "assets/images/87580f2def9af0ce13f4b6f6ce17bb2449bcfc16.png",
+      "bytes": 1978600,
+      "nodes": [
+        {
+          "id": "4:286",
+          "name": "NFT Artwork 09",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "4:289",
+          "name": "NFT Artwork 10",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "4:291",
+          "name": "NFT Artwork 11",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "70343:286",
+          "name": "Image",
+          "frame": "Desktop / Início"
+        },
+        {
+          "id": "11:1180",
+          "name": "NFT Collection Artwork 09",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:1182",
+          "name": "NFT Collection Artwork 10",
+          "frame": "Desktop / Detalhes do NFT"
+        },
+        {
+          "id": "11:1985",
+          "name": "NFT Cart Artwork 4",
+          "frame": "Desktop / Carrinho de NFTs"
+        },
+        {
+          "id": "11:1988",
+          "name": "NFT Cart Artwork 5",
+          "frame": "Desktop / Carrinho de NFTs"
+        },
+        {
+          "id": "I70522:3671;70504:3274",
+          "name": "NFT Auth Artwork 3",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3671;70504:3291",
+          "name": "NFT Auth Artwork 7",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3671;70504:3295",
+          "name": "NFT Auth Artwork 11",
+          "frame": "Desktop / Login"
+        },
+        {
+          "id": "I70522:3841;70504:3274",
+          "name": "NFT Auth Artwork 3",
+          "frame": "Desktop / Cadastro"
+        },
+        {
+          "id": "I70522:3841;70504:3291",
+          "name": "NFT Auth Artwork 7",
+          "frame": "Desktop / Cadastro"
+        },
+        {
+          "id": "I70522:3841;70504:3295",
+          "name": "NFT Auth Artwork 11",
+          "frame": "Desktop / Cadastro"
+        },
+        {
+          "id": "15:5431",
+          "name": "Mobile NFT Artwork 6",
+          "frame": "Mobile / Início"
+        },
+        {
+          "id": "22:1346",
+          "name": "Rectangle 112",
+          "frame": "Mobile / Carrinho de NFTs"
+        },
+        {
+          "id": "16:553",
+          "name": "Mobile Cart NFT 1",
+          "frame": "Mobile / Carrinho de NFTs"
+        }
+      ],
+      "uses": 17
+    }
+  ]
+}

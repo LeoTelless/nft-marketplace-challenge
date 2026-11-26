@@ -1,0 +1,3469 @@
+{
+  "page": "Marketplace de NFTs GreenMint",
+  "section": null,
+  "id": "16:748",
+  "name": "Mobile / Pagamento",
+  "type": "FRAME",
+  "box": {
+    "x": 0,
+    "y": 0,
+    "w": 414,
+    "h": 896
+  },
+  "layout": {
+    "mode": "VERTICAL",
+    "padding": [
+      32,
+      28,
+      32,
+      28
+    ]
+  },
+  "sizing": {
+    "h": "FIXED",
+    "v": "FIXED"
+  },
+  "constraints": {
+    "vertical": "TOP",
+    "horizontal": "LEFT"
+  },
+  "clip": true,
+  "fills": [
+    {
+      "type": "SOLID",
+      "color": "#140D0A"
+    }
+  ],
+  "radius": 40,
+  "styleRefs": {
+    "fills": "70323:314",
+    "fill": "70323:314"
+  },
+  "children": [
+    {
+      "id": "70398:239",
+      "name": "Content",
+      "type": "FRAME",
+      "box": {
+        "x": 28,
+        "y": 32,
+        "w": 358,
+        "h": 832
+      },
+      "layout": {
+        "mode": "VERTICAL",
+        "primaryAlign": "SPACE_BETWEEN",
+        "gap": 16,
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sizing": {
+        "h": "FILL",
+        "v": "FILL"
+      },
+      "layoutAlign": "STRETCH",
+      "layoutGrow": 1,
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "clip": true,
+      "children": [
+        {
+          "id": "70410:4218",
+          "name": "Frame 442",
+          "type": "FRAME",
+          "box": {
+            "x": 28,
+            "y": 32,
+            "w": 358,
+            "h": 605
+          },
+          "layout": {
+            "mode": "VERTICAL",
+            "gap": 16,
+            "padding": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "sizing": {
+            "h": "FILL",
+            "v": "HUG"
+          },
+          "layoutAlign": "STRETCH",
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "children": [
+            {
+              "id": "70398:240",
+              "name": "Screen Header",
+              "type": "FRAME",
+              "box": {
+                "x": 28,
+                "y": 32,
+                "w": 358,
+                "h": 44
+              },
+              "sizing": {
+                "h": "FIXED",
+                "v": "FIXED"
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "children": [
+                {
+                  "id": "16:757",
+                  "name": "Back",
+                  "type": "GROUP",
+                  "box": {
+                    "x": 28,
+                    "y": 32,
+                    "w": 35,
+                    "h": 35
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "children": [
+                    {
+                      "id": "16:758",
+                      "name": "Ellipse 38",
+                      "type": "ELLIPSE",
+                      "box": {
+                        "x": 28,
+                        "y": 32,
+                        "w": 35,
+                        "h": 35
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#2F1D15"
+                        }
+                      ],
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "color": "#3F2319"
+                        }
+                      ],
+                      "strokeWeight": 1,
+                      "strokeAlign": "INSIDE",
+                      "styleRefs": {
+                        "fill": "70323:313",
+                        "stroke": "70323:318"
+                      }
+                    },
+                    {
+                      "id": "16:759",
+                      "name": "Iconly/Curved/Arrow - Left 2",
+                      "type": "INSTANCE",
+                      "box": {
+                        "x": 35,
+                        "y": 39,
+                        "w": 20,
+                        "h": 20
+                      },
+                      "componentId": "15:5746",
+                      "constraints": {
+                        "vertical": "SCALE",
+                        "horizontal": "SCALE"
+                      },
+                      "children": [
+                        {
+                          "id": "I16:759;29221:4975",
+                          "name": "Arrow - Left 2",
+                          "type": "GROUP",
+                          "box": {
+                            "x": 42.08,
+                            "y": 43.17,
+                            "w": 5.83,
+                            "h": 11.67
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "children": [
+                            {
+                              "id": "I16:759;29221:4976",
+                              "name": "Stroke 1",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 42.08,
+                                "y": 43.17,
+                                "w": 5.83,
+                                "h": 11.67
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#B39463"
+                                }
+                              ],
+                              "strokeWeight": 1.5,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:310"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "16:756",
+                  "name": "Pagamento com carteira",
+                  "type": "TEXT",
+                  "box": {
+                    "x": 87,
+                    "y": 41,
+                    "w": 265,
+                    "h": 16
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "color": "#F5F1EB"
+                    }
+                  ],
+                  "text": {
+                    "characters": "Pagamento com carteira",
+                    "fontFamily": "Roboto Mono",
+                    "fontWeight": 700,
+                    "fontSize": 20,
+                    "lineHeightPx": 16,
+                    "lineHeightPercent": 80,
+                    "letterSpacing": 0,
+                    "align": "LEFT",
+                    "valign": "TOP",
+                    "autoResize": "WIDTH_AND_HEIGHT"
+                  },
+                  "styleRefs": {
+                    "fill": "70323:306",
+                    "text": "70321:317"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "70304:365",
+              "name": "Frame 2",
+              "type": "FRAME",
+              "box": {
+                "x": 28,
+                "y": 92,
+                "w": 358,
+                "h": 16
+              },
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAlign": "SPACE_BETWEEN",
+                "counterAlign": "CENTER",
+                "gap": 122,
+                "padding": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "sizing": {
+                "h": "FILL",
+                "v": "HUG"
+              },
+              "layoutAlign": "STRETCH",
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "children": [
+                {
+                  "id": "16:844",
+                  "name": "Carteira conectada",
+                  "type": "TEXT",
+                  "box": {
+                    "x": 28,
+                    "y": 92,
+                    "w": 173,
+                    "h": 16
+                  },
+                  "sizing": {
+                    "h": "HUG",
+                    "v": "HUG"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "color": "#F5F1EB"
+                    }
+                  ],
+                  "text": {
+                    "characters": "Carteira conectada",
+                    "fontFamily": "Roboto Mono",
+                    "fontWeight": 700,
+                    "fontSize": 16,
+                    "lineHeightPx": 16,
+                    "lineHeightPercent": 100,
+                    "letterSpacing": 0,
+                    "align": "LEFT",
+                    "valign": "TOP",
+                    "autoResize": "WIDTH_AND_HEIGHT"
+                  },
+                  "styleRefs": {
+                    "fill": "70323:306",
+                    "text": "70321:334"
+                  }
+                },
+                {
+                  "id": "16:846",
+                  "name": "Trocar carteira",
+                  "type": "TEXT",
+                  "box": {
+                    "x": 259,
+                    "y": 92,
+                    "w": 127,
+                    "h": 16
+                  },
+                  "sizing": {
+                    "h": "HUG",
+                    "v": "HUG"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "color": "#E89B55"
+                    }
+                  ],
+                  "text": {
+                    "characters": "Trocar carteira",
+                    "fontFamily": "Roboto Mono",
+                    "fontWeight": 700,
+                    "fontSize": 14,
+                    "lineHeightPx": 16,
+                    "lineHeightPercent": 114.29,
+                    "letterSpacing": 0,
+                    "align": "LEFT",
+                    "valign": "TOP",
+                    "autoResize": "WIDTH_AND_HEIGHT"
+                  },
+                  "styleRefs": {
+                    "fill": "70330:306",
+                    "text": "70321:354"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "70398:241",
+              "name": "Wallet Cards",
+              "type": "FRAME",
+              "box": {
+                "x": 28,
+                "y": 124,
+                "w": 358,
+                "h": 206
+              },
+              "layout": {
+                "mode": "VERTICAL",
+                "gap": 20,
+                "padding": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "sizing": {
+                "h": "HUG",
+                "v": "HUG"
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "clip": true,
+              "children": [
+                {
+                  "id": "70398:242",
+                  "name": "Wallet Card — Reserva",
+                  "type": "FRAME",
+                  "box": {
+                    "x": 28,
+                    "y": 124,
+                    "w": 358,
+                    "h": 93
+                  },
+                  "sizing": {
+                    "h": "FIXED",
+                    "v": "FIXED"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "children": [
+                    {
+                      "id": "16:987",
+                      "name": "Rectangle 102",
+                      "type": "RECTANGLE",
+                      "box": {
+                        "x": 28,
+                        "y": 124,
+                        "w": 358,
+                        "h": 93
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#241612"
+                        }
+                      ],
+                      "radius": 14,
+                      "effects": [
+                        {
+                          "type": "DROP_SHADOW",
+                          "color": "#0A060473",
+                          "offset": [
+                            0,
+                            20
+                          ],
+                          "radius": 20
+                        }
+                      ],
+                      "styleRefs": {
+                        "fill": "70323:312"
+                      }
+                    },
+                    {
+                      "id": "16:988",
+                      "name": "Reserva",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 82,
+                        "y": 139,
+                        "w": 68,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#F5F1EB"
+                        }
+                      ],
+                      "text": {
+                        "characters": "Reserva",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 700,
+                        "fontSize": 16,
+                        "lineHeightPx": 16,
+                        "lineHeightPercent": 100,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70323:306",
+                        "text": "70321:334"
+                      }
+                    },
+                    {
+                      "id": "16:989",
+                      "name": "nova.kurio.eth Rede Polygon",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 82,
+                        "y": 162,
+                        "w": 201,
+                        "h": 44
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#CFB28C"
+                        }
+                      ],
+                      "text": {
+                        "characters": "nova.kurio.eth\nRede Polygon",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 400,
+                        "fontSize": 14,
+                        "lineHeightPx": 22,
+                        "lineHeightPercent": 157.14,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70330:305",
+                        "text": "70321:348"
+                      }
+                    },
+                    {
+                      "id": "16:990",
+                      "name": "Group 87",
+                      "type": "GROUP",
+                      "box": {
+                        "x": 364,
+                        "y": 163,
+                        "w": 3,
+                        "h": 15
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "children": [
+                        {
+                          "id": "16:991",
+                          "name": "Ellipse 46",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 364,
+                            "y": 163,
+                            "w": 3,
+                            "h": 3
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "color": "#B39463"
+                            }
+                          ],
+                          "styleRefs": {
+                            "fill": "70323:310"
+                          }
+                        },
+                        {
+                          "id": "16:992",
+                          "name": "Ellipse 47",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 364,
+                            "y": 169,
+                            "w": 3,
+                            "h": 3
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "color": "#B39463"
+                            }
+                          ],
+                          "styleRefs": {
+                            "fill": "70323:310"
+                          }
+                        },
+                        {
+                          "id": "16:993",
+                          "name": "Ellipse 48",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 364,
+                            "y": 175,
+                            "w": 3,
+                            "h": 3
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "color": "#B39463"
+                            }
+                          ],
+                          "styleRefs": {
+                            "fill": "70323:310"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": "16:998",
+                      "name": "Group 90",
+                      "type": "GROUP",
+                      "box": {
+                        "x": 47,
+                        "y": 163,
+                        "w": 16,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "children": [
+                        {
+                          "id": "16:999",
+                          "name": "Ellipse 34",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 47,
+                            "y": 163,
+                            "w": 16,
+                            "h": 16
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#D28A4C"
+                            }
+                          ],
+                          "strokeWeight": 1.2000000476837158,
+                          "strokeAlign": "INSIDE",
+                          "styleRefs": {
+                            "stroke": "70323:301"
+                          }
+                        },
+                        {
+                          "id": "16:1000",
+                          "name": "Ellipse 35",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 51,
+                            "y": 167,
+                            "w": 8,
+                            "h": 8
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "color": "#D28A4C"
+                            }
+                          ],
+                          "styleRefs": {
+                            "fill": "70323:301"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "70398:243",
+                  "name": "Wallet Card — Principal",
+                  "type": "FRAME",
+                  "box": {
+                    "x": 28,
+                    "y": 237,
+                    "w": 358,
+                    "h": 93
+                  },
+                  "sizing": {
+                    "h": "FIXED",
+                    "v": "FIXED"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "children": [
+                    {
+                      "id": "16:980",
+                      "name": "Rectangle 106",
+                      "type": "RECTANGLE",
+                      "box": {
+                        "x": 28,
+                        "y": 237,
+                        "w": 358,
+                        "h": 93
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#241612"
+                        }
+                      ],
+                      "radius": 14,
+                      "styleRefs": {
+                        "fill": "70323:312"
+                      }
+                    },
+                    {
+                      "id": "16:981",
+                      "name": "Principal",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 82,
+                        "y": 253,
+                        "w": 87,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#F5F1EB"
+                        }
+                      ],
+                      "text": {
+                        "characters": "Principal",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 700,
+                        "fontSize": 16,
+                        "lineHeightPx": 16,
+                        "lineHeightPercent": 100,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70323:306",
+                        "text": "70321:334"
+                      }
+                    },
+                    {
+                      "id": "16:982",
+                      "name": "0xA91F…E82C\nEthereum Mainnet",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 82,
+                        "y": 275,
+                        "w": 203,
+                        "h": 44
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#CFB28C"
+                        }
+                      ],
+                      "text": {
+                        "characters": "0xA91F…E82C\nRede principal Ethereum",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 400,
+                        "fontSize": 14,
+                        "lineHeightPx": 22,
+                        "lineHeightPercent": 157.14,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70330:305",
+                        "text": "70321:348"
+                      }
+                    },
+                    {
+                      "id": "16:983",
+                      "name": "Group 88",
+                      "type": "GROUP",
+                      "box": {
+                        "x": 364,
+                        "y": 276,
+                        "w": 3,
+                        "h": 15
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "children": [
+                        {
+                          "id": "16:984",
+                          "name": "Ellipse 46",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 364,
+                            "y": 276,
+                            "w": 3,
+                            "h": 3
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "color": "#B39463"
+                            }
+                          ],
+                          "styleRefs": {
+                            "fill": "70323:310"
+                          }
+                        },
+                        {
+                          "id": "16:985",
+                          "name": "Ellipse 47",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 364,
+                            "y": 282,
+                            "w": 3,
+                            "h": 3
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "color": "#B39463"
+                            }
+                          ],
+                          "styleRefs": {
+                            "fill": "70323:310"
+                          }
+                        },
+                        {
+                          "id": "16:986",
+                          "name": "Ellipse 48",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 364,
+                            "y": 288,
+                            "w": 3,
+                            "h": 3
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "color": "#B39463"
+                            }
+                          ],
+                          "styleRefs": {
+                            "fill": "70323:310"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": "16:1001",
+                      "name": "Ellipse 46",
+                      "type": "ELLIPSE",
+                      "box": {
+                        "x": 47,
+                        "y": 275,
+                        "w": 16,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "color": "#55321F"
+                        }
+                      ],
+                      "strokeWeight": 1.2000000476837158,
+                      "strokeAlign": "INSIDE",
+                      "styleRefs": {
+                        "stroke": "70323:319"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "70398:244",
+              "name": "Wallet Options",
+              "type": "FRAME",
+              "box": {
+                "x": 28,
+                "y": 346,
+                "w": 359,
+                "h": 259
+              },
+              "layout": {
+                "mode": "VERTICAL",
+                "gap": 16,
+                "padding": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "sizing": {
+                "h": "HUG",
+                "v": "HUG"
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "clip": true,
+              "children": [
+                {
+                  "id": "16:852",
+                  "name": "Carteira e rede",
+                  "type": "TEXT",
+                  "box": {
+                    "x": 28,
+                    "y": 346,
+                    "w": 145,
+                    "h": 16
+                  },
+                  "sizing": {
+                    "h": "HUG",
+                    "v": "HUG"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "color": "#F5F1EB"
+                    }
+                  ],
+                  "text": {
+                    "characters": "Carteira e rede",
+                    "fontFamily": "Roboto Mono",
+                    "fontWeight": 700,
+                    "fontSize": 16,
+                    "lineHeightPx": 16,
+                    "lineHeightPercent": 100,
+                    "letterSpacing": 0,
+                    "align": "LEFT",
+                    "valign": "TOP",
+                    "autoResize": "WIDTH_AND_HEIGHT"
+                  },
+                  "styleRefs": {
+                    "fill": "70323:306",
+                    "text": "70321:334"
+                  }
+                },
+                {
+                  "id": "70398:245",
+                  "name": "Option — WalletConnect",
+                  "type": "FRAME",
+                  "box": {
+                    "x": 28,
+                    "y": 378,
+                    "w": 359,
+                    "h": 65
+                  },
+                  "sizing": {
+                    "h": "FIXED",
+                    "v": "FIXED"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "children": [
+                    {
+                      "id": "16:892",
+                      "name": "Rectangle 105",
+                      "type": "RECTANGLE",
+                      "box": {
+                        "x": 28,
+                        "y": 378,
+                        "w": 359,
+                        "h": 65
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#241612"
+                        }
+                      ],
+                      "radius": 15,
+                      "effects": [
+                        {
+                          "type": "DROP_SHADOW",
+                          "color": "#0A060473",
+                          "offset": [
+                            0,
+                            0
+                          ],
+                          "radius": 20
+                        }
+                      ],
+                      "styleRefs": {
+                        "fill": "70323:312"
+                      }
+                    },
+                    {
+                      "id": "16:893",
+                      "name": "Ellipse 44",
+                      "type": "ELLIPSE",
+                      "box": {
+                        "x": 42,
+                        "y": 391,
+                        "w": 40,
+                        "h": 40
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#2F1D15"
+                        }
+                      ],
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "color": "#3F2319"
+                        }
+                      ],
+                      "strokeWeight": 1,
+                      "strokeAlign": "INSIDE",
+                      "styleRefs": {
+                        "fill": "70323:313",
+                        "stroke": "70323:318"
+                      }
+                    },
+                    {
+                      "id": "16:894",
+                      "name": "WalletConnect",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 93,
+                        "y": 403,
+                        "w": 110,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#F5F1EB"
+                        }
+                      ],
+                      "text": {
+                        "characters": "WalletConnect",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 400,
+                        "fontSize": 14,
+                        "lineHeightPx": 16,
+                        "lineHeightPercent": 114.29,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70323:306",
+                        "text": "70321:351"
+                      }
+                    },
+                    {
+                      "id": "16:895",
+                      "name": "Ellipse 45",
+                      "type": "ELLIPSE",
+                      "box": {
+                        "x": 354,
+                        "y": 403,
+                        "w": 16,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "color": "#55321F"
+                        }
+                      ],
+                      "strokeWeight": 1.2000000476837158,
+                      "strokeAlign": "INSIDE",
+                      "styleRefs": {
+                        "stroke": "70323:319"
+                      }
+                    },
+                    {
+                      "id": "16:918",
+                      "name": "Frame",
+                      "type": "FRAME",
+                      "visible": false,
+                      "box": {
+                        "x": 48,
+                        "y": 402,
+                        "w": 29,
+                        "h": 17.36
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "clip": true,
+                      "children": [
+                        {
+                          "id": "16:919",
+                          "name": "Group",
+                          "type": "GROUP",
+                          "box": {
+                            "x": 48,
+                            "y": 402,
+                            "w": 29,
+                            "h": 17.36
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "children": [
+                            {
+                              "id": "16:920",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 59.64,
+                                "y": 402,
+                                "w": 17.36,
+                                "h": 17.36
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:921",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 48,
+                                "y": 402,
+                                "w": 17.36,
+                                "h": 17.36
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#ED1B2E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:322"
+                              }
+                            },
+                            {
+                              "id": "16:922",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 61.48,
+                                "y": 404.86,
+                                "w": 4.61,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:923",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 60.79,
+                                "y": 405.9,
+                                "w": 5.3,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:924",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 60.28,
+                                "y": 406.95,
+                                "w": 5.82,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:925",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 59.92,
+                                "y": 408,
+                                "w": 6.17,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:926",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 59.98,
+                                "y": 413.06,
+                                "w": 6.13,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:927",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 60.35,
+                                "y": 414.11,
+                                "w": 5.76,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:928",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 60.89,
+                                "y": 415.16,
+                                "w": 5.21,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:929",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 61.63,
+                                "y": 416.2,
+                                "w": 4.48,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:930",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 59.72,
+                                "y": 409.04,
+                                "w": 6.38,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:931",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 63.6,
+                                "y": 412.02,
+                                "w": 2.43,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:932",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 63.8,
+                                "y": 410.97,
+                                "w": 2.24,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:933",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 59.55,
+                                "y": 410.97,
+                                "w": 0.63,
+                                "h": 0.47
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:934",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 55.92,
+                                "y": 409.66,
+                                "w": 2.61,
+                                "h": 3.21
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:935",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 55.92,
+                                "y": 409.66,
+                                "w": 2.61,
+                                "h": 3.21
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            },
+                            {
+                              "id": "16:936",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 58.49,
+                                "y": 409.01,
+                                "w": 1.76,
+                                "h": 3.84
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:937",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 58.49,
+                                "y": 409.01,
+                                "w": 1.76,
+                                "h": 3.84
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            },
+                            {
+                              "id": "16:938",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 60.04,
+                                "y": 409.66,
+                                "w": 2.83,
+                                "h": 3.2
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:939",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 60.04,
+                                "y": 409.66,
+                                "w": 2.83,
+                                "h": 3.2
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            },
+                            {
+                              "id": "16:940",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 64.89,
+                                "y": 408.88,
+                                "w": 3.13,
+                                "h": 3.97
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:941",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 64.89,
+                                "y": 408.88,
+                                "w": 3.13,
+                                "h": 3.97
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            },
+                            {
+                              "id": "16:942",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 72.4,
+                                "y": 409.03,
+                                "w": 3.34,
+                                "h": 3.87
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:943",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 72.4,
+                                "y": 409.03,
+                                "w": 3.34,
+                                "h": 3.87
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            },
+                            {
+                              "id": "16:944",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 73.35,
+                                "y": 410.43,
+                                "w": 1.2,
+                                "h": 1.72
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:945",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 53.11,
+                                "y": 409.69,
+                                "w": 2.98,
+                                "h": 3.22
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:946",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 53.11,
+                                "y": 409.69,
+                                "w": 2.98,
+                                "h": 3.22
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            },
+                            {
+                              "id": "16:947",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 54.02,
+                                "y": 411.39,
+                                "w": 1.05,
+                                "h": 0.82
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#ED1B2E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:322"
+                              }
+                            },
+                            {
+                              "id": "16:948",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 48.83,
+                                "y": 409.01,
+                                "w": 4.58,
+                                "h": 3.84
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:949",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 48.83,
+                                "y": 409.01,
+                                "w": 4.58,
+                                "h": 3.84
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            },
+                            {
+                              "id": "16:950",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 67.66,
+                                "y": 409.69,
+                                "w": 2.97,
+                                "h": 3.22
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:951",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 70.17,
+                                "y": 412.21,
+                                "w": 0.16,
+                                "h": 0.67
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:952",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 69.43,
+                                "y": 412.84,
+                                "w": 0.76,
+                                "h": 0.04
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:953",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 69.44,
+                                "y": 412.51,
+                                "w": 0.05,
+                                "h": 0.35
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:954",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 68.35,
+                                "y": 412.51,
+                                "w": 1.14,
+                                "h": 0.42
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:955",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 67.64,
+                                "y": 412.02,
+                                "w": 0.71,
+                                "h": 0.89
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:956",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 67.64,
+                                "y": 410.89,
+                                "w": 1.05,
+                                "h": 1.12
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:957",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 68.69,
+                                "y": 410.83,
+                                "w": 0.6,
+                                "h": 0.1
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:958",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 69.29,
+                                "y": 410.83,
+                                "w": 0.43,
+                                "h": 0.06
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:959",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 69.69,
+                                "y": 410.68,
+                                "w": 0.07,
+                                "h": 0.19
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:960",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 69.37,
+                                "y": 410.35,
+                                "w": 0.38,
+                                "h": 0.33
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:961",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 68.11,
+                                "y": 410.34,
+                                "w": 1.26,
+                                "h": 0.2
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:962",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 68.11,
+                                "y": 409.81,
+                                "w": 0.24,
+                                "h": 0.73
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:963",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 68.33,
+                                "y": 409.66,
+                                "w": 1.3,
+                                "h": 0.18
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:964",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 69.63,
+                                "y": 409.67,
+                                "w": 1.02,
+                                "h": 0.99
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:965",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 70.29,
+                                "y": 410.66,
+                                "w": 0.34,
+                                "h": 1.55
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:966",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 68.57,
+                                "y": 411.39,
+                                "w": 1.03,
+                                "h": 0.82
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#E3A44E"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:304"
+                              }
+                            },
+                            {
+                              "id": "16:967",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 75.63,
+                                "y": 412.06,
+                                "w": 0.82,
+                                "h": 0.4
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:968",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 75.9,
+                                "y": 412.28,
+                                "w": 0.31,
+                                "h": 0.18
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:969",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 75.63,
+                                "y": 412.46,
+                                "w": 0.82,
+                                "h": 0.43
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:970",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 75.9,
+                                "y": 412.46,
+                                "w": 0.29,
+                                "h": 0.18
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:971",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 75.63,
+                                "y": 412.06,
+                                "w": 0.82,
+                                "h": 0.83
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            },
+                            {
+                              "id": "16:972",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 70.53,
+                                "y": 409.69,
+                                "w": 2.19,
+                                "h": 3.17
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:973",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 70.53,
+                                "y": 409.69,
+                                "w": 2.19,
+                                "h": 3.17
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            },
+                            {
+                              "id": "16:974",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 62.78,
+                                "y": 409.69,
+                                "w": 2.33,
+                                "h": 3.17
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FFFFFF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:308"
+                              }
+                            },
+                            {
+                              "id": "16:975",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 62.78,
+                                "y": 409.69,
+                                "w": 2.33,
+                                "h": 3.17
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#140D0A"
+                                }
+                              ],
+                              "strokeWeight": 0.2160000056028366,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:314"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "70243:316",
+                      "name": "Wallet mark W",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 55,
+                        "y": 402,
+                        "w": 9,
+                        "h": 18
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#E89B55"
+                        }
+                      ],
+                      "text": {
+                        "characters": "W",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 700,
+                        "fontSize": 14,
+                        "lineHeightPx": 18.46,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70330:306",
+                        "text": "70321:356"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "70398:246",
+                  "name": "Option — MetaMask",
+                  "type": "FRAME",
+                  "box": {
+                    "x": 28,
+                    "y": 459,
+                    "w": 359,
+                    "h": 65
+                  },
+                  "sizing": {
+                    "h": "FIXED",
+                    "v": "FIXED"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "children": [
+                    {
+                      "id": "16:885",
+                      "name": "Rectangle 104",
+                      "type": "RECTANGLE",
+                      "box": {
+                        "x": 28,
+                        "y": 459,
+                        "w": 359,
+                        "h": 65
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#241612"
+                        }
+                      ],
+                      "radius": 15,
+                      "effects": [
+                        {
+                          "type": "DROP_SHADOW",
+                          "color": "#0A060473",
+                          "offset": [
+                            0,
+                            0
+                          ],
+                          "radius": 20
+                        }
+                      ],
+                      "styleRefs": {
+                        "fill": "70323:312"
+                      }
+                    },
+                    {
+                      "id": "16:886",
+                      "name": "Ellipse 42",
+                      "type": "ELLIPSE",
+                      "box": {
+                        "x": 42,
+                        "y": 472,
+                        "w": 40,
+                        "h": 40
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#2F1D15"
+                        }
+                      ],
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "color": "#3F2319"
+                        }
+                      ],
+                      "strokeWeight": 1,
+                      "strokeAlign": "INSIDE",
+                      "styleRefs": {
+                        "fill": "70323:313",
+                        "stroke": "70323:318"
+                      }
+                    },
+                    {
+                      "id": "16:889",
+                      "name": "MetaMask",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 93,
+                        "y": 484,
+                        "w": 68,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#F5F1EB"
+                        }
+                      ],
+                      "text": {
+                        "characters": "MetaMask",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 400,
+                        "fontSize": 14,
+                        "lineHeightPx": 16,
+                        "lineHeightPercent": 114.29,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70323:306",
+                        "text": "70321:351"
+                      }
+                    },
+                    {
+                      "id": "16:890",
+                      "name": "Ellipse 43",
+                      "type": "ELLIPSE",
+                      "box": {
+                        "x": 354,
+                        "y": 484,
+                        "w": 16,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "color": "#55321F"
+                        }
+                      ],
+                      "strokeWeight": 1.2000000476837158,
+                      "strokeAlign": "INSIDE",
+                      "styleRefs": {
+                        "stroke": "70323:319"
+                      }
+                    },
+                    {
+                      "id": "16:915",
+                      "name": "Group 86",
+                      "type": "GROUP",
+                      "visible": false,
+                      "box": {
+                        "x": 52,
+                        "y": 482,
+                        "w": 22,
+                        "h": 22
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "children": [
+                        {
+                          "id": "16:897",
+                          "name": "paypal 1",
+                          "type": "FRAME",
+                          "box": {
+                            "x": 52,
+                            "y": 482,
+                            "w": 22,
+                            "h": 22
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "clip": true,
+                          "children": [
+                            {
+                              "id": "16:898",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 57.79,
+                                "y": 487,
+                                "w": 14.6,
+                                "h": 17
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#03A9F4"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:329"
+                              }
+                            },
+                            {
+                              "id": "16:899",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 53.61,
+                                "y": 482,
+                                "w": 16.96,
+                                "h": 19.25
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#283593"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:330"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "70243:315",
+                      "name": "Wallet mark M",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 56,
+                        "y": 483,
+                        "w": 9,
+                        "h": 18
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#E89B55"
+                        }
+                      ],
+                      "text": {
+                        "characters": "M",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 700,
+                        "fontSize": 14,
+                        "lineHeightPx": 18.46,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70330:306",
+                        "text": "70321:356"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "70398:247",
+                  "name": "Option — Coinbase",
+                  "type": "FRAME",
+                  "box": {
+                    "x": 28,
+                    "y": 540,
+                    "w": 359,
+                    "h": 65
+                  },
+                  "sizing": {
+                    "h": "FIXED",
+                    "v": "FIXED"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "children": [
+                    {
+                      "id": "16:858",
+                      "name": "Rectangle 88",
+                      "type": "RECTANGLE",
+                      "box": {
+                        "x": 28,
+                        "y": 540,
+                        "w": 359,
+                        "h": 65
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#241612"
+                        }
+                      ],
+                      "radius": 15,
+                      "effects": [
+                        {
+                          "type": "DROP_SHADOW",
+                          "color": "#0A060473",
+                          "offset": [
+                            0,
+                            0
+                          ],
+                          "radius": 40
+                        }
+                      ],
+                      "styleRefs": {
+                        "fill": "70323:312"
+                      }
+                    },
+                    {
+                      "id": "16:867",
+                      "name": "Ellipse 40",
+                      "type": "ELLIPSE",
+                      "box": {
+                        "x": 42,
+                        "y": 553,
+                        "w": 40,
+                        "h": 40
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#2F1D15"
+                        }
+                      ],
+                      "strokes": [
+                        {
+                          "type": "SOLID",
+                          "color": "#3F2319"
+                        }
+                      ],
+                      "strokeWeight": 1,
+                      "strokeAlign": "INSIDE",
+                      "styleRefs": {
+                        "fill": "70323:313",
+                        "stroke": "70323:318"
+                      }
+                    },
+                    {
+                      "id": "16:854",
+                      "name": "Coinbase Wallet",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 93,
+                        "y": 565,
+                        "w": 127,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#F5F1EB"
+                        }
+                      ],
+                      "text": {
+                        "characters": "Coinbase Wallet",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 400,
+                        "fontSize": 14,
+                        "lineHeightPx": 16,
+                        "lineHeightPercent": 114.29,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70323:306",
+                        "text": "70321:351"
+                      }
+                    },
+                    {
+                      "id": "16:994",
+                      "name": "Group 89",
+                      "type": "GROUP",
+                      "box": {
+                        "x": 354,
+                        "y": 565,
+                        "w": 16,
+                        "h": 16
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "children": [
+                        {
+                          "id": "16:881",
+                          "name": "Ellipse 34",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 354,
+                            "y": 565,
+                            "w": 16,
+                            "h": 16
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#D28A4C"
+                            }
+                          ],
+                          "strokeWeight": 1.2000000476837158,
+                          "strokeAlign": "INSIDE",
+                          "styleRefs": {
+                            "stroke": "70323:301"
+                          }
+                        },
+                        {
+                          "id": "16:883",
+                          "name": "Ellipse 35",
+                          "type": "ELLIPSE",
+                          "box": {
+                            "x": 358,
+                            "y": 569,
+                            "w": 8,
+                            "h": 8
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "color": "#D28A4C"
+                            }
+                          ],
+                          "styleRefs": {
+                            "fill": "70323:301"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": "23:1379",
+                      "name": "Iconly/Curved/Wallet",
+                      "type": "INSTANCE",
+                      "box": {
+                        "x": 50,
+                        "y": 561,
+                        "w": 24,
+                        "h": 24
+                      },
+                      "componentId": "23:1373",
+                      "constraints": {
+                        "vertical": "SCALE",
+                        "horizontal": "SCALE"
+                      },
+                      "children": [
+                        {
+                          "id": "I23:1379;23:1374",
+                          "name": "Wallet",
+                          "type": "GROUP",
+                          "box": {
+                            "x": 52.71,
+                            "y": 564.71,
+                            "w": 18.6,
+                            "h": 17.08
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "children": [
+                            {
+                              "id": "I23:1379;23:1375",
+                              "name": "Stroke 1",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 64.72,
+                                "y": 570.55,
+                                "w": 6.45,
+                                "h": 5.13
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#D28A4C"
+                                }
+                              ],
+                              "strokeWeight": 1.5,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:301"
+                              }
+                            },
+                            {
+                              "id": "I23:1379;23:1376",
+                              "name": "Stroke 3",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 67.1,
+                                "y": 572.58,
+                                "w": 0.95,
+                                "h": 0.95
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#D28A4C"
+                                }
+                              ],
+                              "strokeWeight": 1.5,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:301"
+                              }
+                            },
+                            {
+                              "id": "I23:1379;23:1377",
+                              "name": "Stroke 5",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 57.61,
+                                "y": 568.67,
+                                "w": 4.06,
+                                "h": 0.95
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#D28A4C"
+                                }
+                              ],
+                              "strokeWeight": 1.5,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:301"
+                              }
+                            },
+                            {
+                              "id": "I23:1379;23:1378",
+                              "name": "Stroke 7",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 52.71,
+                                "y": 564.71,
+                                "w": 18.6,
+                                "h": 17.08
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "strokes": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#D28A4C"
+                                }
+                              ],
+                              "strokeWeight": 1.5,
+                              "strokeAlign": "CENTER",
+                              "styleRefs": {
+                                "stroke": "70323:301"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "70398:248",
+              "name": "Total Row",
+              "type": "FRAME",
+              "box": {
+                "x": 28,
+                "y": 621,
+                "w": 358,
+                "h": 16
+              },
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAlign": "MAX",
+                "padding": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "sizing": {
+                "h": "FILL",
+                "v": "HUG"
+              },
+              "layoutAlign": "STRETCH",
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "clip": true,
+              "children": [
+                {
+                  "id": "70304:366",
+                  "name": "Frame 3",
+                  "type": "FRAME",
+                  "box": {
+                    "x": 202,
+                    "y": 621,
+                    "w": 184,
+                    "h": 16
+                  },
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "counterAlign": "CENTER",
+                    "gap": 28,
+                    "padding": [
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "sizing": {
+                    "h": "HUG",
+                    "v": "HUG"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "children": [
+                    {
+                      "id": "16:832",
+                      "name": "Total:",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 202,
+                        "y": 621,
+                        "w": 58,
+                        "h": 16
+                      },
+                      "sizing": {
+                        "h": "HUG",
+                        "v": "HUG"
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#F5F1EB"
+                        }
+                      ],
+                      "text": {
+                        "characters": "Total:",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 700,
+                        "fontSize": 16,
+                        "lineHeightPx": 16,
+                        "lineHeightPercent": 100,
+                        "letterSpacing": 0,
+                        "align": "LEFT",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70323:306",
+                        "text": "70321:334"
+                      }
+                    },
+                    {
+                      "id": "16:835",
+                      "name": "8.936 ETH",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 288,
+                        "y": 621,
+                        "w": 98,
+                        "h": 16
+                      },
+                      "sizing": {
+                        "h": "HUG",
+                        "v": "HUG"
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#E89B55"
+                        }
+                      ],
+                      "text": {
+                        "characters": "8.936 ETH",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 700,
+                        "fontSize": 18,
+                        "lineHeightPx": 16,
+                        "lineHeightPercent": 88.89,
+                        "letterSpacing": 0,
+                        "align": "RIGHT",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70330:306",
+                        "text": "70321:319"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "70398:249",
+          "name": "Confirm Button",
+          "type": "FRAME",
+          "box": {
+            "x": 28,
+            "y": 804,
+            "w": 358,
+            "h": 60
+          },
+          "layout": {
+            "mode": "HORIZONTAL",
+            "primaryAlign": "CENTER",
+            "counterAlign": "CENTER",
+            "padding": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "sizing": {
+            "h": "FIXED",
+            "v": "FIXED"
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "clip": true,
+          "fills": [
+            {
+              "type": "GRADIENT_LINEAR",
+              "stops": [
+                {
+                  "pos": 0,
+                  "color": "#D28A4C"
+                },
+                {
+                  "pos": 1,
+                  "color": "#D28A4CCC"
+                }
+              ],
+              "handles": [
+                [
+                  -0.031,
+                  -0.2
+                ],
+                [
+                  1.224,
+                  1.133
+                ],
+                [
+                  -0.697,
+                  11.705
+                ]
+              ]
+            }
+          ],
+          "radius": 40,
+          "children": [
+            {
+              "id": "16:761",
+              "name": "Confirmar compra",
+              "type": "TEXT",
+              "box": {
+                "x": 134.5,
+                "y": 826,
+                "w": 145,
+                "h": 16
+              },
+              "sizing": {
+                "h": "HUG",
+                "v": "HUG"
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "color": "#140D0A"
+                }
+              ],
+              "text": {
+                "characters": "Confirmar compra",
+                "fontFamily": "Roboto Mono",
+                "fontWeight": 700,
+                "fontSize": 15,
+                "lineHeightPx": 16,
+                "lineHeightPercent": 106.67,
+                "letterSpacing": 0,
+                "align": "CENTER",
+                "valign": "TOP",
+                "autoResize": "WIDTH_AND_HEIGHT"
+              },
+              "styleRefs": {
+                "fill": "70323:314",
+                "text": "70321:340"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

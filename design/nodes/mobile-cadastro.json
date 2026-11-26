@@ -1,0 +1,1958 @@
+{
+  "page": "Marketplace de NFTs GreenMint",
+  "section": null,
+  "id": "16:1228",
+  "name": "Mobile / Cadastro",
+  "type": "FRAME",
+  "box": {
+    "x": 0,
+    "y": 0,
+    "w": 414,
+    "h": 896
+  },
+  "layout": {
+    "mode": "VERTICAL",
+    "gap": 40,
+    "padding": [
+      80,
+      28,
+      24,
+      28
+    ]
+  },
+  "sizing": {
+    "h": "FIXED",
+    "v": "FIXED"
+  },
+  "constraints": {
+    "vertical": "TOP",
+    "horizontal": "LEFT"
+  },
+  "clip": true,
+  "fills": [
+    {
+      "type": "SOLID",
+      "color": "#140D0A"
+    }
+  ],
+  "radius": 40,
+  "styleRefs": {
+    "fills": "70323:314",
+    "fill": "70323:314"
+  },
+  "children": [
+    {
+      "id": "70410:4345",
+      "name": "Logo",
+      "type": "FRAME",
+      "box": {
+        "x": 28,
+        "y": 80,
+        "w": 358,
+        "h": 136
+      },
+      "layout": {
+        "mode": "HORIZONTAL",
+        "primaryAlign": "CENTER",
+        "counterAlign": "CENTER",
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sizing": {
+        "h": "FILL",
+        "v": "FIXED"
+      },
+      "layoutAlign": "STRETCH",
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "clip": true,
+      "children": [
+        {
+          "id": "70410:4346",
+          "name": "KURIO Wordmark",
+          "type": "TEXT",
+          "box": {
+            "x": 152.5,
+            "y": 127,
+            "w": 109,
+            "h": 42
+          },
+          "sizing": {
+            "h": "HUG",
+            "v": "HUG"
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#F5F1EB"
+            }
+          ],
+          "text": {
+            "characters": "KURIO",
+            "fontFamily": "Roboto Mono",
+            "fontWeight": 700,
+            "fontSize": 32,
+            "lineHeightPx": 42.2,
+            "letterSpacing": 3.2,
+            "align": "CENTER",
+            "valign": "TOP",
+            "autoResize": "WIDTH_AND_HEIGHT"
+          },
+          "styleRefs": {
+            "fill": "70323:306",
+            "text": "70321:302"
+          }
+        }
+      ]
+    },
+    {
+      "id": "70399:249",
+      "name": "Title",
+      "type": "FRAME",
+      "box": {
+        "x": 28,
+        "y": 256,
+        "w": 358,
+        "h": 16
+      },
+      "layout": {
+        "mode": "HORIZONTAL",
+        "primaryAlign": "CENTER",
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sizing": {
+        "h": "FILL",
+        "v": "HUG"
+      },
+      "layoutAlign": "STRETCH",
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "clip": true,
+      "children": [
+        {
+          "id": "16:1241",
+          "name": "Criar perfil de colecionador",
+          "type": "TEXT",
+          "box": {
+            "x": 55.5,
+            "y": 256,
+            "w": 303,
+            "h": 16
+          },
+          "sizing": {
+            "h": "HUG",
+            "v": "HUG"
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#F5F1EB"
+            }
+          ],
+          "text": {
+            "characters": "Criar perfil de colecionador",
+            "fontFamily": "Roboto Mono",
+            "fontWeight": 700,
+            "fontSize": 18,
+            "lineHeightPx": 16,
+            "lineHeightPercent": 88.89,
+            "letterSpacing": 0,
+            "align": "LEFT",
+            "valign": "TOP",
+            "autoResize": "WIDTH_AND_HEIGHT"
+          },
+          "styleRefs": {
+            "fill": "70323:306",
+            "text": "70321:319"
+          }
+        }
+      ]
+    },
+    {
+      "id": "70399:250",
+      "name": "Form",
+      "type": "FRAME",
+      "box": {
+        "x": 28,
+        "y": 312,
+        "w": 358,
+        "h": 236
+      },
+      "layout": {
+        "mode": "VERTICAL",
+        "gap": 12,
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sizing": {
+        "h": "FILL",
+        "v": "HUG"
+      },
+      "layoutAlign": "STRETCH",
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "clip": true,
+      "children": [
+        {
+          "id": "70410:4348",
+          "name": "Container",
+          "type": "FRAME",
+          "box": {
+            "x": 28,
+            "y": 312,
+            "w": 358,
+            "h": 50
+          },
+          "layout": {
+            "mode": "HORIZONTAL",
+            "primaryAlign": "SPACE_BETWEEN",
+            "counterAlign": "CENTER",
+            "gap": 10,
+            "padding": [
+              0,
+              16,
+              0,
+              16
+            ]
+          },
+          "sizing": {
+            "h": "FIXED",
+            "v": "FIXED"
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "strokes": [
+            {
+              "type": "SOLID",
+              "color": "#3F2319"
+            }
+          ],
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "radius": 10,
+          "styleRefs": {
+            "strokes": "70323:318",
+            "stroke": "70323:318"
+          },
+          "children": [
+            {
+              "id": "16:1286",
+              "name": "User Name",
+              "type": "TEXT",
+              "box": {
+                "x": 143.5,
+                "y": 329,
+                "w": 127,
+                "h": 16
+              },
+              "sizing": {
+                "h": "HUG",
+                "v": "HUG"
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "color": "#B39463"
+                }
+              ],
+              "text": {
+                "characters": "Nome de usuário",
+                "fontFamily": "Roboto Mono",
+                "fontWeight": 400,
+                "fontSize": 14,
+                "lineHeightPx": 16,
+                "lineHeightPercent": 114.29,
+                "letterSpacing": 0,
+                "align": "LEFT",
+                "valign": "TOP",
+                "autoResize": "WIDTH_AND_HEIGHT"
+              },
+              "styleRefs": {
+                "fill": "70323:310",
+                "text": "70321:351"
+              }
+            }
+          ]
+        },
+        {
+          "id": "70410:4349",
+          "name": "Frame 447",
+          "type": "FRAME",
+          "box": {
+            "x": 28,
+            "y": 374,
+            "w": 358,
+            "h": 50
+          },
+          "layout": {
+            "mode": "HORIZONTAL",
+            "counterAlign": "CENTER",
+            "gap": 10,
+            "padding": [
+              0,
+              16,
+              0,
+              16
+            ]
+          },
+          "sizing": {
+            "h": "FIXED",
+            "v": "FIXED"
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "strokes": [
+            {
+              "type": "SOLID",
+              "color": "#3F2319"
+            }
+          ],
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "radius": 10,
+          "styleRefs": {
+            "strokes": "70323:318",
+            "stroke": "70323:318"
+          },
+          "children": [
+            {
+              "id": "16:1245",
+              "name": "Digite seu e-mail",
+              "type": "TEXT",
+              "box": {
+                "x": 44,
+                "y": 391,
+                "w": 143,
+                "h": 16
+              },
+              "sizing": {
+                "h": "HUG",
+                "v": "HUG"
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "color": "#B39463"
+                }
+              ],
+              "text": {
+                "characters": "Digite seu e-mail",
+                "fontFamily": "Roboto Mono",
+                "fontWeight": 400,
+                "fontSize": 14,
+                "lineHeightPx": 16,
+                "lineHeightPercent": 114.29,
+                "letterSpacing": 0,
+                "align": "LEFT",
+                "valign": "TOP",
+                "autoResize": "WIDTH_AND_HEIGHT"
+              },
+              "styleRefs": {
+                "fill": "70323:310",
+                "text": "70321:351"
+              }
+            }
+          ]
+        },
+        {
+          "id": "70410:4351",
+          "name": "Frame 449",
+          "type": "FRAME",
+          "box": {
+            "x": 28,
+            "y": 436,
+            "w": 358,
+            "h": 50
+          },
+          "layout": {
+            "mode": "VERTICAL",
+            "primaryAlign": "CENTER",
+            "gap": 10,
+            "padding": [
+              0,
+              16,
+              0,
+              16
+            ]
+          },
+          "sizing": {
+            "h": "FIXED",
+            "v": "FIXED"
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "children": [
+            {
+              "id": "16:1291",
+              "name": "Rectangle 49",
+              "type": "RECTANGLE",
+              "box": {
+                "x": 28,
+                "y": 436,
+                "w": 358,
+                "h": 50
+              },
+              "sizing": {
+                "h": "FIXED",
+                "v": "FIXED"
+              },
+              "positioning": "ABSOLUTE",
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "color": "#3F2319"
+                }
+              ],
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "radius": 10,
+              "styleRefs": {
+                "stroke": "70323:318"
+              }
+            },
+            {
+              "id": "70410:4350",
+              "name": "Frame 448",
+              "type": "FRAME",
+              "box": {
+                "x": 44,
+                "y": 452,
+                "w": 326,
+                "h": 18
+              },
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAlign": "SPACE_BETWEEN",
+                "gap": 269,
+                "padding": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "sizing": {
+                "h": "FILL",
+                "v": "HUG"
+              },
+              "layoutAlign": "STRETCH",
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "children": [
+                {
+                  "id": "16:1290",
+                  "name": "Senha",
+                  "type": "TEXT",
+                  "box": {
+                    "x": 44,
+                    "y": 452,
+                    "w": 43,
+                    "h": 16
+                  },
+                  "sizing": {
+                    "h": "HUG",
+                    "v": "HUG"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "color": "#B39463"
+                    }
+                  ],
+                  "text": {
+                    "characters": "Senha",
+                    "fontFamily": "Roboto Mono",
+                    "fontWeight": 400,
+                    "fontSize": 14,
+                    "lineHeightPx": 16,
+                    "lineHeightPercent": 114.29,
+                    "letterSpacing": 0,
+                    "align": "LEFT",
+                    "valign": "TOP",
+                    "autoResize": "WIDTH_AND_HEIGHT"
+                  },
+                  "styleRefs": {
+                    "fill": "70323:310",
+                    "text": "70321:351"
+                  }
+                },
+                {
+                  "id": "16:1292",
+                  "name": "Iconly/Curved/Hide",
+                  "type": "INSTANCE",
+                  "box": {
+                    "x": 352,
+                    "y": 452,
+                    "w": 18,
+                    "h": 18
+                  },
+                  "componentId": "9:964",
+                  "sizing": {
+                    "h": "FIXED",
+                    "v": "FIXED"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "radius": 10,
+                  "children": [
+                    {
+                      "id": "I16:1292;29221:4811",
+                      "name": "Hide",
+                      "type": "GROUP",
+                      "box": {
+                        "x": 354.06,
+                        "y": 455.19,
+                        "w": 13.88,
+                        "h": 11.83
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "children": [
+                        {
+                          "id": "I16:1292;29221:4812",
+                          "name": "Stroke 1",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 354.06,
+                            "y": 455.63,
+                            "w": 11.13,
+                            "h": 9.67
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        },
+                        {
+                          "id": "I16:1292;29221:4813",
+                          "name": "Stroke 3",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 359.03,
+                            "y": 458.46,
+                            "w": 8.92,
+                            "h": 8.12
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        },
+                        {
+                          "id": "I16:1292;29221:4814",
+                          "name": "Stroke 5",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 358.63,
+                            "y": 458.73,
+                            "w": 4.05,
+                            "h": 4.05
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        },
+                        {
+                          "id": "I16:1292;29221:4815",
+                          "name": "Stroke 7",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 361.43,
+                            "y": 461.52,
+                            "w": 1.9,
+                            "h": 1.91
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        },
+                        {
+                          "id": "I16:1292;29221:4816",
+                          "name": "Stroke 9",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 355.09,
+                            "y": 455.19,
+                            "w": 11.83,
+                            "h": 11.83
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "70410:4353",
+          "name": "Frame 451",
+          "type": "FRAME",
+          "box": {
+            "x": 28,
+            "y": 498,
+            "w": 358,
+            "h": 50
+          },
+          "layout": {
+            "mode": "VERTICAL",
+            "primaryAlign": "SPACE_BETWEEN",
+            "padding": [
+              0,
+              16,
+              0,
+              16
+            ]
+          },
+          "sizing": {
+            "h": "FIXED",
+            "v": "FIXED"
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "children": [
+            {
+              "id": "16:1299",
+              "name": "Group 98",
+              "type": "GROUP",
+              "box": {
+                "x": 28,
+                "y": 498,
+                "w": 358,
+                "h": 50
+              },
+              "sizing": {
+                "h": "FIXED",
+                "v": "FIXED"
+              },
+              "positioning": "ABSOLUTE",
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "radius": 10,
+              "children": [
+                {
+                  "id": "16:1301",
+                  "name": "Rectangle 49",
+                  "type": "RECTANGLE",
+                  "box": {
+                    "x": 28,
+                    "y": 498,
+                    "w": 358,
+                    "h": 50
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "strokes": [
+                    {
+                      "type": "SOLID",
+                      "color": "#3F2319"
+                    }
+                  ],
+                  "strokeWeight": 1,
+                  "strokeAlign": "INSIDE",
+                  "radius": 10,
+                  "styleRefs": {
+                    "stroke": "70323:318"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "70410:4352",
+              "name": "Frame 450",
+              "type": "FRAME",
+              "box": {
+                "x": 44,
+                "y": 514,
+                "w": 326,
+                "h": 18
+              },
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAlign": "SPACE_BETWEEN",
+                "counterAlign": "CENTER",
+                "gap": 185,
+                "padding": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "sizing": {
+                "h": "FILL",
+                "v": "HUG"
+              },
+              "layoutAlign": "STRETCH",
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "children": [
+                {
+                  "id": "16:1300",
+                  "name": "Confirmar senha",
+                  "type": "TEXT",
+                  "box": {
+                    "x": 44,
+                    "y": 515,
+                    "w": 127,
+                    "h": 16
+                  },
+                  "sizing": {
+                    "h": "HUG",
+                    "v": "HUG"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "color": "#B39463"
+                    }
+                  ],
+                  "text": {
+                    "characters": "Confirmar senha",
+                    "fontFamily": "Roboto Mono",
+                    "fontWeight": 400,
+                    "fontSize": 14,
+                    "lineHeightPx": 16,
+                    "lineHeightPercent": 114.29,
+                    "letterSpacing": 0,
+                    "align": "LEFT",
+                    "valign": "TOP",
+                    "autoResize": "WIDTH_AND_HEIGHT"
+                  },
+                  "styleRefs": {
+                    "fill": "70323:310",
+                    "text": "70321:351"
+                  }
+                },
+                {
+                  "id": "16:1302",
+                  "name": "Iconly/Curved/Hide",
+                  "type": "INSTANCE",
+                  "box": {
+                    "x": 352,
+                    "y": 514,
+                    "w": 18,
+                    "h": 18
+                  },
+                  "componentId": "9:964",
+                  "sizing": {
+                    "h": "FIXED",
+                    "v": "FIXED"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "radius": 10,
+                  "children": [
+                    {
+                      "id": "I16:1302;29221:4811",
+                      "name": "Hide",
+                      "type": "GROUP",
+                      "box": {
+                        "x": 354.06,
+                        "y": 517.19,
+                        "w": 13.88,
+                        "h": 11.83
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "children": [
+                        {
+                          "id": "I16:1302;29221:4812",
+                          "name": "Stroke 1",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 354.06,
+                            "y": 517.63,
+                            "w": 11.13,
+                            "h": 9.67
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        },
+                        {
+                          "id": "I16:1302;29221:4813",
+                          "name": "Stroke 3",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 359.03,
+                            "y": 520.46,
+                            "w": 8.92,
+                            "h": 8.12
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        },
+                        {
+                          "id": "I16:1302;29221:4814",
+                          "name": "Stroke 5",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 358.63,
+                            "y": 520.73,
+                            "w": 4.05,
+                            "h": 4.05
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        },
+                        {
+                          "id": "I16:1302;29221:4815",
+                          "name": "Stroke 7",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 361.43,
+                            "y": 523.52,
+                            "w": 1.9,
+                            "h": 1.91
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        },
+                        {
+                          "id": "I16:1302;29221:4816",
+                          "name": "Stroke 9",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 355.09,
+                            "y": 517.19,
+                            "w": 11.83,
+                            "h": 11.83
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "strokes": [
+                            {
+                              "type": "SOLID",
+                              "color": "#55321F"
+                            }
+                          ],
+                          "strokeWeight": 1.5,
+                          "strokeAlign": "CENTER",
+                          "styleRefs": {
+                            "stroke": "70323:319"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "70399:251",
+      "name": "Create Profile Button",
+      "type": "FRAME",
+      "box": {
+        "x": 28,
+        "y": 588,
+        "w": 358,
+        "h": 60
+      },
+      "layout": {
+        "mode": "HORIZONTAL",
+        "primaryAlign": "CENTER",
+        "counterAlign": "CENTER",
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sizing": {
+        "h": "FILL",
+        "v": "FIXED"
+      },
+      "layoutAlign": "STRETCH",
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "clip": true,
+      "fills": [
+        {
+          "type": "SOLID",
+          "color": "#D28A4C"
+        }
+      ],
+      "radius": 10,
+      "styleRefs": {
+        "fills": "70323:301",
+        "fill": "70323:301"
+      },
+      "children": [
+        {
+          "id": "16:1256",
+          "name": "Criar perfil",
+          "type": "TEXT",
+          "box": {
+            "x": 149,
+            "y": 610,
+            "w": 116,
+            "h": 16
+          },
+          "sizing": {
+            "h": "HUG",
+            "v": "HUG"
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#140D0A"
+            }
+          ],
+          "text": {
+            "characters": "Criar perfil",
+            "fontFamily": "Roboto Mono",
+            "fontWeight": 700,
+            "fontSize": 16,
+            "lineHeightPx": 16,
+            "lineHeightPercent": 100,
+            "letterSpacing": 0,
+            "align": "LEFT",
+            "valign": "TOP",
+            "autoResize": "WIDTH_AND_HEIGHT"
+          },
+          "styleRefs": {
+            "fill": "70323:314",
+            "text": "70321:334"
+          }
+        }
+      ]
+    },
+    {
+      "id": "70522:3213",
+      "name": "Mobile Social Block",
+      "type": "INSTANCE",
+      "box": {
+        "x": 28,
+        "y": 688,
+        "w": 358,
+        "h": 124
+      },
+      "componentId": "70504:2994",
+      "layout": {
+        "mode": "VERTICAL",
+        "gap": 12,
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sizing": {
+        "h": "FILL",
+        "v": "HUG"
+      },
+      "layoutAlign": "STRETCH",
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "clip": true,
+      "children": [
+        {
+          "id": "I70522:3213;70504:2987",
+          "name": "Frame 4",
+          "type": "FRAME",
+          "box": {
+            "x": 28,
+            "y": 688,
+            "w": 358,
+            "h": 16
+          },
+          "layout": {
+            "mode": "HORIZONTAL",
+            "counterAlign": "CENTER",
+            "gap": 10,
+            "padding": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "sizing": {
+            "h": "FILL",
+            "v": "HUG"
+          },
+          "layoutAlign": "STRETCH",
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "children": [
+            {
+              "id": "I70522:3213;70504:2988",
+              "name": "Line 7",
+              "type": "LINE",
+              "box": {
+                "x": 28,
+                "y": 696,
+                "w": 110,
+                "h": 0
+              },
+              "sizing": {
+                "h": "FILL",
+                "v": "FIXED"
+              },
+              "layoutGrow": 1,
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "color": "#3F2319"
+                }
+              ],
+              "strokeWeight": 1,
+              "strokeAlign": "CENTER",
+              "styleRefs": {
+                "stroke": "70323:318"
+              }
+            },
+            {
+              "id": "I70522:3213;70504:2989",
+              "name": "Ou continue com",
+              "type": "TEXT",
+              "box": {
+                "x": 148,
+                "y": 688,
+                "w": 118,
+                "h": 16
+              },
+              "sizing": {
+                "h": "HUG",
+                "v": "HUG"
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "color": "#F5F1EB"
+                }
+              ],
+              "text": {
+                "characters": "Ou continue com",
+                "fontFamily": "Roboto Mono",
+                "fontWeight": 400,
+                "fontSize": 13,
+                "lineHeightPx": 16,
+                "lineHeightPercent": 123.08,
+                "letterSpacing": 0,
+                "align": "LEFT",
+                "valign": "TOP",
+                "autoResize": "WIDTH_AND_HEIGHT"
+              },
+              "styleRefs": {
+                "fill": "70323:306",
+                "text": "70321:359"
+              }
+            },
+            {
+              "id": "I70522:3213;70504:2990",
+              "name": "Line 8",
+              "type": "LINE",
+              "box": {
+                "x": 276,
+                "y": 696,
+                "w": 110,
+                "h": 0
+              },
+              "sizing": {
+                "h": "FILL",
+                "v": "FIXED"
+              },
+              "layoutGrow": 1,
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "color": "#3F2319"
+                }
+              ],
+              "strokeWeight": 1,
+              "strokeAlign": "CENTER",
+              "styleRefs": {
+                "stroke": "70323:318"
+              }
+            }
+          ]
+        },
+        {
+          "id": "I70522:3213;70504:2991",
+          "name": "Frame 370",
+          "type": "FRAME",
+          "box": {
+            "x": 28,
+            "y": 716,
+            "w": 358,
+            "h": 96
+          },
+          "layout": {
+            "mode": "VERTICAL",
+            "gap": 16,
+            "padding": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "sizing": {
+            "h": "FILL",
+            "v": "HUG"
+          },
+          "layoutAlign": "STRETCH",
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "children": [
+            {
+              "id": "I70522:3213;70504:2992",
+              "name": "Social Button",
+              "type": "INSTANCE",
+              "box": {
+                "x": 28,
+                "y": 716,
+                "w": 358,
+                "h": 40
+              },
+              "componentId": "70483:256",
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAlign": "CENTER",
+                "counterAlign": "CENTER",
+                "padding": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "sizing": {
+                "h": "FILL",
+                "v": "FIXED"
+              },
+              "layoutAlign": "STRETCH",
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "clip": true,
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "color": "#3F2319"
+                }
+              ],
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "radius": 5,
+              "styleRefs": {
+                "strokes": "70323:318",
+                "stroke": "70323:318"
+              },
+              "children": [
+                {
+                  "id": "I70522:3213;70504:2992;70483:241",
+                  "name": "Content",
+                  "type": "FRAME",
+                  "box": {
+                    "x": 103.5,
+                    "y": 726,
+                    "w": 189,
+                    "h": 20
+                  },
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "counterAlign": "CENTER",
+                    "gap": 12,
+                    "padding": [
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "sizing": {
+                    "h": "HUG",
+                    "v": "HUG"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "children": [
+                    {
+                      "id": "I70522:3213;70504:2992;70483:242",
+                      "name": "google 1",
+                      "type": "FRAME",
+                      "box": {
+                        "x": 103.5,
+                        "y": 726,
+                        "w": 20,
+                        "h": 20
+                      },
+                      "sizing": {
+                        "h": "FIXED",
+                        "v": "FIXED"
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "clip": true,
+                      "children": [
+                        {
+                          "id": "I70522:3213;70504:2992;70483:243",
+                          "name": "Group",
+                          "type": "GROUP",
+                          "box": {
+                            "x": 103.5,
+                            "y": 726,
+                            "w": 20,
+                            "h": 20
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "children": [
+                            {
+                              "id": "I70522:3213;70504:2992;70483:244",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 104.92,
+                                "y": 737.54,
+                                "w": 15.01,
+                                "h": 8.46
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#59C36A"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:326"
+                              }
+                            },
+                            {
+                              "id": "I70522:3213;70504:2992;70483:245",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 113.5,
+                                "y": 740.27,
+                                "w": 6.43,
+                                "h": 5.73
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#00A66C"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:321"
+                              }
+                            },
+                            {
+                              "id": "I70522:3213;70504:2992;70483:246",
+                              "name": "Connected_Home_1_",
+                              "type": "GROUP",
+                              "box": {
+                                "x": 103.5,
+                                "y": 730.94,
+                                "w": 4.95,
+                                "h": 10.12
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "children": [
+                                {
+                                  "id": "I70522:3213;70504:2992;70483:247",
+                                  "name": "Group",
+                                  "type": "GROUP",
+                                  "box": {
+                                    "x": 103.5,
+                                    "y": 730.94,
+                                    "w": 4.95,
+                                    "h": 10.12
+                                  },
+                                  "constraints": {
+                                    "vertical": "SCALE",
+                                    "horizontal": "SCALE"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "I70522:3213;70504:2992;70483:248",
+                                      "name": "Group",
+                                      "type": "GROUP",
+                                      "box": {
+                                        "x": 103.5,
+                                        "y": 730.94,
+                                        "w": 4.95,
+                                        "h": 10.12
+                                      },
+                                      "constraints": {
+                                        "vertical": "SCALE",
+                                        "horizontal": "SCALE"
+                                      },
+                                      "children": [
+                                        {
+                                          "id": "I70522:3213;70504:2992;70483:249",
+                                          "name": "Group",
+                                          "type": "GROUP",
+                                          "box": {
+                                            "x": 103.5,
+                                            "y": 730.94,
+                                            "w": 4.95,
+                                            "h": 10.12
+                                          },
+                                          "constraints": {
+                                            "vertical": "SCALE",
+                                            "horizontal": "SCALE"
+                                          },
+                                          "children": [
+                                            {
+                                              "id": "I70522:3213;70504:2992;70483:250",
+                                              "name": "Vector",
+                                              "type": "VECTOR",
+                                              "box": {
+                                                "x": 103.5,
+                                                "y": 730.94,
+                                                "w": 4.95,
+                                                "h": 10.12
+                                              },
+                                              "constraints": {
+                                                "vertical": "SCALE",
+                                                "horizontal": "SCALE"
+                                              },
+                                              "fills": [
+                                                {
+                                                  "type": "SOLID",
+                                                  "color": "#FFDA2D"
+                                                }
+                                              ],
+                                              "styleRefs": {
+                                                "fill": "70323:327"
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "id": "I70522:3213;70504:2992;70483:251",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 112.91,
+                                "y": 733.66,
+                                "w": 10.59,
+                                "h": 9.95
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#4086F4"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:325"
+                              }
+                            },
+                            {
+                              "id": "I70522:3213;70504:2992;70483:252",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 113.5,
+                                "y": 733.66,
+                                "w": 10,
+                                "h": 9.95
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#4175DF"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:328"
+                              }
+                            },
+                            {
+                              "id": "I70522:3213;70504:2992;70483:253",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 104.92,
+                                "y": 726,
+                                "w": 15.18,
+                                "h": 8.46
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#FF641A"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:323"
+                              }
+                            },
+                            {
+                              "id": "I70522:3213;70504:2992;70483:254",
+                              "name": "Vector",
+                              "type": "VECTOR",
+                              "box": {
+                                "x": 113.5,
+                                "y": 726,
+                                "w": 6.6,
+                                "h": 5.9
+                              },
+                              "constraints": {
+                                "vertical": "SCALE",
+                                "horizontal": "SCALE"
+                              },
+                              "fills": [
+                                {
+                                  "type": "SOLID",
+                                  "color": "#F0805F"
+                                }
+                              ],
+                              "styleRefs": {
+                                "fill": "70323:305"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "I70522:3213;70504:2992;70483:255",
+                      "name": "Continuar com Google",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 135.5,
+                        "y": 728,
+                        "w": 157,
+                        "h": 16
+                      },
+                      "sizing": {
+                        "h": "HUG",
+                        "v": "HUG"
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#CFB28C"
+                        }
+                      ],
+                      "text": {
+                        "characters": "Continuar com Google",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 500,
+                        "fontSize": 13,
+                        "lineHeightPx": 16,
+                        "lineHeightPercent": 123.08,
+                        "letterSpacing": 0,
+                        "align": "CENTER",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70330:305",
+                        "text": "70321:360"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "I70522:3213;70504:2993",
+              "name": "Social Button",
+              "type": "INSTANCE",
+              "box": {
+                "x": 28,
+                "y": 772,
+                "w": 358,
+                "h": 40
+              },
+              "componentId": "70483:262",
+              "layout": {
+                "mode": "HORIZONTAL",
+                "primaryAlign": "CENTER",
+                "counterAlign": "CENTER",
+                "padding": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "sizing": {
+                "h": "FILL",
+                "v": "FIXED"
+              },
+              "layoutAlign": "STRETCH",
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "clip": true,
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "color": "#3F2319"
+                }
+              ],
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "radius": 5,
+              "styleRefs": {
+                "strokes": "70323:318",
+                "stroke": "70323:318"
+              },
+              "children": [
+                {
+                  "id": "I70522:3213;70504:2993;70483:258",
+                  "name": "Content",
+                  "type": "FRAME",
+                  "box": {
+                    "x": 96,
+                    "y": 782,
+                    "w": 204,
+                    "h": 20
+                  },
+                  "layout": {
+                    "mode": "HORIZONTAL",
+                    "counterAlign": "CENTER",
+                    "gap": 12,
+                    "padding": [
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "sizing": {
+                    "h": "HUG",
+                    "v": "HUG"
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "children": [
+                    {
+                      "id": "I70522:3213;70504:2993;70483:259",
+                      "name": "facebook 1",
+                      "type": "FRAME",
+                      "box": {
+                        "x": 96,
+                        "y": 782,
+                        "w": 20,
+                        "h": 20
+                      },
+                      "sizing": {
+                        "h": "FIXED",
+                        "v": "FIXED"
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "clip": true,
+                      "children": [
+                        {
+                          "id": "I70522:3213;70504:2993;70483:260",
+                          "name": "Vector",
+                          "type": "VECTOR",
+                          "box": {
+                            "x": 101.16,
+                            "y": 782,
+                            "w": 10,
+                            "h": 20
+                          },
+                          "constraints": {
+                            "vertical": "SCALE",
+                            "horizontal": "SCALE"
+                          },
+                          "fills": [
+                            {
+                              "type": "SOLID",
+                              "color": "#3B5999"
+                            }
+                          ],
+                          "styleRefs": {
+                            "fill": "70323:324"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": "I70522:3213;70504:2993;70483:261",
+                      "name": "Continuar com Facebook",
+                      "type": "TEXT",
+                      "box": {
+                        "x": 128,
+                        "y": 784,
+                        "w": 172,
+                        "h": 16
+                      },
+                      "sizing": {
+                        "h": "HUG",
+                        "v": "HUG"
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "fills": [
+                        {
+                          "type": "SOLID",
+                          "color": "#CFB28C"
+                        }
+                      ],
+                      "text": {
+                        "characters": "Continuar com Facebook",
+                        "fontFamily": "Roboto Mono",
+                        "fontWeight": 500,
+                        "fontSize": 13,
+                        "lineHeightPx": 16,
+                        "lineHeightPercent": 123.08,
+                        "letterSpacing": 0,
+                        "align": "CENTER",
+                        "valign": "TOP",
+                        "autoResize": "WIDTH_AND_HEIGHT"
+                      },
+                      "styleRefs": {
+                        "fill": "70330:305",
+                        "text": "70321:360"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "70399:255",
+      "name": "Login Link",
+      "type": "FRAME",
+      "box": {
+        "x": 28,
+        "y": 852,
+        "w": 358,
+        "h": 20
+      },
+      "layout": {
+        "mode": "HORIZONTAL",
+        "primaryAlign": "CENTER",
+        "counterAlign": "MAX",
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sizing": {
+        "h": "FILL",
+        "v": "HUG"
+      },
+      "layoutAlign": "STRETCH",
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "clip": true,
+      "children": [
+        {
+          "id": "16:1243",
+          "name": "Já tem uma conta? Entre",
+          "type": "TEXT",
+          "box": {
+            "x": 103,
+            "y": 852,
+            "w": 208,
+            "h": 20
+          },
+          "sizing": {
+            "h": "HUG",
+            "v": "HUG"
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": "#CFB28C"
+            }
+          ],
+          "text": {
+            "characters": "Já tem uma conta? Entre",
+            "fontFamily": "Roboto Mono",
+            "fontWeight": 400,
+            "fontSize": 15,
+            "lineHeightPx": 19.78,
+            "letterSpacing": 0,
+            "align": "LEFT",
+            "valign": "TOP",
+            "autoResize": "WIDTH_AND_HEIGHT"
+          },
+          "styleRefs": {
+            "fill": "70330:305",
+            "text": "70321:337"
+          }
+        }
+      ]
+    }
+  ]
+}
