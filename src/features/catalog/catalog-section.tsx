@@ -3,6 +3,7 @@ import { LoaderCircle, SearchX } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
 import { useFavorites } from '@/features/favorites/use-favorites'
 import { apiErrorMessage } from '@/shared/lib/form-errors'
+import { useMediaQuery } from '@/shared/lib/use-media-query'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 import { ChevronLeftIcon, ChevronRightIcon, DangerTriangleIcon, FilterIcon } from '@/shared/ui/icons'
@@ -95,6 +96,10 @@ export function CatalogSection({ sidebarExtra }: { sidebarExtra?: ReactNode }) {
     }
   }, [data, list.isPlaceholderData, search.page, update])
 
+  // The sidebar is shown from `lg` only (below it the sheet holds the filters). Its filters are not
+  // rendered while it is hidden: the price slider measures its thumbs on mount, which would force a
+  // layout of the whole page inside the first render on mobile.
+  const showSidebar = useMediaQuery('(min-width: 1024px)')
   const filtersPanel = (idPrefix: string) => <CatalogFilters search={search} update={update} idPrefix={idPrefix} />
 
   return (
@@ -115,7 +120,7 @@ export function CatalogSection({ sidebarExtra }: { sidebarExtra?: ReactNode }) {
                 className="[&_input]:bg-surface-dark"
               />
             </div>
-            {filtersPanel('sidebar')}
+            {showSidebar ? filtersPanel('sidebar') : null}
           </div>
           {sidebarExtra}
         </aside>
