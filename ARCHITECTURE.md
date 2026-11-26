@@ -357,12 +357,12 @@ URL `https://nft-marketplace-challenge-ivory.vercel.app` (mesmo código do commi
 
 | Página | Perfil | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Início | Mobile | 90 | 100 | 100 | 100 | 2,74 s | 0 | 281 ms |
+| Início | Mobile | **87** | 100 | 100 | 100 | 2,73 s | 0 | 376 ms |
 | Início | Desktop | 100 | 100 | 100 | 100 | 0,59 s | 0 | 0 ms |
-| Detalhe do NFT | Mobile | 92 | 100 | 100 | 100 | 2,75 s | 0 | 217 ms |
-| Detalhe do NFT | Desktop | 100 | 100 | 100 | 100 | 0,60 s | 0 | 0 ms |
+| Detalhe do NFT | Mobile | 91 | 100 | 100 | 100 | 2,76 s | 0 | 241 ms |
+| Detalhe do NFT | Desktop | 100 | 100 | 100 | 100 | 0,59 s | 0 | 0 ms |
 
-Todas as metas foram atingidas. A Performance do Início mobile é a mais justa: 90, 91 e 88 nas três execuções (mediana 90; a execução de 88 teve TBT de 363 ms), então fica no limite da meta e pode oscilar abaixo dela em uma medição isolada.
+**Resultado abaixo da meta:** a Performance do Início mobile ficou em 87 (execuções de 85, 87 e 88), três pontos abaixo dos 90. As demais metas foram atingidas. A causa está no TBT (346 a 378 ms) somado ao LCP de 2,7 s: o JavaScript de inicialização (aplicação mais a camada de mocks) é avaliado com a CPU 4x mais lenta do perfil mobile antes de a primeira resposta da API liberar a imagem do LCP. O resultado oscila entre medições: em uma medição anterior do mesmo ambiente, com um build equivalente, a mediana foi 90 (90, 91 e 88), e na medição local abaixo foi 92. Reduzir o TBT de forma consistente exigiria tirar mais código do caminho crítico (por exemplo, dividir o vendor ou adiar parte da inicialização), o que não foi feito.
 
 ### Medição local (build servido por `lighthouse/server.mjs`: HTTP/2 sobre TLS, Brotli, cabeçalhos do `vercel.json`, fallback de SPA)
 

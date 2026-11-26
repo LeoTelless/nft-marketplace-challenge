@@ -1,7 +1,7 @@
 {
   "environment": {
     "label": "Produção (https://nft-marketplace-challenge-ivory.vercel.app)",
-    "generatedAt": "2026-11-26T18:34:52.261Z",
+    "generatedAt": "2026-11-26T19:19:15.294Z",
     "lighthouse": "13.6.0",
     "chrome": "Chrome/159.0.8154.6",
     "node": "v22.23.5",
@@ -21,40 +21,40 @@
       "path": "/",
       "profile": "Mobile",
       "median": {
-        "performance": 90,
+        "performance": 87,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 2735,
+        "lcpMs": 2728,
         "cls": 0,
-        "tbtMs": 281
+        "tbtMs": 376
       },
       "runs": [
         {
           "run": 1,
-          "performance": 90,
+          "performance": 85,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2737.777,
+          "lcp": 2994.805,
           "cls": 0,
-          "tbt": 280.5,
+          "tbt": 377.5,
           "report": "inicio-mobile-run1",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": true
+          "isMedianReport": false
         },
         {
           "run": 2,
-          "performance": 91,
+          "performance": 87,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2734.602,
+          "lcp": 2725.6130000000003,
           "cls": 0,
-          "tbt": 254,
+          "tbt": 376,
           "report": "inicio-mobile-run2",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": true
         },
         {
           "run": 3,
@@ -62,9 +62,9 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2730.724,
+          "lcp": 2728.0965,
           "cls": 0,
-          "tbt": 363,
+          "tbt": 345.5,
           "report": "inicio-mobile-run3",
           "lighthouseVersion": "13.6.0",
           "isMedianReport": false
@@ -80,7 +80,7 @@
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 589,
+        "lcpMs": 586,
         "cls": 0,
         "tbtMs": 0
       },
@@ -91,7 +91,7 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 596.331,
+          "lcp": 582.217,
           "cls": 0,
           "tbt": 0,
           "report": "inicio-desktop-run1",
@@ -104,12 +104,12 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 586.766,
+          "lcp": 586.423,
           "cls": 0,
           "tbt": 0,
           "report": "inicio-desktop-run2",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": true
         },
         {
           "run": 3,
@@ -117,12 +117,12 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 589.277,
+          "lcp": 588.91,
           "cls": 0,
           "tbt": 0,
           "report": "inicio-desktop-run3",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": true
+          "isMedianReport": false
         }
       ]
     },
@@ -131,37 +131,37 @@
       "path": "/nft/nft-001",
       "profile": "Mobile",
       "median": {
-        "performance": 92,
+        "performance": 91,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 2758,
+        "lcpMs": 2761,
         "cls": 0,
-        "tbtMs": 217
+        "tbtMs": 241
       },
       "runs": [
         {
           "run": 1,
+          "performance": 91,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 2792.4995,
+          "cls": 0,
+          "tbt": 241,
+          "report": "detalhe-mobile-run1",
+          "lighthouseVersion": "13.6.0",
+          "isMedianReport": false
+        },
+        {
+          "run": 2,
           "performance": 92,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2757.9955,
+          "lcp": 2755.1465,
           "cls": 0,
-          "tbt": 217,
-          "report": "detalhe-mobile-run1",
-          "lighthouseVersion": "13.6.0",
-          "isMedianReport": true
-        },
-        {
-          "run": 2,
-          "performance": 93,
-          "accessibility": 100,
-          "bestPractices": 100,
-          "seo": 100,
-          "lcp": 2748.5685,
-          "cls": 0,
-          "tbt": 206.5,
+          "tbt": 212.5,
           "report": "detalhe-mobile-run2",
           "lighthouseVersion": "13.6.0",
           "isMedianReport": false
@@ -172,12 +172,12 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2764.4685,
+          "lcp": 2760.949,
           "cls": 0,
-          "tbt": 267.5,
+          "tbt": 261,
           "report": "detalhe-mobile-run3",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": true
         }
       ]
     },
@@ -190,7 +190,7 @@
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 602,
+        "lcpMs": 587,
         "cls": 0,
         "tbtMs": 0
       },
@@ -201,12 +201,12 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 607.8365,
+          "lcp": 587.0840000000001,
           "cls": 0,
           "tbt": 0,
           "report": "detalhe-desktop-run1",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": true
         },
         {
           "run": 2,
@@ -214,12 +214,12 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 602.268,
+          "lcp": 590.1825,
           "cls": 0,
           "tbt": 0,
           "report": "detalhe-desktop-run2",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": true
+          "isMedianReport": false
         },
         {
           "run": 3,
@@ -227,7 +227,7 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 595.653,
+          "lcp": 586.049,
           "cls": 0,
           "tbt": 0,
           "report": "detalhe-desktop-run3",
