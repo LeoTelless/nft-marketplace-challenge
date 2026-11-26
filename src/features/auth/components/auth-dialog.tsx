@@ -45,6 +45,9 @@ export function AuthScreen({ mode, search }: { mode: Mode; search: AuthSearch })
           aria-describedby={`${mode}-description`}
           onCloseAutoFocus={(event) => {
             event.preventDefault()
+            // Only when focus would be lost (on <body>); never steal it from where it already went.
+            const active = document.activeElement
+            if (active && active !== document.body && active.isConnected) return
             const target = trigger?.isConnected && trigger !== document.body ? trigger : document.getElementById('conteudo')
             target?.focus()
           }}
