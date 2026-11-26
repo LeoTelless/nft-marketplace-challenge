@@ -332,9 +332,9 @@ Cobertura atual (`e2e/`):
 | `resilience.spec.ts` | Skeletons com carregamento lento sem salto de layout (catálogo, detalhe, páginas privadas), latência variável (respostas fora de ordem ignoradas) e falhas (HTTP 500, sem conexão, 503 transitório absorvido, resultado vazio, requisição travada com timeout, erros do detalhe, do perfil e do carrinho, sempre com "Tentar novamente" ou reversão) |
 | `visual.spec.ts` | Regressão visual de Início, Detalhe, Carrinho e Pagamento (`toHaveScreenshot`, baselines por projeto em `e2e/__screenshots__/`; `npm run test:visual` e `npm run test:visual:update`) |
 
-Cada arquivo roda nos dois projetos (`chromium-desktop` e `chromium-mobile`). Há 90 testes por projeto (180 no total), dos quais 8 são de regressão visual e 4 estão marcados com `test.fixme` (2 por projeto).
+Cada arquivo roda nos dois projetos (`chromium-desktop` e `chromium-mobile`). Há 90 testes por projeto (180 no total), dos quais 8 são de regressão visual. Quatro testes de acessibilidade são específicos de um viewport (filtros na lateral só no desktop, sheet e drawer só no mobile) e são ignorados no outro projeto.
 
-Resultado da última execução (26/11/2026, `npx playwright test --reporter=line --grep-invert visual`, build de produção): **168 passaram, 0 falharam, 4 ignorados** (os `test.fixme`), somando os dois projetos. A regressão visual (`npm run test:visual`) é executada à parte: 3 de 8 baselines conferem e 5 divergem das telas atuais (as baselines são anteriores a ajustes recentes de layout e ainda não foram regeneradas; a divergência existe com ou sem as mudanças de performance).
+Resultado da última execução (26/11/2026, `npx playwright test --reporter=line --grep-invert visual`, build de produção): **168 passaram, 0 falharam, 4 ignorados** (os específicos de viewport), somando os dois projetos. A regressão visual (`npm run test:visual`) é executada à parte: **8 de 8 baselines conferem**, em execuções repetidas.
 
 Relatório HTML: `playwright-report/index.html`; traces e capturas das falhas: `test-results/`.
 
