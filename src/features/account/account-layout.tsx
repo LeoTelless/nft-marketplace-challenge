@@ -1,23 +1,25 @@
 import { Link } from '@tanstack/react-router'
-import { Download, Heart, LogOut, MapPin, ShoppingCart, Tag, TriangleAlert, UserRound, type LucideIcon } from 'lucide-react'
-import type { ReactNode } from 'react'
+import type { ComponentType, ReactNode, SVGProps } from 'react'
 import { useLogout } from '@/features/auth/use-auth'
 import { cn } from '@/shared/lib/utils'
+import { ActivityIcon, DangerTriangleIcon, DownloadIcon, HeartIcon, LocationIcon, LogoutIcon, ShoppingIcon, UserIcon } from '@/shared/ui/icons'
 
 type AccountPath = '/account/profile' | '/account/wallets' | '/orders' | '/account/favorites'
+type Icon = ComponentType<SVGProps<SVGSVGElement>>
 
-const LINKS: Array<{ to: AccountPath; label: string; icon: LucideIcon }> = [
-  { to: '/account/profile', label: 'Dados do perfil', icon: UserRound },
-  { to: '/account/wallets', label: 'Carteiras', icon: MapPin },
-  { to: '/orders', label: 'Atividade', icon: ShoppingCart },
-  { to: '/account/favorites', label: 'Lista de interesse', icon: Heart },
+/** Iconly glyphs of the frame menu, at their frame sizes (16–20px; the text follows 12px after). */
+const LINKS: Array<{ to: AccountPath; label: string; icon: Icon; size: string }> = [
+  { to: '/account/profile', label: 'Dados do perfil', icon: UserIcon, size: 'size-[18px]' },
+  { to: '/account/wallets', label: 'Carteiras', icon: LocationIcon, size: 'size-5' },
+  { to: '/orders', label: 'Atividade', icon: ShoppingIcon, size: 'size-[18px]' },
+  { to: '/account/favorites', label: 'Lista de interesse', icon: HeartIcon, size: 'size-4' },
 ]
 
 /** Items of the Figma menu without a feature in scope: visible, disabled, marked "em breve". */
-const SOON: Array<{ label: string; icon: LucideIcon }> = [
-  { label: 'Ofertas', icon: Tag },
-  { label: 'Arquivos baixados', icon: Download },
-  { label: 'Suporte', icon: TriangleAlert },
+const SOON: Array<{ label: string; icon: Icon }> = [
+  { label: 'Ofertas', icon: ActivityIcon },
+  { label: 'Arquivos baixados', icon: DownloadIcon },
+  { label: 'Suporte', icon: DangerTriangleIcon },
 ]
 
 const item = 'flex h-[45px] shrink-0 items-center gap-3 px-4 text-[15px] leading-[15px] text-brand-accent whitespace-nowrap'
@@ -38,22 +40,27 @@ export function AccountLayout({ children }: { children: ReactNode }) {
         </p>
         <nav aria-label="Meu perfil">
           <ul className="flex overflow-x-auto scrollbar-none lg:flex-col">
-            {LINKS.map(({ to, label, icon: Icon }) => (
+            {LINKS.map(({ to, label, icon: Icon, size }) => (
               <li key={to}>
+                {/* Icons 16px from the edge (6px border + 10px); the current item's icon is #D28A4C. */}
                 <Link
                   to={to}
-                  className={cn(item, 'border-transparent hover:bg-surface-raised max-lg:border-b-2 lg:border-l-[6px] lg:pl-2.5')}
+                  className={cn(
+                    item,
+                    'group border-transparent hover:bg-surface-raised max-lg:border-b-2 lg:border-l-[6px] lg:pl-2.5',
+                    to === '/account/profile' && 'lg:gap-4',
+                  )}
                   activeProps={{ className: 'border-brand! bg-surface-raised lg:bg-transparent', 'aria-current': 'page' }}
                 >
-                  <Icon className="size-[18px] text-text-muted" aria-hidden="true" />
+                  <Icon className={cn(size, 'shrink-0 text-text-muted group-aria-[current=page]:text-brand')} />
                   {label}
                 </Link>
               </li>
             ))}
             {SOON.map(({ label, icon: Icon }) => (
               <li key={label} className="max-lg:hidden">
-                <span aria-disabled="true" className={cn(item, 'cursor-not-allowed pl-4 opacity-60 lg:pl-[22px]')}>
-                  <Icon className="size-[18px] text-text-muted" aria-hidden="true" />
+                <span aria-disabled="true" className={cn(item, 'cursor-not-allowed opacity-60')}>
+                  <Icon className="size-[18px] shrink-0 text-text-muted" />
                   {label} <span className="text-xs text-text-muted">(em breve)</span>
                 </span>
               </li>
@@ -63,9 +70,9 @@ export function AccountLayout({ children }: { children: ReactNode }) {
                 type="button"
                 onClick={() => logout.mutate()}
                 disabled={logout.isPending}
-                className={cn(item, 'w-full cursor-pointer font-bold hover:bg-surface-raised disabled:opacity-60 lg:h-10 lg:pl-[22px]')}
+                className={cn(item, 'w-full cursor-pointer gap-2 font-bold hover:bg-surface-raised disabled:opacity-60 lg:h-10')}
               >
-                <LogOut className="size-5" aria-hidden="true" />
+                <LogoutIcon className="size-5 shrink-0 text-brand" />
                 {logout.isPending ? 'Saindo…' : 'Sair'}
               </button>
             </li>
@@ -94,10 +101,10 @@ export function AccountHeading({
   return (
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div className="flex flex-col gap-2">
-        <Tag id={id} className="text-lg leading-5 font-bold md:text-base md:leading-4">
+        <Tag id={id} className={cn('text-lg leading-5 font-bold md:leading-4', Tag === 'h2' ? 'md:text-[17px]' : 'md:text-base')}>
           {title}
         </Tag>
-        {description ? <p className="text-[15px] leading-5 text-text-secondary">{description}</p> : null}
+        {description ? <p className="text-[15px] leading-5 text-text-secondary md:text-sm md:leading-[15px]">{description}</p> : null}
       </div>
       {action}
     </div>

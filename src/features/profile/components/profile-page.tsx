@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ImageUp, TriangleAlert } from 'lucide-react'
+import { ImagePlus, TriangleAlert } from 'lucide-react'
 import { useEffect, useId, useRef, useState, type ChangeEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import type { Profile, Wallet } from '@/contracts'
@@ -47,18 +47,29 @@ export function ProfilePage() {
   )
 }
 
-function ProfileSkeleton() {
+export function ProfileSkeleton() {
   return (
-    <div aria-busy="true" aria-label="Carregando perfil" className="flex flex-col gap-6">
+    // Same grid as the form (title, 3 rows of 79px, password block, Salvar), so nothing moves.
+    <div aria-busy="true" aria-label="Carregando perfil" className="flex flex-col gap-8">
       <Skeleton className="h-4 w-56" />
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-x-7 gap-y-6 md:grid-cols-2">
         {Array.from({ length: 6 }, (_, i) => (
           <div key={i} className="flex flex-col gap-2.5">
-            <Skeleton className="h-4 w-36" />
+            <Skeleton className="my-[7px] h-[15px] w-36" />
             <Skeleton className="h-10 w-full" />
           </div>
         ))}
       </div>
+      <div className="flex flex-col gap-6 md:max-w-[417px]">
+        <Skeleton className="h-4 w-40" />
+        {Array.from({ length: 3 }, (_, i) => (
+          <div key={i} className="flex flex-col gap-3">
+            <Skeleton className="h-[15px] w-36" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        ))}
+      </div>
+      <Skeleton className="h-10 w-full md:w-[131px]" />
     </div>
   )
 }
@@ -138,21 +149,26 @@ function ProfileForm({ profile, primaryWallet, walletsLoading }: { profile: Prof
         <AvatarField profile={profile} />
       </div>
 
+      {/* Frame: "Alterar senha" 500/16, then label (15px) → 12px → input, 24px between fields. */}
       <fieldset className="flex flex-col gap-6 md:max-w-[417px]">
-        <legend className="mb-6 text-base leading-4 font-bold">Alterar senha</legend>
-        <PasswordField className="gap-2.5" label="Senha atual" autoComplete="current-password" error={errors.currentPassword?.message} {...form.register('currentPassword')} />
-        <PasswordField className="gap-2.5"
+        <legend className="mb-6 text-base leading-4 font-medium">Alterar senha</legend>
+        <PasswordField className="gap-3" labelSize="compact" label="Senha atual" autoComplete="current-password" error={errors.currentPassword?.message} {...form.register('currentPassword')} />
+        <PasswordField
+          className="gap-3"
+          labelSize="compact"
           label="Nova senha"
           autoComplete="new-password"
-          placeholder="Mínimo de 8 caracteres, com letras e números"
+          placeholder="Mín. 8, letras e números"
+          hint="Mínimo de 8 caracteres, com letras e números."
+          hintMode="on-error"
           error={errors.newPassword?.message}
           {...form.register('newPassword')}
         />
-        <PasswordField className="gap-2.5" label="Confirmar nova senha" autoComplete="new-password" error={errors.confirmPassword?.message} {...form.register('confirmPassword')} />
+        <PasswordField className="gap-3" labelSize="compact" label="Confirmar nova senha" autoComplete="new-password" error={errors.confirmPassword?.message} {...form.register('confirmPassword')} />
       </fieldset>
 
       <FormAlert message={errors.root?.server?.message} />
-      <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting || undefined} className="h-10 w-full font-bold md:w-[131px]">
+      <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting || undefined} className="h-10 w-full rounded-[3px] font-bold md:w-[131px]">
         {isSubmitting ? 'Salvando…' : 'Salvar'}
       </Button>
     </form>
@@ -166,8 +182,9 @@ function EnsInput({ error, register }: { error?: string; register: ReturnType<Re
       <label htmlFor={id} className="flex h-[29px] items-center text-[15px] leading-[15px]">
         Nome ENS (opcional)
       </label>
-      <div className="flex gap-3">
-        <span className="grid h-10 w-[92px] shrink-0 place-content-center rounded-sm border border-line text-base" aria-hidden="true">
+      {/* Frame: 78px ".eth" box, 10px gap, input. */}
+      <div className="flex gap-2.5">
+        <span className="grid h-10 w-[78px] shrink-0 place-content-center rounded-[3px] border border-line text-[15px]" aria-hidden="true">
           .eth
         </span>
         <input
@@ -175,7 +192,7 @@ function EnsInput({ error, register }: { error?: string; register: ReturnType<Re
           aria-invalid={error ? true : undefined}
           placeholder="seunome"
           aria-describedby={error ? `${id}-error` : `${id}-hint`}
-          className="h-10 min-w-0 flex-1 rounded-[5px] border border-line bg-transparent px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
+          className="h-10 min-w-0 flex-1 rounded-[3px] border border-line bg-transparent px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
           {...register}
         />
       </div>
@@ -226,16 +243,17 @@ function AvatarField({ profile }: { profile: Profile }) {
 
   const src = pending?.url ?? profile.avatarUrl
   return (
+    // Frame: 15px label, 10px, 50px avatar circle, 24px, "Alterar" 98x40 and "Remover" (20px apart).
     <div className="flex flex-col gap-2.5" role="group" aria-labelledby={`${id}-label`}>
-      <span id={`${id}-label`} className="flex h-[29px] items-center text-[15px] leading-[15px]">
+      <span id={`${id}-label`} className="flex h-[15px] items-center text-[15px] leading-[15px]">
         Avatar
       </span>
-      <div className="flex flex-wrap items-center gap-6">
-        <span className="grid size-[60px] shrink-0 place-content-center overflow-hidden rounded-full border border-line bg-surface-raised text-brand-accent">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <span className="grid size-[50px] shrink-0 place-content-center overflow-hidden rounded-full border border-line bg-surface-raised text-text-muted">
           {src ? (
-            <img src={src} alt={pending ? 'Pré-visualização do novo avatar' : `Avatar de ${profile.name}`} className="size-[60px] object-cover" />
+            <img src={src} alt={pending ? 'Pré-visualização do novo avatar' : `Avatar de ${profile.name}`} className="size-[50px] object-cover" />
           ) : (
-            <ImageUp className="size-6" aria-label="Sem avatar" />
+            <ImagePlus className="size-6" aria-label="Sem avatar" />
           )}
         </span>
         <input
@@ -260,14 +278,16 @@ function AvatarField({ profile }: { profile: Profile }) {
           </>
         ) : (
           <>
-            <Button type="button" onClick={() => input.current?.click()} className="h-10 px-6 font-bold" aria-describedby={`${id}-hint`}>
-              Alterar<span className="sr-only"> avatar</span>
-            </Button>
-            {profile.avatarUrl ? (
-              <Button type="button" variant="ghost" onClick={() => avatar.mutate(null)} disabled={avatar.isPending}>
-                Remover<span className="sr-only"> avatar</span>
+            <span className="flex items-center gap-5">
+              <Button type="button" onClick={() => input.current?.click()} className="h-10 w-[98px] rounded-[3px] px-0 font-bold" aria-describedby={`${id}-hint`}>
+                Alterar<span className="sr-only"> avatar</span>
               </Button>
-            ) : null}
+              {profile.avatarUrl ? (
+                <Button type="button" variant="ghost" onClick={() => avatar.mutate(null)} disabled={avatar.isPending} className="h-10 px-0 font-normal hover:bg-transparent hover:text-brand-accent">
+                  Remover<span className="sr-only"> avatar</span>
+                </Button>
+              ) : null}
+            </span>
           </>
         )}
       </div>
