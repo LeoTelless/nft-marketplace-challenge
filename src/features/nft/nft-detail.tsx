@@ -351,7 +351,7 @@ function PurchasePanel({
   return (
     <div
       data-testid="purchase-panel"
-      className="flex flex-col gap-5 max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-40 max-md:rounded-t-[40px] max-md:bg-surface max-md:px-6 max-md:pt-5 max-md:pb-[max(env(safe-area-inset-bottom),36px)] max-md:shadow-[0_0_20px_0_#0a060473] md:gap-3"
+      className="flex flex-col gap-5 max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-40 max-md:rounded-t-[40px] max-md:bg-surface max-md:px-6 max-md:pt-5 max-md:pb-[max(env(safe-area-inset-bottom),36px)] max-md:shadow-[0_0_20px_0_#0a060473] md:gap-3 max-md:[@media(max-height:500px)]:static max-md:[@media(max-height:500px)]:mt-2 max-md:[@media(max-height:500px)]:-mx-6"
     >
       {/* Desktop frame: COMPRAR and Favoritar aligned with the top of the stepper. */}
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-5 md:items-start">

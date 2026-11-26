@@ -69,7 +69,11 @@ export function CatalogSearchField({
           clearTimeout(timer.current)
           timer.current = setTimeout(() => send(next), DEBOUNCE_MS)
         }}
-        className="h-[45px] w-full rounded-[10px] border border-transparent bg-surface pr-10 pl-11 text-sm font-bold text-foreground placeholder:text-text-muted hover:border-line focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent [&::-webkit-search-cancel-button]:hidden"
+        // Frame: text 42px from the left edge; the right padding only makes room for "Limpar busca".
+        className={cn(
+          'h-[45px] w-full rounded-[10px] border border-transparent bg-surface pl-[42px] text-sm font-bold text-foreground placeholder:text-text-muted hover:border-line focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent [&::-webkit-search-cancel-button]:hidden',
+          draft ? 'pr-10' : 'pr-3',
+        )}
       />
       {draft ? (
         <button

@@ -20,7 +20,11 @@ export function CatalogViews({
     <div
       role="group"
       aria-label="Visualização do catálogo"
-      className={cn('scrollbar-none flex items-center gap-4 overflow-x-auto md:gap-5', className)}
+      // Below 390px the three views wrap to a second line instead of hiding "Em alta" off-screen.
+      className={cn(
+        'scrollbar-none flex items-center gap-4 overflow-x-auto max-[389px]:flex-wrap max-[389px]:gap-y-3 md:gap-5',
+        className,
+      )}
     >
       {CATALOG_VIEWS.map((item) => {
         const active = item.value === view
