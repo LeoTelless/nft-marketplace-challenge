@@ -36,25 +36,37 @@ export function NftDetail({
   const announcement = useLiveChanges(nft, edition)
 
   return (
-    <div className="container-page pt-4 md:pt-8">
+    <div className="container-page md:pt-8">
       <Breadcrumb name={nft.name} />
 
-      <div className="mt-3 flex flex-col gap-8 lg:flex-row lg:gap-8">
+      <div className="flex flex-col md:mt-3 md:gap-8 lg:flex-row lg:gap-8">
         <div className="relative md:max-lg:mx-auto md:max-lg:w-[480px] lg:w-[573px] lg:shrink-0">
-          <MobileImageActions
-            isFavorite={isFavorite}
-            pending={favoritePending}
-            onToggle={toggleFavorite}
-            name={nft.name}
+          <NftGallery
+            nft={nft}
+            overlay={
+              <MobileImageActions
+                isFavorite={isFavorite}
+                pending={favoritePending}
+                onToggle={toggleFavorite}
+                name={nft.name}
+              />
+            }
           />
-          <NftGallery nft={nft} />
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col gap-5 max-md:relative max-md:z-10 max-md:-mx-6 max-md:-mt-8 max-md:rounded-t-[31px] max-md:bg-surface max-md:px-6 max-md:pt-8 max-md:pb-4">
+        <div className="flex min-w-0 flex-1 flex-col gap-3 max-md:relative max-md:z-10 max-md:-mx-6 max-md:-mt-[30px] max-md:rounded-t-[31px] max-md:bg-surface max-md:px-6 max-md:pt-8 max-md:pb-6 md:gap-5">
           <header className="flex flex-col gap-3">
-            <h1 className="text-xl leading-6 font-bold text-foreground md:text-[28px] md:leading-[37px]">{nft.name}</h1>
-            <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-brand/30 pb-3">
-              <p className="text-[22px] leading-6 font-bold text-brand-accent max-md:hidden">
+            <div className="flex items-start justify-between gap-3">
+              <h1 className="text-xl leading-6 font-bold text-foreground md:text-[28px] md:leading-[37px]">
+                {nft.name}
+              </h1>
+              {/* Mobile: the creator takes the place of the rating chip of the frame. */}
+              <p className="max-w-[50%] shrink-0 rounded-2xl border border-brand px-2.5 py-1 text-right text-sm leading-4 text-text-secondary md:hidden">
+                por <span className="text-foreground">{nft.creator.name}</span>
+              </p>
+            </div>
+            <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-brand/30 pb-3 max-md:hidden">
+              <p className="text-[22px] leading-6 font-bold text-brand-accent">
                 <span className="sr-only">Preço da edição {editionLabel(edition)}: </span>
                 <span
                   data-testid="detail-price"
@@ -80,10 +92,10 @@ export function NftDetail({
           ) : null}
 
           <section aria-labelledby="about-title" className="flex flex-col gap-3">
-            <h2 id="about-title" className="text-[15px] leading-4 font-bold text-foreground">
+            <h2 id="about-title" className="text-[15px] leading-4 font-bold text-foreground max-md:sr-only">
               Sobre este NFT:
             </h2>
-            <p className="text-[15px] leading-[22px] text-text-secondary md:leading-[26px]">{nft.description}</p>
+            <p className="text-sm leading-6 text-text-secondary">{nft.description}</p>
           </section>
 
           <EditionPicker nft={nft} selected={edition} onChange={onEditionChange} />
@@ -170,7 +182,7 @@ function MobileImageActions({
   const circle =
     'grid size-[35px] cursor-pointer place-content-center rounded-full border border-line bg-surface-raised text-foreground'
   return (
-    <div className="pointer-events-none absolute inset-x-1 top-2 z-10 flex justify-between md:hidden">
+    <div className="pointer-events-none absolute inset-x-7 top-[23px] z-10 flex justify-between md:hidden">
       <button
         type="button"
         aria-label="Voltar"
@@ -234,12 +246,18 @@ function FavoriteToggle({
 function EditionPicker({ nft, selected, onChange }: { nft: Nft; selected: Edition; onChange: (id: string) => void }) {
   const titleId = useId()
   const infoId = useId()
+  // A radiogroup labelled by a paragraph (not fieldset/legend, whose box ignores the flex gap).
   return (
-    <fieldset className="flex flex-col gap-3" aria-labelledby={titleId} aria-describedby={infoId}>
-      <legend id={titleId} className="mb-3 text-[15px] leading-4 font-bold text-foreground">
+    <div className="flex flex-col gap-2 md:gap-3">
+      <p id={titleId} className="text-[15px] leading-4 font-bold text-foreground">
         Edição:
-      </legend>
-      <div className="-mt-3 flex flex-wrap gap-1.5 md:gap-1.5">
+      </p>
+      <div
+        role="radiogroup"
+        aria-labelledby={titleId}
+        aria-describedby={infoId}
+        className="flex flex-wrap gap-3 md:gap-1.5"
+      >
         {nft.editions.map((edition) => {
           const soldOut = edition.available === 0
           const checked = edition.id === selected.id
@@ -247,10 +265,10 @@ function EditionPicker({ nft, selected, onChange }: { nft: Nft; selected: Editio
             <label
               key={edition.id}
               className={cn(
-                'relative flex h-7 items-center rounded-[50%] border px-2.5 text-sm leading-4 transition-colors',
+                'relative flex h-7 min-w-[42px] items-center justify-center rounded-[50%] border px-2.5 text-sm leading-4 transition-colors',
                 checked ? 'border-brand font-medium text-brand-accent' : 'border-line text-text-secondary',
                 soldOut ? 'cursor-not-allowed text-text-muted line-through' : 'cursor-pointer hover:border-brand',
-                'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand-accent',
+                'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-solid has-[:focus-visible]:outline-brand-accent',
               )}
             >
               <input
@@ -262,7 +280,7 @@ function EditionPicker({ nft, selected, onChange }: { nft: Nft; selected: Editio
                 onChange={() => onChange(edition.id)}
                 className="sr-only"
               />
-              {editionLabel(edition)} · 1/{edition.supply}
+              {editionLabel(edition)}
               {soldOut ? <span className="sr-only"> (esgotada)</span> : null}
             </label>
           )
@@ -271,9 +289,9 @@ function EditionPicker({ nft, selected, onChange }: { nft: Nft; selected: Editio
       <p id={infoId} data-testid="edition-availability" className="text-[13px] leading-5 text-text-secondary">
         {selected.available === 0
           ? `Edição ${editionLabel(selected)} esgotada.`
-          : `${selected.available} de ${selected.supply} disponíveis · máx. ${selected.maxPerOrder} por pedido`}
+          : `Tiragem 1/${selected.supply} · ${selected.available} disponíveis · máx. ${selected.maxPerOrder} por pedido`}
       </p>
-    </fieldset>
+    </div>
   )
 }
 
@@ -489,12 +507,12 @@ export function NftDetailsSection({ nft }: { nft: Nft }) {
       <div className="border-b border-brand/30">
         <h2
           id="details-title"
-          className="relative inline-block pb-2 text-lg leading-6 font-bold text-brand-accent after:absolute after:inset-x-0 after:-bottom-px after:h-[3px] after:bg-brand md:text-xl"
+          className="relative inline-block pb-3 text-[17px] leading-4 font-bold text-brand-accent after:absolute after:inset-x-0 after:-bottom-px after:h-[3px] after:bg-brand"
         >
           Detalhes do NFT
         </h2>
       </div>
-      <div className="mt-4 flex flex-col gap-3 text-sm leading-6 text-text-secondary">
+      <div className="mt-3 flex flex-col gap-3 text-sm leading-6 text-text-secondary">
         <p>
           {nft.description} A propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e
           um registro permanente de procedência registrado na rede.

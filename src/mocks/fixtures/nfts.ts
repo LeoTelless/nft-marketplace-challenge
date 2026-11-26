@@ -51,7 +51,7 @@ const EDITION_TEMPLATES = [
 
 /**
  * Artwork exported from the Figma file (see `scripts/optimize-assets.mjs`): four portraits,
- * each with a close-up crop used as the second gallery image. Served from `public/` in
+ * each with three square crops (face, torso, alternative framing) as the other gallery views. Served from `public/` in
  * AVIF/WebP at 256/512/800 px; the URL points to the 800 px WebP and the UI derives the
  * other sizes and formats (`shared/ui/nft-image.tsx`).
  */
@@ -109,7 +109,9 @@ export function createNftFixtures(): Nft[] {
       creator: { ...creator, avatarUrl: null },
       images: [
         { url: artworkUrl(art), alt: `${name}, obra de ${creator.name}`, width: 800, height: 800 },
-        { url: artworkUrl(`${art}-detail`), alt: `${name}, detalhe da obra em close`, width: 800, height: 800 },
+        { url: artworkUrl(`${art}-detail`), alt: `${name}, close do rosto`, width: 800, height: 800 },
+        { url: artworkUrl(`${art}-torso`), alt: `${name}, detalhe da roupa e dos acessórios`, width: 800, height: 800 },
+        { url: artworkUrl(`${art}-side`), alt: `${name}, enquadramento alternativo`, width: 800, height: 800 },
       ],
       editions,
       featured: index % 8 === 0,

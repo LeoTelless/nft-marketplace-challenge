@@ -1,7 +1,8 @@
 /**
  * Generates the runtime assets from the Figma cache (`design/assets`):
  * - NFT artwork in AVIF + WebP at several widths (`public/images/nft/<slug>-<width>.<ext>`),
- *   plus a close-up crop used as the second gallery image (`<slug>-detail-<width>`);
+ *   plus three square crops of the same artwork used as the other gallery views
+ *   (`-detail`: face, `-torso`: chest/accessory, `-side`: alternative framing);
  * - Roboto Mono variable font (latin + latin-ext) copied from @fontsource-variable,
  *   self-hosted under `public/fonts` so it can be preloaded from index.html.
  *
@@ -30,18 +31,22 @@ await mkdir(outFonts, { recursive: true })
 for (const [slug, file] of Object.entries(ARTWORK)) {
   const source = sharp(path.join(imagesDir, file))
   const { width = 1254, height = 1254 } = await source.metadata()
-  // Close-up: the upper-center area (face), square.
-  const crop = Math.round(width * 0.62)
-  const detail = sharp(path.join(imagesDir, file)).extract({
-    left: Math.round((width - crop) / 2),
-    top: Math.round(height * 0.12),
-    width: crop,
-    height: crop,
-  })
-  for (const [name, image] of [
+  const crop = (fraction, leftRatio, topRatio) => {
+    const size = Math.round(width * fraction)
+    return sharp(path.join(imagesDir, file)).extract({
+      left: Math.round((width - size) * leftRatio),
+      top: Math.min(Math.round(height * topRatio), height - size),
+      width: size,
+      height: size,
+    })
+  }
+  const views = [
     [slug, source],
-    [`${slug}-detail`, detail],
-  ]) {
+    [`${slug}-detail`, crop(0.62, 0.5, 0.12)],
+    [`${slug}-torso`, crop(0.55, 0.5, 0.45)],
+    [`${slug}-side`, crop(0.78, 0.05, 0.08)],
+  ]
+  for (const [name, image] of views) {
     for (const w of WIDTHS) {
       const resized = image.clone().resize(w, w)
       await resized.clone().avif({ quality: 50, effort: 6 }).toFile(path.join(outImages, `${name}-${w}.avif`))
