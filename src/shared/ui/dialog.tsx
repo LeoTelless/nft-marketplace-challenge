@@ -1,9 +1,9 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
-import { XIcon } from "lucide-react"
 import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { Button } from "@/shared/ui/button"
+import { CloseIcon } from "@/shared/ui/icons"
 
 function Dialog({
   ...props
@@ -37,7 +37,7 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
+        "fixed inset-0 z-50 bg-black/60 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
         className
       )}
       {...props}
@@ -49,9 +49,12 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  closeClassName,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
+  /** Position/color overrides for the close button (e.g. full-screen dialogs). */
+  closeClassName?: string
 }) {
   return (
     <DialogPortal data-slot="dialog-portal">
@@ -66,11 +69,16 @@ function DialogContent({
       >
         {children}
         {showCloseButton && (
+          // Figma: an 18px #D28A4C "X" 11px from the top and 12px from the right edge, no box.
+          // The 40px hit area is invisible and centered on the glyph.
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="absolute top-4 right-4 grid size-9 place-content-center rounded-full border border-line bg-surface-raised text-foreground transition-colors hover:border-brand disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+            className={cn(
+              "absolute top-0 right-px grid size-10 cursor-pointer place-content-center rounded-full text-brand transition-colors hover:text-brand-accent disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
+              closeClassName
+            )}
           >
-            <XIcon />
+            <CloseIcon className="size-[18px]" />
             <span className="sr-only">Fechar</span>
           </DialogPrimitive.Close>
         )}

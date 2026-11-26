@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
-import { XIcon } from "lucide-react"
 import { Dialog as SheetPrimitive } from "radix-ui"
+import { CloseIcon } from "@/shared/ui/icons"
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -72,8 +72,8 @@ function SheetContent({
       >
         {children}
         {showCloseButton && (
-          <SheetPrimitive.Close className="absolute top-4 right-4 grid size-9 place-content-center rounded-full border border-line bg-surface-raised text-foreground transition-colors hover:border-brand disabled:pointer-events-none">
-            <XIcon className="size-4" />
+          <SheetPrimitive.Close className="absolute top-3 right-3 grid size-10 cursor-pointer place-content-center rounded-full text-brand transition-colors hover:text-brand-accent disabled:pointer-events-none">
+            <CloseIcon className="size-[18px]" />
             <span className="sr-only">Fechar</span>
           </SheetPrimitive.Close>
         )}

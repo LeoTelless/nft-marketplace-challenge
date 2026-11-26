@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
+import { CheckIcon, ChevronUpIcon } from "lucide-react"
+import { ArrowDownIcon } from "@/shared/ui/icons"
 import { Select as SelectPrimitive } from "radix-ui"
 
 function Select({
@@ -41,7 +42,8 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-4 text-foreground" />
+        {/* Figma: Iconly/Two-tone/Arrow - Down 2, 16px. */}
+        <ArrowDownIcon className="size-4 text-foreground" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
@@ -168,7 +170,7 @@ function SelectScrollDownButton({
       )}
       {...props}
     >
-      <ChevronDownIcon className="size-4" />
+      <ArrowDownIcon className="size-4" />
     </SelectPrimitive.ScrollDownButton>
   )
 }

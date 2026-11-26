@@ -41,7 +41,8 @@ function Slider({
           data-slot="slider-thumb"
           key={index}
           aria-label={thumbLabels?.[index]}
-          className="block size-[18px] shrink-0 cursor-grab rounded-full border-[3px] border-ink bg-brand shadow-button transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent active:cursor-grabbing"
+          // Figma: 15px thumb with a 3px ink ring; an invisible 25px area keeps it easy to grab.
+          className="relative block size-[15px] shrink-0 cursor-grab rounded-full border-[3px] border-ink bg-brand shadow-button transition-transform after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:scale-110 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent active:cursor-grabbing"
         />
       ))}
     </SliderPrimitive.Root>

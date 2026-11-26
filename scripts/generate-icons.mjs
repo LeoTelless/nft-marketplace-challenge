@@ -23,10 +23,35 @@ const ICONS = {
   StarIcon: 'iconly-bold-star',
   FilterIcon: 'frame-402',
   ArrowRightIcon: 'iconly-curved-arrow-right',
+  // Iconly set of the layout (dialogs, fields, account menu, cart, detail).
+  CloseIcon: 'x-18x18',
+  HideIcon: 'iconly-curved-hide',
+  HideOutlineIcon: 'iconly-light-outline-hide',
+  UserFilledIcon: 'user-20x20',
+  LocationIcon: 'iconly-light-outline-location',
+  ActivityIcon: 'iconly-curved-activity',
+  DownloadIcon: 'iconly-curved-download',
+  DangerTriangleIcon: 'iconly-curved-danger-triangle',
+  DeleteIcon: 'iconly-curved-delete',
+  WalletIcon: 'iconly-curved-wallet',
+  LogoutIcon: 'iconly-curved-logout',
+  ChevronDownIcon: 'arrow-down',
+  ArrowDownIcon: 'iconly-two-tone-arrow-down-2',
+  MessageIcon: 'message',
+  ShoppingIcon: 'shopping-1',
+  ChevronLeftIcon: 'back',
+  ChevronRightIcon: 'back',
 }
 
 /** The filter glyph sits inside a 45px button frame: crop to the glyph. */
-const VIEWBOX_OVERRIDES = { FilterIcon: '14.5 14.5 18 18' }
+const VIEWBOX_OVERRIDES = {
+  FilterIcon: '14.5 14.5 18 18',
+  // "Back" is the 35px round button of the mobile frames: keep only the Iconly "Arrow - Left 2".
+  ChevronLeftIcon: '9 9 18 18',
+  ChevronRightIcon: '9 9 18 18',
+}
+/** Mirrored glyphs (the layout only exports the left arrow): mirror axis width. */
+const MIRROR = { ChevronRightIcon: 36 }
 
 const camel = (attr) => attr.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
 
@@ -36,6 +61,9 @@ function convert(svg) {
     .replace(/^[\s\S]*?<svg[^>]*>/, '')
     .replace(/<\/svg>\s*$/, '')
     .replace(/<defs>[\s\S]*?<\/defs>/g, '')
+    // Luminance masks of the Iconly exports only cover the glyph's own box: drop them.
+    .replace(/<mask[\s\S]*?<\/mask>/g, '')
+    .replace(/<g mask="[^"]*">/g, '<g>')
     .replace(/<g clip-path="[^"]*">/g, '<g>')
     // Frames drawn around icons (rounded rects): the UI draws its own borders.
     .replace(/<rect[^>]*\/>/g, '')
@@ -44,7 +72,8 @@ function convert(svg) {
     .replace(/\s([a-z]+(?:-[a-z]+)+)=/g, (_, attr) => ` ${camel(attr)}=`)
     .replace(/\n/g, '')
     .trim()
-  body = body.replace(/<g>([\s\S]*)<\/g>/, '$1')
+  // Plain groups left after dropping clip paths and masks carry nothing: flatten them.
+  body = body.replace(/<\/?g>/g, '')
   return { viewBox, body }
 }
 
@@ -62,7 +91,9 @@ for (const [name, file] of Object.entries(ICONS)) {
   const svg = await readFile(path.join(root, 'design/assets', `${file}.svg`), 'utf8')
   const converted = convert(svg)
   const viewBox = VIEWBOX_OVERRIDES[name] ?? converted.viewBox
-  const body = converted.body
+  const body = MIRROR[name]
+    ? `<g transform="matrix(-1 0 0 1 ${MIRROR[name]} 0)">${converted.body}</g>`
+    : converted.body
   out += `\nexport function ${name}(props: IconProps) {\n  return (\n    <svg {...base(props, '${viewBox}')}>\n      ${body}\n    </svg>\n  )\n}\n`
 }
 await writeFile(path.join(root, 'src/shared/ui/icons.tsx'), out)
