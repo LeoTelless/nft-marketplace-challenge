@@ -9,6 +9,12 @@ export interface MocksControl {
   getScenario(): string
   setScenario(id: string): void
   reset(): void
+  getState(): {
+    nfts: Array<{ id: string; name: string; editions: Array<{ id: string; name: string; price: string; available: number; maxPerOrder: number }> }>
+    orders: Array<{ order: { id: string; status: string }; userId: string; idempotencyKey: string }>
+    favorites: Record<string, string[]>
+    carts: Array<{ id: string; userId: string | null; lines: Array<{ nftId: string; editionId: string; quantity: number }> }>
+  }
   updateNft(nftId: string, patch: { editionId?: string; price?: string; available?: number }): unknown
   resolveOrder(orderId: string, outcome: 'confirmed' | 'rejected'): unknown
   expireSessions(): void
