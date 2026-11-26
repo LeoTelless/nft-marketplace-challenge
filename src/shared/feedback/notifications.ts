@@ -1,10 +1,12 @@
-import { toast } from 'sonner'
-
 /**
  * Feedback of mutations and realtime events (price changed, payment confirmed, favorite
  * failed...). Thin adapter over `sonner` (rendered by `<Toaster />` of `shared/ui/sonner`,
  * mounted once in the root layout, inside an `aria-live` region), so feature code does not
  * depend on the toast library and can publish from hooks or socket listeners alike.
+ *
+ * The library is loaded on the first notice (or when the Toaster mounts, after the first paint),
+ * not at startup. Calls keep their order: they all chain on the same import. A notice published
+ * before the Toaster mounts is shown as soon as it subscribes (sonner replays active toasts).
  */
 export type NoticeTone = 'info' | 'success' | 'warning' | 'error'
 
@@ -18,19 +20,27 @@ export interface NotifyInput {
   duration?: number
 }
 
-export function notify({ tone, title, description, key, duration }: NotifyInput): string | number {
-  return toast[tone](title, {
-    id: key,
-    description,
-    duration: duration ?? (tone === 'error' || tone === 'warning' ? 9_000 : 6_000),
-  })
+let sonner: Promise<typeof import('sonner')> | undefined
+const withToast = (run: (toast: typeof import('sonner').toast) => void) => {
+  sonner ??= import('sonner')
+  void sonner.then(({ toast }) => run(toast))
+}
+
+export function notify({ tone, title, description, key, duration }: NotifyInput) {
+  withToast((toast) =>
+    toast[tone](title, {
+      id: key,
+      description,
+      duration: duration ?? (tone === 'error' || tone === 'warning' ? 9_000 : 6_000),
+    }),
+  )
 }
 
 export function dismissNotice(id: string | number) {
-  toast.dismiss(id)
+  withToast((toast) => toast.dismiss(id))
 }
 
 /** Drops every notice (logout / user switch: nothing of the previous session may remain). */
 export function clearNotices() {
-  toast.dismiss()
+  withToast((toast) => toast.dismiss())
 }

@@ -1,13 +1,17 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
-import { useEffect, useRef, type ReactNode } from 'react'
+import { lazy, Suspense, useEffect, useRef, type ReactNode } from 'react'
 import { useOrderNotices } from '@/features/orders/use-order-notices'
 import { queryKeys } from '@/shared/api/query-keys'
 import { notify } from '@/shared/feedback/notifications'
+import { useAfterFirstPaint } from '@/shared/lib/use-after-first-paint'
 import { RealtimeProvider } from '@/shared/realtime/realtime-provider'
-import { Toaster } from '@/shared/ui/sonner'
 import { onSessionExpired, sessionStore } from '@/shared/session/session-store'
 import { clearPrivateData, useSession } from './session'
+
+// The toast library is not needed for the first paint: loaded with its region after it (notices
+// published earlier are shown once it subscribes, see shared/feedback/notifications.ts).
+const Toaster = lazy(() => import('@/shared/ui/sonner').then((module) => ({ default: module.Toaster })))
 
 /**
  * Session lifecycle for the whole app (rendered once, in the root layout):
@@ -18,7 +22,7 @@ import { clearPrivateData, useSession } from './session'
  *   to `/login?redirect=<current location>` when on a private route (checkout state is
  *   persisted per user, so the flow resumes after logging in again);
  * - announces payment results (`order.updated`).
- * - renders the toasts (`<Toaster />` of shared/ui/sonner, an `aria-live` region).
+ * - renders the toasts (`<Toaster />` of shared/ui/sonner, an `aria-live` region), after the first paint.
  */
 export function SessionProvider({ children }: { children: ReactNode }) {
   const { token, user, status } = useSession()
@@ -65,13 +69,18 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   )
 
   useOrderNotices()
+  const toasterReady = useAfterFirstPaint()
 
   // Wait for the session before opening the socket, so it is authenticated as the right user.
   const realtimeToken = status === 'authenticated' ? token : null
   return (
     <RealtimeProvider token={realtimeToken} userId={status === 'authenticated' ? userId : null}>
       {children}
-      <Toaster />
+      {toasterReady ? (
+        <Suspense fallback={null}>
+          <Toaster />
+        </Suspense>
+      ) : null}
     </RealtimeProvider>
   )
 }
