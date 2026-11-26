@@ -3,6 +3,10 @@ import { expect, type Page } from '@playwright/test'
 /** The app's main landmark (header/footer have their own links, buttons and inputs). */
 export const main = (page: Page) => page.getByRole('main')
 
+/** Login/sign-up dialog and the purchase review dialog (rendered in a portal, outside `main`). */
+export const authDialog = (page: Page, name: 'Entrar' | 'Criar conta' = 'Entrar') => page.getByRole('dialog', { name })
+export const reviewDialog = (page: Page) => page.getByRole('dialog', { name: 'Revise seu pedido' })
+
 /**
  * Helpers for the purchase/session flows. Everything goes through the app's real paths:
  * the UI (by role/label), the simulated REST API (MSW) or `window.__mocks`. The app cache is
@@ -14,10 +18,11 @@ export const USERS = {
 } as const
 
 export async function fillLogin(page: Page, user: (typeof USERS)[keyof typeof USERS]) {
-  await expect(main(page).getByRole('heading', { name: 'Entrar' })).toBeVisible()
-  await main(page).getByLabel('E-mail').fill(user.email)
-  await main(page).getByLabel('Senha').fill(user.password)
-  await main(page).getByRole('button', { name: 'Entrar' }).click()
+  const dialog = authDialog(page)
+  await expect(dialog).toBeVisible()
+  await dialog.getByLabel('E-mail', { exact: true }).fill(user.email)
+  await dialog.getByLabel('Senha', { exact: true }).fill(user.password)
+  await dialog.getByRole('button', { name: 'Entrar', exact: true }).click()
   await expect(page).not.toHaveURL(/\/login/)
 }
 
@@ -31,31 +36,35 @@ export interface EditionPick {
   nftId: string
   nftName: string
   editionId: string
+  /** Edition label shown in the UI (pt-BR). */
   editionName: string
 }
 
+const EDITION_PT: Record<string, string> = { Standard: 'Padrão', Rare: 'Rara', Legendary: 'Lendária' }
+
 /** NFTs (deterministic fixtures) whose first edition has at least `minAvailable` units purchasable. */
 export async function pickEditions(page: Page, count: number, minAvailable = 5): Promise<EditionPick[]> {
-  return page.evaluate(
+  const picks = await page.evaluate(
     ({ count, minAvailable }) => {
-      const picks: EditionPick[] = []
+      const found: EditionPick[] = []
       for (const nft of window.__mocks!.getState().nfts) {
         const edition = nft.editions[0]
         if (edition.available >= minAvailable && edition.maxPerOrder >= minAvailable) {
-          picks.push({ nftId: nft.id, nftName: nft.name, editionId: edition.id, editionName: edition.name })
+          found.push({ nftId: nft.id, nftName: nft.name, editionId: edition.id, editionName: edition.name })
         }
-        if (picks.length === count) break
+        if (found.length === count) break
       }
-      return picks
+      return found
     },
     { count, minAvailable },
   )
+  return picks.map((pick) => ({ ...pick, editionName: EDITION_PT[pick.editionName] ?? pick.editionName }))
 }
 
 /**
  * Adds an item through the simulated REST API with the same credentials the app uses
- * (session token, or the visitor cart id). Stands in for the detail page's "add to cart",
- * which belongs to another screen.
+ * (session token, or the visitor cart id). Used to set up carts quickly; the full purchase
+ * spec adds through the detail page instead.
  */
 export async function addToCartViaApi(page: Page, pick: EditionPick, quantity = 1) {
   const status = await page.evaluate(
@@ -77,22 +86,38 @@ export async function addToCartViaApi(page: Page, pick: EditionPick, quantity = 
   expect(status).toBe(200)
 }
 
+/** Adds one unit through the NFT detail page ("Adicionar ao carrinho"). */
+export async function addToCartFromDetail(page: Page, pick: EditionPick) {
+  await page.goto(`/nft/${pick.nftId}?edition=${pick.editionId}`)
+  const button = main(page).getByRole('button', { name: 'Adicionar ao carrinho' })
+  await expect(button).toBeEnabled()
+  await button.click()
+  await expect(page.getByText(`1 × ${pick.nftName} adicionado ao carrinho.`)).toBeVisible()
+}
+
 export function cartLine(page: Page, pick: EditionPick) {
-  return main(page).getByRole('list', { name: 'Itens do carrinho' }).getByRole('listitem', { name: `${pick.nftName} (${pick.editionName})` })
+  return main(page)
+    .getByRole('list', { name: 'Itens do carrinho' })
+    .getByRole('listitem', { name: `${pick.nftName} (${pick.editionName})` })
 }
 
 export function lineQuantity(page: Page, pick: EditionPick) {
   return cartLine(page, pick).locator('output')
 }
 
-/** Fills the required collector fields, connects the primary wallet and opens the review. */
+export const summaryTotal = (page: Page) => main(page).getByRole('region', { name: 'Resumo do pedido' }).getByTestId('summary-total')
+
+/** Fills the required collector fields, connects the primary wallet and opens the review dialog. */
 export async function fillCheckoutAndReview(page: Page, username = 'ana.souza') {
   await expect(main(page).getByRole('heading', { name: 'Pagamento' })).toBeVisible()
-  await main(page).getByLabel('Nome de usuário').fill(username)
+  await main(page).getByLabel('Nome de usuário', { exact: true }).fill(username)
   // Totals must be loaded before reviewing.
-  await expect(main(page).getByRole('region', { name: 'Resumo do pedido' }).getByTestId('summary-total')).toBeVisible()
+  await expect(summaryTotal(page)).toBeVisible()
   await main(page).getByRole('button', { name: 'Conectar carteira' }).click()
-  await expect(page.getByText(/Carteira .+ conectada\./)).toBeVisible()
-  await main(page).getByRole('button', { name: 'Revisar pedido' }).click()
-  await expect(main(page).getByRole('button', { name: 'Confirmar compra' })).toBeEnabled()
+  await expect(main(page).getByText(/Carteira .+ conectada\./)).toBeVisible()
+  await main(page).getByRole('button', { name: 'Confirmar compra' }).click()
+  await expect(reviewDialog(page).getByRole('button', { name: 'Confirmar compra' })).toBeEnabled()
 }
+
+/** The final "Confirmar compra" of the review dialog. */
+export const confirmPurchase = (page: Page) => reviewDialog(page).getByRole('button', { name: /Confirmar compra|Tentar novamente/ })
