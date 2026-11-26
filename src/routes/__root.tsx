@@ -7,6 +7,7 @@ import { useSession } from '@/features/auth/session'
 import { useLogout } from '@/features/auth/use-auth'
 import { useCartCount } from '@/features/cart/use-cart'
 import { RotateCw } from 'lucide-react'
+import { useAfterFirstPaint } from '@/shared/lib/use-after-first-paint'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 import { CartButton } from '@/shared/layout/cart-button'
@@ -101,6 +102,7 @@ function RootLayout() {
   const actionBar = useHasActionBar()
   useBottomBarAttribute(hideTabBar, actionBar)
   const hideMobileFooter = useHidesMobileFooter()
+  const pageEndReady = useAfterFirstPaint()
 
   return (
     <SessionProvider>
@@ -122,11 +124,16 @@ function RootLayout() {
           <Outlet />
         </main>
         <div className={actionBar ? 'max-md:pb-44' : hideTabBar ? undefined : 'max-md:pb-24'}>
-          <div className={hideMobileFooter ? 'max-md:hidden' : undefined}>
-            <SiteFooter />
-          </div>
-          {/* Mobile: an ordinary button after the footer (above the bottom bar); desktop: floating. */}
-          <DemoPanel />
+          {/* Rendered after the first paint (own task): below the fold on the pages people land on. */}
+          {pageEndReady ? (
+            <>
+              <div className={hideMobileFooter ? 'max-md:hidden' : undefined}>
+                <SiteFooter />
+              </div>
+              {/* Mobile: an ordinary button after the footer (above the bottom bar); desktop: floating. */}
+              <DemoPanel />
+            </>
+          ) : null}
         </div>
       </div>
       {hideTabBar ? null : <MobileTabBar cartCount={cartCount} account={<AccountSlot variant="menu" />} />}
