@@ -49,3 +49,4 @@ O Figma tem inconsistências (várias delas apontadas nos comentários do própr
 - Header: "Mercado" não fica sublinhado no Carrinho e no Pagamento (o sublinhado indica a seção atual, e essas telas não são o catálogo).
 - Resumo (carrinho, pagamento): o desconto zero aparece como `(-) 0 ETH`, no mesmo formato dos demais valores da cotação, em vez do texto fixo `(-) 00.00` do Figma.
 - Detalhe, mobile: a descrição do NFT já é o primeiro parágrafo da área de compra; em "Detalhes do NFT" ela não é repetida (só no desktop, onde as duas seções ficam distantes). Em "Detalhes do NFT", os textos de "Contrato" e "Direitos autorais" estavam trocados no layout e foram colocados sob o título correto.
+- Rodapé: as colunas fixas do frame (265/211 px) só valem a partir de 1280 px; entre 768 e 1279 px os blocos ficam em 2 colunas, para não estourar a largura em 1024 px.

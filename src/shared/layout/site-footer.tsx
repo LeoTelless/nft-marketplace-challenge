@@ -98,7 +98,7 @@ export function SiteFooter() {
     <footer className="container-page mt-16 md:mt-24">
       <section
         aria-label="Serviços KURIO"
-        className="grid grid-cols-1 gap-8 bg-surface p-6 md:grid-cols-2 md:p-8 lg:grid-cols-[265px_265px_265px_1fr] lg:gap-0"
+        className="grid grid-cols-1 gap-8 bg-surface p-6 md:grid-cols-2 md:p-8 xl:grid-cols-[265px_265px_265px_1fr] xl:gap-0"
       >
         {SERVICES.map(({ icon: Icon, title, text }) => (
           <div key={title} className="flex flex-col gap-3 lg:border-r lg:border-brand lg:px-4">
@@ -109,12 +109,12 @@ export function SiteFooter() {
             <p className="max-w-[204px] text-sm leading-[22px] text-text-secondary">{text}</p>
           </div>
         ))}
-        <div className="lg:pl-4">
+        <div className="xl:pl-4">
           <Newsletter />
         </div>
       </section>
 
-      <div className="grid gap-4 bg-surface-dark px-6 py-6 text-sm leading-[22px] text-foreground sm:grid-cols-2 md:px-8 lg:grid-cols-[211px_211px_211px_1fr] lg:items-center lg:gap-x-[91px] lg:py-8">
+      <div className="grid gap-4 bg-surface-dark px-6 py-6 text-sm leading-[22px] text-foreground sm:grid-cols-2 md:px-8 xl:grid-cols-[211px_211px_211px_1fr] xl:items-center xl:gap-x-[91px] xl:py-8">
         <Link to="/" className="text-sm font-bold tracking-[0.1em]">
           KURIO
         </Link>
@@ -131,7 +131,7 @@ export function SiteFooter() {
         </a>
       </div>
 
-      <div className="grid gap-10 bg-surface px-6 py-8 sm:grid-cols-2 md:px-8 lg:grid-cols-[211px_211px_211px_1fr] lg:gap-x-[91px]">
+      <div className="grid gap-10 bg-surface px-6 py-8 sm:grid-cols-2 md:px-8 xl:grid-cols-[211px_211px_211px_1fr] xl:gap-x-[91px]">
         <nav aria-labelledby="footer-profile" className="flex flex-col gap-2">
           <h2 id="footer-profile" className={columnTitle}>
             Meu perfil
