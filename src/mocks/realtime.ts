@@ -46,6 +46,8 @@ interface Peer {
 }
 
 const peers = new Set<Peer>()
+/** Connection attempts received while the simulated server is down. */
+const held = new Set<WebSocketHandlerConnection>()
 let socketDown = false
 const recentEvents: RealtimeEvent[] = []
 const previousSnapshots = new Map<string, Nft>()
@@ -56,10 +58,20 @@ export const socketHandler = socketLink.addEventListener('connection', (connecti
     return
   }
   if (socketDown || is('offline')) {
-    connection.client.close(4000, 'Simulated outage')
+    // Hold the attempt instead of closing it. Closing a WebSocket before it opens dispatches
+    // `close` without `error`, which socket.io-client's Manager does not listen to while
+    // opening: the attempt would hang until the connect timeout (20 s by default) and a
+    // `restoreSocket()` landing in that window left the client "reconnecting" with no socket.
+    // A held attempt is answered as soon as the server is back (`restoreSockets()`), or
+    // abandoned by the client on its own connect timeout.
+    held.add(connection)
+    connection.client.addEventListener('close', () => held.delete(connection))
     return
   }
+  accept(connection)
+})
 
+function accept(connection: WebSocketHandlerConnection) {
   const io = toSocketIo(connection)
   const peer: Peer = {
     connection,
@@ -99,7 +111,7 @@ export const socketHandler = socketLink.addEventListener('connection', (connecti
     clearInterval(ping)
     peers.delete(peer)
   })
-})
+}
 
 function safeSend(connection: WebSocketHandlerConnection, data: string) {
   try {
@@ -184,7 +196,7 @@ export function emitStaleNftEvent(nftId: string): NftUpdatedEvent | null {
   return event
 }
 
-/** Closes every socket and refuses new connections until `restoreSockets()`. */
+/** Closes every socket; new attempts are held (unanswered) until `restoreSockets()`. */
 export function dropSockets() {
   socketDown = true
   for (const peer of [...peers]) peer.connection.client.close(4000, 'Simulated outage')
@@ -193,6 +205,9 @@ export function dropSockets() {
 
 export function restoreSockets() {
   socketDown = false
+  const waiting = [...held]
+  held.clear()
+  for (const connection of waiting) accept(connection)
 }
 
 export function connectedPeers() {

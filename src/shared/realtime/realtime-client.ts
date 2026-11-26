@@ -71,7 +71,7 @@ function notice(n: RealtimeNotice) {
 }
 
 export interface RealtimeConnection {
-  readonly socket: Socket
+  /** Idempotent. After it returns, this connection never opens a socket, touches the cache or writes status. */
   destroy(): void
 }
 
@@ -83,72 +83,108 @@ export interface ConnectRealtimeOptions {
   url?: string
 }
 
-export async function connectRealtime(options: ConnectRealtimeOptions): Promise<RealtimeConnection> {
-  const { io } = await import('socket.io-client')
+/**
+ * Creates a connection synchronously and opens the socket once `socket.io-client` is loaded.
+ *
+ * Lifecycle guarantees (the provider may create and destroy connections concurrently:
+ * StrictMode double effects, token then token+user on reload, user switch):
+ * - the connection id is taken synchronously, so creation order = recency order, no matter
+ *   in which order the dynamic imports resolve;
+ * - a connection destroyed before the import resolves never opens a socket;
+ * - only the most recent live connection writes the shared status; destroying a superseded
+ *   connection never overwrites the status of the live one;
+ * - every listener checks `disposed` first, so nothing from a previous session can reach the
+ *   cache after `destroy()` (and `order.updated` is also filtered by `userId`).
+ */
+export function connectRealtime(options: ConnectRealtimeOptions): RealtimeConnection {
   const { queryClient, token, userId } = options
-  const guard = new EventGuard()
-  // Only the most recent connection reports status (an older one may still be tearing down).
   const connectionId = ++latestConnectionId
-  const setStatus = (next: RealtimeStatus) => {
-    if (connectionId === latestConnectionId) setGlobalStatus(next)
-  }
-  const auth: SocketAuth = { token }
+  let disposed = false
+  let socket: Socket | null = null
+  const guard = new EventGuard()
 
-  const socket = io(options.url ?? (import.meta.env.VITE_SOCKET_URL || window.location.origin), {
-    path: SOCKET_PATH,
-    transports: ['websocket'],
-    auth,
-    reconnectionDelay: 500,
-    reconnectionDelayMax: 3_000,
-  })
+  const isCurrent = () => !disposed && connectionId === latestConnectionId
+  const setStatus = (next: RealtimeStatus) => {
+    if (isCurrent()) setGlobalStatus(next)
+  }
 
   setStatus('connecting')
 
-  socket.on('connect', () => setStatus('connected'))
-  socket.on('disconnect', (reason) => {
-    // "io client disconnect" = we closed it (logout / user switch): no reconnection.
-    setStatus(reason === 'io client disconnect' ? 'idle' : 'reconnecting')
-  })
-  socket.on('connect_error', (error) => {
-    if (error.message === SOCKET_UNAUTHORIZED) {
-      setStatus('unauthorized')
-      emitSessionExpired({ reason: 'session_expired' })
-      return
-    }
-    setStatus('reconnecting')
-  })
-  socket.io.on('reconnect', () => {
-    // Reconciliation: anything may have changed while the socket was down.
-    void queryClient.invalidateQueries()
-    notice({ type: 'reconnected' })
-  })
+  void import('socket.io-client').then(({ io }) => {
+    if (disposed) return
+    const auth: SocketAuth = { token }
+    const created = io(options.url ?? (import.meta.env.VITE_SOCKET_URL || window.location.origin), {
+      path: SOCKET_PATH,
+      transports: ['websocket'],
+      auth,
+      // Reconnection policy (explicit, so recovery time is bounded and reproducible):
+      // - backoff 300 ms doubling up to 2 s, without jitter (randomizationFactor 0);
+      // - an attempt that gets no Engine.IO handshake is abandoned and retried after 4 s
+      //   (socket.io-client default: 20 s, which made recovery take 15-20 s after an outage).
+      // Worst case after the network returns: one pending attempt (<= 4 s) + one delay (<= 2 s);
+      // with the mock, held attempts are answered on `restoreSocket()`, so it is immediate.
+      reconnectionDelay: 300,
+      reconnectionDelayMax: 2_000,
+      randomizationFactor: 0,
+      timeout: 4_000,
+    })
+    socket = created
 
-  socket.on(REALTIME_EVENTS.nftUpdated, (payload: unknown) => {
-    const parsed = nftUpdatedEventSchema.safeParse(payload)
-    if (!parsed.success) return warnInvalid(REALTIME_EVENTS.nftUpdated, parsed.error)
-    if (!guard.accept(parsed.data)) return
-    applyNftUpdated(queryClient, parsed.data)
-    notice({ type: 'nft.updated', event: parsed.data })
-  })
+    created.on('connect', () => setStatus('connected'))
+    created.on('disconnect', (reason) => {
+      // "io client disconnect" = we closed it (logout / user switch): no reconnection.
+      setStatus(reason === 'io client disconnect' ? 'idle' : 'reconnecting')
+    })
+    created.on('connect_error', (error) => {
+      if (disposed) return
+      if (error.message === SOCKET_UNAUTHORIZED) {
+        setStatus('unauthorized')
+        emitSessionExpired({ reason: 'session_expired' })
+        return
+      }
+      setStatus('reconnecting')
+    })
+    created.io.on('reconnect', () => {
+      if (disposed) return
+      // Reconciliation: anything may have changed while the socket was down.
+      void queryClient.invalidateQueries()
+      notice({ type: 'reconnected' })
+    })
 
-  socket.on(REALTIME_EVENTS.orderUpdated, (payload: unknown) => {
-    const parsed = orderUpdatedEventSchema.safeParse(payload)
-    if (!parsed.success) return warnInvalid(REALTIME_EVENTS.orderUpdated, parsed.error)
-    // Defense in depth: the server only targets the owner, but never apply another user's data.
-    if (!userId || parsed.data.userId !== userId) return
-    if (!guard.accept(parsed.data)) return
-    applyOrderUpdated(queryClient, parsed.data)
-    notice({ type: 'order.updated', event: parsed.data })
+    created.on(REALTIME_EVENTS.nftUpdated, (payload: unknown) => {
+      if (disposed) return
+      const parsed = nftUpdatedEventSchema.safeParse(payload)
+      if (!parsed.success) return warnInvalid(REALTIME_EVENTS.nftUpdated, parsed.error)
+      if (!guard.accept(parsed.data)) return
+      applyNftUpdated(queryClient, parsed.data)
+      notice({ type: 'nft.updated', event: parsed.data })
+    })
+
+    created.on(REALTIME_EVENTS.orderUpdated, (payload: unknown) => {
+      if (disposed) return
+      const parsed = orderUpdatedEventSchema.safeParse(payload)
+      if (!parsed.success) return warnInvalid(REALTIME_EVENTS.orderUpdated, parsed.error)
+      // Defense in depth: the server only targets the owner, but never apply another user's data.
+      if (!userId || parsed.data.userId !== userId) return
+      if (!guard.accept(parsed.data)) return
+      applyOrderUpdated(queryClient, parsed.data)
+      notice({ type: 'order.updated', event: parsed.data })
+    })
   })
 
   return {
-    socket,
     destroy() {
-      socket.removeAllListeners()
-      socket.io.removeAllListeners()
-      socket.disconnect()
+      if (disposed) return
+      // Report idle only if no newer connection took over (checked before marking disposed).
+      if (connectionId === latestConnectionId) setGlobalStatus('idle')
+      disposed = true
+      if (socket) {
+        socket.removeAllListeners()
+        socket.io.removeAllListeners()
+        socket.disconnect()
+        socket = null
+      }
       guard.clear()
-      setStatus('idle')
     },
   }
 }

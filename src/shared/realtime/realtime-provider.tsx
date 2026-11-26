@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useSyncExternalStore, type ReactNode } from 'react'
-import { connectRealtime, realtimeStatus, type RealtimeConnection } from './realtime-client'
+import { connectRealtime, realtimeStatus } from './realtime-client'
 
 /**
  * Owns the socket lifecycle: one connection per (token, userId). Changing either
@@ -19,16 +19,8 @@ export function RealtimeProvider({
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    let connection: RealtimeConnection | null = null
-    let disposed = false
-    void connectRealtime({ queryClient, token, userId }).then((created) => {
-      if (disposed) created.destroy()
-      else connection = created
-    })
-    return () => {
-      disposed = true
-      connection?.destroy()
-    }
+    const connection = connectRealtime({ queryClient, token, userId })
+    return () => connection.destroy()
   }, [queryClient, token, userId])
 
   return children

@@ -28,7 +28,7 @@ export interface MocksControl {
   replayLastEvent(type?: RealtimeEvent['type']): RealtimeEvent | null
   /** Emits an `nft.updated` with an older version. */
   emitStaleNftEvent(nftId: string): RealtimeEvent | null
-  /** Closes all sockets and refuses reconnections until `restoreSocket()`. */
+  /** Closes all sockets; reconnection attempts are held until `restoreSocket()` answers them. */
   dropSocket(): void
   restoreSocket(): void
   connectedSockets(): Array<{ userId: string | null }>
