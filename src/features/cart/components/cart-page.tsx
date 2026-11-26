@@ -163,12 +163,12 @@ function CartLine({ item }: { item: CartItem }) {
         <div className="size-[100px] shrink-0 overflow-hidden bg-surface-raised md:size-[70px]">
           <NftImage image={cartItemImage(item)} sizes="100px" />
         </div>
-        <div className="flex min-w-0 flex-col gap-1.5 py-3 md:py-0">
+        <div className="flex min-w-0 flex-col gap-1.5 py-3 pr-11 md:py-0 md:pr-0">
           <Link
             to="/nft/$nftId"
             params={{ nftId: item.nftId }}
             search={{ edition: item.editionId }}
-            className="truncate text-[15px] leading-4 font-bold text-foreground hover:text-brand-accent md:text-base"
+            className="line-clamp-2 text-[15px] leading-[18px] font-bold break-words text-foreground hover:text-brand-accent md:text-base"
           >
             {item.nftName}
           </Link>

@@ -16,7 +16,7 @@ export function DemoPanel() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
-        className="fixed top-1/2 right-0 z-30 inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-l-full border border-r-0 border-line bg-surface-raised/95 px-2 text-xs font-medium text-text-secondary opacity-80 shadow-raised hover:border-brand hover:text-brand-accent hover:opacity-100 md:top-auto md:right-auto md:bottom-4 md:left-4 md:rounded-full md:border-r md:px-3 md:opacity-100"
+        className="fixed top-1/2 left-0 z-30 inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-r-full border border-l-0 border-line bg-surface-raised/95 px-2 text-xs font-medium text-text-secondary opacity-80 shadow-raised hover:border-brand hover:text-brand-accent hover:opacity-100 md:top-auto md:bottom-4 md:left-4 md:rounded-full md:border-l md:px-3 md:opacity-100"
       >
         <FlaskConical className="size-4" aria-hidden="true" />
         <span className="max-md:sr-only">Demo</span>

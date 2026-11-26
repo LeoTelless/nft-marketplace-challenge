@@ -90,7 +90,13 @@ function PromoteButton({ wallet }: { wallet: Wallet }) {
   const update = useUpdateWallet()
   return (
     <Button variant="outline" className="w-fit" disabled={update.isPending} onClick={() => update.mutate({ id: wallet.id, role: 'primary' })}>
-      {update.isPending ? 'Atualizando…' : `Tornar ${wallet.label} a carteira principal`}
+      {update.isPending ? (
+        'Atualizando…'
+      ) : (
+        <>
+          Tornar principal<span className="sr-only">: {wallet.label}</span>
+        </>
+      )}
     </Button>
   )
 }
@@ -158,7 +164,7 @@ function WalletEditor({ wallet, role, onCancel }: { wallet: Wallet | null; role:
                 <span
                   className={cn(
                     'inline-flex h-10 cursor-pointer items-center gap-2 rounded-sm border border-line bg-surface-dark px-3 text-sm',
-                    'peer-checked:border-brand peer-checked:bg-brand/15 peer-checked:[&_.check]:opacity-100 peer-checked:text-brand-accent peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-accent',
+                    'peer-checked:border-brand peer-checked:bg-brand/15 peer-checked:[&_.check]:opacity-100 peer-checked:text-brand-accent peer-focus-visible:outline-2 peer-focus-visible:outline-solid focus-visible:outline-solid peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-accent',
                   )}
                 >
                   <span aria-hidden="true" className="grid size-4 place-content-center rounded-[3px] border border-current">

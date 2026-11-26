@@ -49,11 +49,11 @@ function Header({ icon, title, children }: { icon: ReactNode; title: ReactNode; 
 
 function Meta({ items }: { items: Array<{ label: string; value: ReactNode; strong?: boolean }> }) {
   return (
-    <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-b border-brand px-6 py-3 text-text-secondary sm:flex sm:items-center sm:justify-between md:px-9">
+    <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-b border-brand px-6 py-3 text-text-secondary sm:flex sm:items-center sm:justify-between sm:gap-3">
       {items.map((item, index) => (
-        <div key={item.label} className={cn('flex min-w-0 flex-col', index > 0 && 'sm:border-l sm:border-brand sm:pl-4')}>
-          <dt className={cn('text-sm leading-4', item.strong && 'font-bold')}>{item.label}</dt>
-          <dd className="truncate text-[15px] leading-5">{item.value}</dd>
+        <div key={item.label} className={cn('flex flex-col', index > 0 && 'sm:border-l sm:border-brand sm:pl-3')}>
+          <dt className={cn('text-sm leading-4 sm:whitespace-nowrap', item.strong && 'font-bold')}>{item.label}</dt>
+          <dd className="text-sm leading-5 break-all sm:break-normal sm:whitespace-nowrap">{item.value}</dd>
         </div>
       ))}
     </dl>
@@ -90,27 +90,29 @@ function Confirmed({ order }: { order: Order }) {
       />
       <section aria-label="Recibo" className="flex flex-col gap-3 px-6 pt-5 pb-8 md:px-11">
         <h2 className="text-[15px] leading-4 font-bold">Detalhes da transação</h2>
-        <div aria-hidden="true" className="flex border-b border-brand/30 pb-3 text-base leading-4">
+        <div aria-hidden="true" className="flex border-b border-brand/30 pb-3 text-base leading-4 max-sm:[&>span:nth-child(2)]:hidden">
           <span className="flex-1 font-bold">NFTs</span>
           <span className="w-[72px] text-center font-bold">Edições</span>
           <span className="w-[100px] text-right font-medium">Subtotal</span>
         </div>
         <ul aria-label="Itens comprados" className="flex flex-col gap-3">
           {receipt.lines.map((line) => (
-            <li key={`${line.nftId}-${line.editionId}`} className="flex min-h-[70px] items-center gap-3">
+            <li key={`${line.nftId}-${line.editionId}`} className="flex min-h-[70px] flex-wrap items-center gap-x-3 gap-y-1">
               <div className="size-[70px] shrink-0 overflow-hidden rounded-[10px]">
                 <NftImage image={cartItemImage(line)} sizes="70px" />
               </div>
-              <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                <span className="truncate text-base leading-4 font-bold">{line.nftName}</span>
+              <div className="flex min-w-[130px] flex-1 flex-col gap-1.5">
+                <span className="line-clamp-2 text-base leading-[18px] font-bold break-words">{line.nftName}</span>
                 <span className="text-sm leading-4 text-text-muted">
                   {editionLabel({ name: line.editionName })} · ID {tokenLabel(line.nftId)}
                 </span>
               </div>
-              <span className="w-[72px] text-center text-sm text-text-secondary">
-                <span className="sr-only">Quantidade: </span>(x {line.quantity})
+              <span className="ml-auto flex items-center gap-3 sm:gap-0">
+                <span className="text-sm text-text-secondary sm:w-[72px] sm:text-center">
+                  <span className="sr-only">Quantidade: </span>(x {line.quantity})
+                </span>
+                <span className="text-right text-lg leading-4 font-bold text-brand-accent sm:w-[100px]">{eth(line.lineTotal)}</span>
               </span>
-              <span className="w-[100px] text-right text-lg leading-4 font-bold text-brand-accent">{eth(line.lineTotal)}</span>
             </li>
           ))}
         </ul>

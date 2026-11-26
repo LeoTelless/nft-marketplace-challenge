@@ -197,7 +197,7 @@ export function CheckoutPage() {
               rows={6}
               aria-invalid={errors.collector?.note ? true : undefined}
               aria-describedby={errors.collector?.note ? 'collector-note-error' : undefined}
-              className="min-h-[152px] rounded-sm border border-line bg-surface-dark p-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
+              className="min-h-[152px] rounded-sm border border-line bg-surface-dark p-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
               {...form.register('collector.note')}
             />
             {errors.collector?.note ? (
@@ -309,7 +309,7 @@ function EnsField({ form }: { form: UseFormReturn<CheckoutFormValues> }) {
           placeholder="ENS da carteira"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${id}-error` : `${id}-suffix`}
-          className="h-10 min-w-0 flex-1 rounded-sm border border-line bg-surface-dark px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
+          className="h-10 min-w-0 flex-1 rounded-sm border border-line bg-surface-dark px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
           {...form.register('collector.ensName')}
         />
         <span id={`${id}-suffix`} className="grid h-10 w-[78px] place-content-center rounded-sm border border-line text-base">
@@ -361,20 +361,22 @@ function QuoteLines({ quote }: { quote: Quote | undefined }) {
   return (
     <ul className="mt-3 flex flex-col gap-3">
       {quote.lines.map((line) => (
-        <li key={`${line.nftId}-${line.editionId}`} className="flex min-h-[70px] items-center gap-2 bg-surface py-0 pr-4 pl-1">
+        <li key={`${line.nftId}-${line.editionId}`} className="flex min-h-[70px] flex-wrap items-center gap-x-2 gap-y-1 bg-surface py-1 pr-4 pl-1">
           <div className="size-[66px] shrink-0 overflow-hidden rounded-[10px]">
             <NftImage image={cartItemImage(line)} sizes="70px" />
           </div>
-          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <span className="truncate text-base leading-4 font-bold">{line.nftName}</span>
+          <div className="flex min-w-[130px] flex-1 flex-col gap-1.5">
+            <span className="line-clamp-2 text-base leading-[18px] font-bold break-words">{line.nftName}</span>
             <span className="text-sm leading-4 text-text-muted">
               {editionLabel({ name: line.editionName })} · ID {tokenLabel(line.nftId)}
             </span>
           </div>
-          <span className="text-sm text-text-secondary">
-            <span className="sr-only">Quantidade: </span>(x {line.quantity})
+          <span className="ml-auto flex items-center gap-3">
+            <span className="text-sm text-text-secondary">
+              <span className="sr-only">Quantidade: </span>(x {line.quantity})
+            </span>
+            <span className="min-w-[88px] text-right text-lg leading-4 font-bold text-brand-accent">{eth(line.lineTotal)}</span>
           </span>
-          <span className="min-w-[88px] text-right text-lg leading-4 font-bold text-brand-accent">{eth(line.lineTotal)}</span>
         </li>
       ))}
     </ul>
@@ -563,7 +565,7 @@ function ReviewDialog({
         <dl className="grid grid-cols-2 gap-3 border-y border-brand py-3 text-sm sm:grid-cols-3">
           <div>
             <dt className="font-bold text-text-secondary">Carteira</dt>
-            <dd className="truncate">{wallet ? `${wallet.label} (${shortAddress(wallet.address)})` : '—'}</dd>
+            <dd className="break-words">{wallet ? `${wallet.label} (${shortAddress(wallet.address)})` : '—'}</dd>
           </div>
           <div>
             <dt className="font-bold text-text-secondary">Rede</dt>
@@ -571,7 +573,7 @@ function ReviewDialog({
           </div>
           <div className="col-span-2 sm:col-span-1">
             <dt className="font-bold text-text-secondary">Colecionador</dt>
-            <dd className="truncate">
+            <dd className="break-words">
               {values.collector.displayName} (@{values.collector.username})
             </dd>
           </div>

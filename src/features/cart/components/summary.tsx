@@ -126,12 +126,12 @@ export function CouponForm({ network, compact = false }: { network?: Network; co
           autoComplete="off"
           aria-invalid={coupon.error ? true : undefined}
           aria-describedby={coupon.error ? `${id}-error` : undefined}
-          className="min-w-0 flex-1 bg-transparent px-4 text-[13px] text-foreground outline-hidden placeholder:text-text-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-accent md:px-2 md:text-xs"
+          className="min-w-0 flex-1 bg-transparent px-3 text-xs sm:px-4 sm:text-[13px] text-foreground outline-hidden placeholder:text-text-muted focus-visible:outline-2 focus-visible:outline-solid focus-visible:-outline-offset-2 focus-visible:outline-brand-accent md:px-2 md:text-xs"
         />
         <button
           type="submit"
           disabled={coupon.isApplying || !code.trim()}
-          className="w-[97px] shrink-0 cursor-pointer rounded-full bg-linear-120 from-brand to-[#a86c3c] text-[15px] font-bold text-foreground disabled:cursor-not-allowed disabled:opacity-60 md:w-[102px] md:rounded-none md:bg-brand md:bg-none md:text-ink"
+          className="w-[88px] shrink-0 cursor-pointer rounded-full sm:w-[97px] bg-linear-120 from-brand to-[#a86c3c] text-[15px] font-bold text-foreground disabled:cursor-not-allowed disabled:opacity-60 md:w-[102px] md:rounded-none md:bg-brand md:bg-none md:text-ink"
         >
           {coupon.isApplying ? 'Aplicando…' : 'Aplicar'}
         </button>

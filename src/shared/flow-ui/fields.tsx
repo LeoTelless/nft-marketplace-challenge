@@ -153,7 +153,7 @@ export function SelectField({
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           aria-required={required || undefined}
-          className="h-10 w-full cursor-pointer appearance-none rounded-sm border border-line bg-surface-dark py-2 pr-10 pl-3 text-sm text-foreground outline-hidden hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-coral"
+          className="h-10 w-full cursor-pointer appearance-none rounded-sm border border-line bg-surface-dark py-2 pr-10 pl-3 text-sm text-foreground outline-hidden hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-coral"
           {...props}
         >
           {children}

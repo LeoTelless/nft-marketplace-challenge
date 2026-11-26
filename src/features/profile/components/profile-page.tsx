@@ -173,7 +173,7 @@ function EnsInput({ error, register }: { error?: string; register: ReturnType<Re
           id={id}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${id}-error` : `${id}-hint`}
-          className="h-10 min-w-0 flex-1 rounded-sm border border-line bg-surface-dark px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
+          className="h-10 min-w-0 flex-1 rounded-sm border border-line bg-surface-dark px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
           {...register}
         />
       </div>
