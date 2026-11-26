@@ -37,6 +37,10 @@ export function nftDetailQueryOptions(id: string, queryClient?: QueryClient) {
     queryKey: queryKeys.nfts.detail(id),
     queryFn: ({ signal }) => catalogApi.detail(id, { signal }),
     placeholderData: queryClient ? () => findInLists(queryClient, id) : undefined,
+    // The route loader already fetches on every navigation (the lazy route chunk often mounts
+    // after a fast 404 arrived): mounting must not repeat the same failed request. Errors keep
+    // their explicit "Tentar novamente".
+    retryOnMount: false,
   })
 }
 

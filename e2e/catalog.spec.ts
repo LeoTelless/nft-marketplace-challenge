@@ -232,9 +232,18 @@ test.describe('detail: direct access and missing resource', () => {
   })
 
   test('a nonexistent NFT shows its own not-found screen with a way back to the catalog', async ({ page }) => {
+    const detailRequests: string[] = []
+    page.on('request', (request) => {
+      if (request.method() === 'GET' && new URL(request.url()).pathname === '/api/nfts/nft-does-not-exist') {
+        detailRequests.push(request.url())
+      }
+    })
     await openWithScenario(page, '/nft/nft-does-not-exist')
     const notFound = page.getByTestId('nft-not-found')
     await expect(notFound).toBeVisible()
+    // The 404 is requested once: neither a retry nor a second fetch when the route mounts.
+    await page.waitForLoadState('networkidle')
+    expect(detailRequests).toHaveLength(1)
     await expect(page.getByRole('heading', { name: 'Este NFT não existe ou foi removido' })).toBeVisible()
     await expect(notFound).toContainText('nft-does-not-exist')
     await expect(main(page).getByRole('button', { name: 'Adicionar ao carrinho' })).toHaveCount(0)
