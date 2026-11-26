@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "lint": "oxlint",
+    "test:unit": "playwright test -c playwright.unit.config.ts",
     "test:e2e": "playwright test",
     "test:visual": "playwright test e2e/visual.spec.ts",
     "test:visual:update": "playwright test e2e/visual.spec.ts --update-snapshots",
