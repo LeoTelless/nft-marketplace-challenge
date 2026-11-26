@@ -5,7 +5,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { useForm, useWatch, type UseFormReturn } from 'react-hook-form'
 import type { Quote, Wallet } from '@/contracts'
 import { useCurrentUser } from '@/features/auth/session'
-import { cartItemImage } from '@/features/cart/format'
+import { cartItemImage, exactEth } from '@/features/cart/format'
 import { CouponForm, SummaryRows } from '@/features/cart/components/summary'
 import { useCart } from '@/features/cart/use-cart'
 import { useCartChangeNotices } from '@/features/cart/use-cart-change-notices'
@@ -13,12 +13,10 @@ import { editionLabel, tokenLabel } from '@/features/nft/editions'
 import { useWalletConnection } from '@/features/wallets/use-wallet-connection'
 import { PROVIDER_LABELS, useWallets } from '@/features/wallets/use-wallets'
 import { NETWORK_LABELS, shortAddress } from '@/features/wallets/format'
-import { ProviderMark } from '@/features/wallets/wallet-display'
 import { FormAlert, SelectField, TextField } from '@/shared/flow-ui/fields'
 import { MARKET_CRUMBS } from '@/shared/flow-ui/crumbs'
 import { Breadcrumb, MobileScreenHeader } from '@/shared/flow-ui/page-chrome'
 import { StatusPage } from '@/shared/layout/status-page'
-import { formatEth } from '@/shared/lib/eth'
 import { isApiError } from '@/shared/api/api-error'
 import { applyApiErrors } from '@/shared/lib/form-errors'
 import { cn } from '@/shared/lib/utils'
@@ -28,8 +26,6 @@ import { NftImage } from '@/shared/ui/nft-image'
 import { Skeleton } from '@/shared/ui/skeleton'
 import { CHECKOUT_FIELDS, checkoutFormSchema, emptyCheckoutValues, type CheckoutFormValues } from '../schema'
 import { checkoutDraft, useCheckout, type CheckoutOutcome, type ConfirmBlock } from '../use-checkout'
-
-const eth = (value: string) => formatEth(value, { maxDecimals: 6 })
 
 const BLOCK_MESSAGES: Partial<Record<ConfirmBlock, string>> = {
   quote_updating: 'Atualizando os valores do pedido…',
@@ -140,8 +136,8 @@ export function CheckoutPage() {
 
   if (cart.isSuccess && cart.data.items.length === 0 && !checkout.pendingAttempt) {
     return (
-      <div className="container-page min-h-dvh pt-4 md:pt-8">
-        <MobileScreenHeader title="Pagamento com carteira" fallback="/cart" />
+      <div className="container-page min-h-dvh pt-8 max-md:[--page-gutter:1.75rem]">
+        <MobileScreenHeader title="Pagamento com carteira" fallback="/cart" align="start" titleAs="p" />
         <StatusPage
           icon={ShoppingCart}
           title="Seu carrinho está vazio."
@@ -161,9 +157,10 @@ export function CheckoutPage() {
   const errors = form.formState.errors
 
   return (
-    <div className="container-page min-h-dvh pt-4 pb-40 md:pt-8 md:pb-0">
+    // Mobile: 32px top and 28px side margins of the frame; room for the fixed total bar.
+    <div className="container-page min-h-dvh pt-8 pb-40 max-md:[--page-gutter:1.75rem] md:pb-0">
       <Breadcrumb items={[...MARKET_CRUMBS, { label: 'Pagamento' }]} />
-      <MobileScreenHeader title="Pagamento com carteira" fallback="/cart" />
+      <MobileScreenHeader title="Pagamento com carteira" fallback="/cart" align="start" />
       <h1 className="sr-only max-md:hidden">Pagamento</h1>
 
       {checkout.pendingAttempt ? (
@@ -178,7 +175,7 @@ export function CheckoutPage() {
         noValidate
         onSubmit={onReview}
         aria-label="Pagamento"
-        className="mt-6 flex flex-col gap-8 md:mt-8 lg:flex-row lg:gap-8"
+        className="mt-4 flex flex-col gap-8 md:mt-8 lg:flex-row lg:gap-8"
       >
         {/* Collector profile */}
         <section aria-labelledby="collector-title" className="flex min-w-0 flex-1 flex-col gap-3 max-md:order-2 lg:max-w-[763px]">
@@ -198,14 +195,17 @@ export function CheckoutPage() {
             <TextField label="Nome do perfil" required error={errors.collector?.profileName?.message} {...form.register('collector.profileName')} />
             <TextField
               label="Endereço da carteira"
+              required
               readOnly
               value={selectedWallet?.address ?? ''}
               placeholder="Endereço 0x da carteira"
-              title="Preenchido pela carteira selecionada"
+              // The full address may not fit the field: available on hover (the field also scrolls).
+              title={selectedWallet?.address ?? 'Preenchido pela carteira selecionada'}
             />
             <EnsField form={form} />
             <TextField
               label="Tipo de carteira"
+              required
               readOnly
               value={selectedWallet ? PROVIDER_LABELS[selectedWallet.provider] : ''}
               placeholder="Selecione uma carteira"
@@ -225,7 +225,7 @@ export function CheckoutPage() {
               rows={6}
               aria-invalid={errors.collector?.note ? true : undefined}
               aria-describedby={errors.collector?.note ? 'collector-note-error' : undefined}
-              className="min-h-[152px] rounded-[5px] border border-line bg-transparent p-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
+              className="min-h-[152px] resize-none rounded-[3px] border border-line bg-transparent p-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
               {...form.register('collector.note')}
             />
             {errors.collector?.note ? (
@@ -251,17 +251,18 @@ export function CheckoutPage() {
               <QuoteLines quote={quote} />
             </div>
             <CouponToggle network={network} />
-            <section aria-label="Resumo do pedido" className="border-b border-brand/30 pb-3">
-              <SummaryRows quote={quote} updating={checkout.quote.isUpdating} />
+            <section aria-label="Resumo do pedido">
+              <SummaryRows quote={quote} updating={checkout.quote.isUpdating} variant="checkout" />
             </section>
           </section>
 
-          <section aria-labelledby="wallet-title" className="flex flex-col gap-5 max-md:order-1 lg:mt-3">
-            <div className="flex items-baseline justify-between gap-3">
-              <h2 id="wallet-title" className="text-[17px] leading-4 font-bold">
+          <section aria-labelledby="wallet-title" className="flex flex-col gap-5 max-md:order-1 max-md:gap-4">
+            {/* Mobile frame: title + "Trocar carteira"; desktop frame: centered title only. */}
+            <div className="flex items-baseline justify-between gap-3 md:justify-center">
+              <h2 id="wallet-title" className="text-base leading-4 font-bold md:text-[17px]">
                 Carteira e rede
               </h2>
-              <Link to="/account/wallets" className="text-[15px] font-bold text-brand-accent underline-offset-4 hover:underline">
+              <Link to="/account/wallets" className="text-sm leading-4 font-bold text-brand-accent underline-offset-4 hover:underline md:hidden">
                 Trocar carteira
               </Link>
             </div>
@@ -282,16 +283,17 @@ export function CheckoutPage() {
               onDisconnect={connection.disconnect}
             />
             {result && checkout.step === 'form' ? <FormAlert message={result.message} tone={result.tone} /> : null}
-            <div className="flex flex-col gap-3 max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-40 max-md:rounded-t-[40px] max-md:bg-surface max-md:px-6 max-md:pt-5 max-md:pb-[max(env(safe-area-inset-bottom),24px)] max-md:shadow-bar">
-              <p className="flex items-baseline justify-end gap-6 text-lg font-bold md:hidden">
+            {/* Mobile: fixed bar with "Total:" 16/18px and the 60px gradient CTA (28px margins). */}
+            <div className="flex flex-col gap-4 max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-40 max-md:rounded-t-[40px] max-md:bg-surface max-md:px-7 max-md:pt-6 max-md:pb-[max(env(safe-area-inset-bottom),32px)] max-md:shadow-bar md:mt-1">
+              <p className="flex items-baseline justify-end gap-7 text-base leading-4 font-bold md:hidden">
                 Total:
-                <span className="text-[22px] text-brand-accent">{quote ? eth(quote.total) : '—'}</span>
+                <span className="text-lg leading-4 text-brand-accent">{quote ? exactEth(quote.total) : '—'}</span>
               </p>
               <Button
                 ref={confirmButton}
                 type="submit"
                 disabled={!quote || checkout.quote.isUpdating}
-                className="h-[60px] w-full rounded-full text-base font-bold md:h-[45px] md:rounded-sm md:text-[15px]"
+                className="h-[60px] w-full rounded-full bg-linear-135 from-brand to-brand/80 text-[15px] font-bold hover:from-brand-accent hover:to-brand-accent md:h-[45px] md:rounded-[8px] md:bg-brand md:bg-none md:hover:bg-brand-accent"
               >
                 Confirmar compra
               </Button>
@@ -334,16 +336,16 @@ function EnsField({ form }: { form: UseFormReturn<CheckoutFormValues> }) {
       <label htmlFor={id} className="flex h-[29px] items-center text-[15px] leading-[15px]">
         Nome ENS (opcional)
       </label>
-      <div className="flex gap-3">
+      <div className="flex gap-2.5">
         <input
           id={id}
-          placeholder="ENS ou carteira secundária (opcional)"
+          placeholder="seunome"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${id}-error` : `${id}-suffix`}
-          className="h-10 min-w-0 flex-1 rounded-[5px] border border-line bg-transparent px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
+          className="h-10 min-w-0 flex-1 rounded-[3px] border border-line bg-transparent px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
           {...form.register('collector.ensName')}
         />
-        <span id={`${id}-suffix`} className="grid h-10 w-[78px] place-content-center rounded-[5px] border border-line text-base">
+        <span id={`${id}-suffix`} className="grid h-10 w-[78px] place-content-center rounded-[3px] border border-line text-[15px]">
           .eth
         </span>
       </div>
@@ -392,18 +394,21 @@ function QuoteLines({ quote }: { quote: Quote | undefined }) {
   return (
     <ul className="mt-3 flex flex-col gap-3">
       {quote.lines.map((line) => (
-        <li key={`${line.nftId}-${line.editionId}`} className="flex min-h-[70px] items-center gap-2 bg-surface py-1 pr-4 pl-1">
-          <div className="size-[66px] shrink-0 overflow-hidden rounded-[10px]">
+        // Frame row: 70px, 4px left padding, 66px artwork with an 8px radius.
+        <li key={`${line.nftId}-${line.editionId}`} className="flex min-h-[70px] items-center gap-2 bg-surface py-0.5 pr-4 pl-1">
+          <div className="size-[66px] shrink-0 overflow-hidden rounded-[8px]">
             <NftImage image={cartItemImage(line)} sizes="70px" />
           </div>
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <span className="line-clamp-2 text-base leading-[18px] font-bold break-words">{line.nftName}</span>
+            <span className="line-clamp-2 text-base leading-4 font-bold break-words">{line.nftName}</span>
             <span className="text-sm leading-4 text-text-muted">
-              {editionLabel({ name: line.editionName })} · ID {tokenLabel(line.nftId)}
+              ID do token: {tokenLabel(line.nftId)}
+              {/* The frame line only has the token; the edition is added when it is not the standard one. */}
+              {line.editionName === 'Standard' ? null : ` · ${editionLabel({ name: line.editionName })}`}
             </span>
           </div>
           <span className="ml-auto flex flex-col items-end gap-1.5">
-            <span className="text-right text-lg leading-4 font-bold whitespace-nowrap text-brand-accent">{eth(line.lineTotal)}</span>
+            <span className="text-right text-lg leading-4 font-bold whitespace-nowrap text-brand-accent">{exactEth(line.lineTotal)}</span>
             <span className="text-sm leading-4 text-text-secondary">
               <span className="sr-only">Quantidade: </span>(x {line.quantity})
             </span>
@@ -450,8 +455,8 @@ function WalletChoices({
     return (
       <div aria-busy="true" aria-label="Carregando carteiras" className="flex flex-col gap-4">
         {/* Same height as the wallet cards (two-line cards on mobile), so nothing below moves. */}
-        <Skeleton className="h-[98px] w-full rounded-[15px] md:h-[62px] md:rounded-none" />
-        <Skeleton className="h-[98px] w-full rounded-[15px] md:h-[62px] md:rounded-none" />
+        <Skeleton className="h-[93px] w-full rounded-[14px] md:h-[45px] md:rounded-[3px]" />
+        <Skeleton className="h-[93px] w-full rounded-[14px] md:h-[45px] md:rounded-[3px]" />
       </div>
     )
   }
@@ -466,15 +471,17 @@ function WalletChoices({
   }
   return (
     <div className="flex flex-col gap-2">
-      <div role="radiogroup" aria-label="Carteira" aria-describedby={error ? 'wallet-error' : undefined} className="flex flex-col gap-4">
+      <div role="radiogroup" aria-label="Carteira" aria-describedby={error ? 'wallet-error' : undefined} className="flex flex-col gap-5 md:gap-4">
         {wallets.map((wallet) => {
           const checked = wallet.id === selectedId
           return (
             <label
               key={wallet.id}
               className={cn(
-                'flex cursor-pointer items-center gap-4 rounded-[15px] border bg-surface px-4 py-4 transition-colors md:min-h-[45px] md:rounded-none md:bg-transparent md:py-2',
-                checked ? 'border-brand' : 'border-line hover:border-line-soft',
+                // Mobile: 93px card (14px radius, frame shadow, no border: the radio shows the
+                // choice); desktop: 45px option with a 3px radius, orange border when selected.
+                'flex min-h-[93px] cursor-pointer items-center gap-[19px] rounded-[14px] bg-surface px-[19px] py-3 shadow-[0_20px_20px_#0A060473] transition-colors md:min-h-[45px] md:gap-2.5 md:rounded-[3px] md:border md:bg-transparent md:px-3 md:py-2 md:shadow-none',
+                checked ? 'md:border-brand' : 'md:border-line md:hover:border-line-soft',
               )}
             >
               <input
@@ -483,16 +490,22 @@ function WalletChoices({
                 value={wallet.id}
                 checked={checked}
                 onChange={() => onSelect(wallet.id)}
-                className="size-5 shrink-0 cursor-pointer appearance-none rounded-full border-2 border-brand/70 checked:border-brand checked:bg-brand checked:shadow-[inset_0_0_0_3px_var(--kurio-surface)]"
+                // 16px ring (1.2px) with a 10px dot, as in the frames.
+                className="size-4 shrink-0 cursor-pointer appearance-none rounded-full border-[1.2px] border-line-soft checked:border-brand checked:bg-brand checked:shadow-[inset_0_0_0_2px_var(--kurio-surface)] md:checked:shadow-[inset_0_0_0_2px_var(--kurio-ink)]"
               />
-              <ProviderMark provider={wallet.provider} className="max-md:hidden" />
-              <span className="flex min-w-0 flex-1 flex-col gap-1">
-                <span className="text-[15px] leading-5 font-bold md:font-normal">
-                  {wallet.label} <span className="font-normal text-text-muted">— {PROVIDER_LABELS[wallet.provider]}</span>
+              <span className="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-3">
+                <span className="text-base leading-4 font-bold md:text-[15px] md:leading-5 md:font-normal">
+                  {wallet.label}
+                  {/* The provider is visible on desktop only when the nickname does not already name it. */}
+                  <span className={cn('sr-only md:font-normal md:text-text-muted', !namesProvider(wallet) && 'md:not-sr-only')}> — {PROVIDER_LABELS[wallet.provider]}</span>
                 </span>
-                <span className="text-sm text-text-secondary">
-                  {shortAddress(wallet.address)} · {wallet.role === 'primary' ? 'principal' : 'secundária'}
-                  {checked ? ` · Rede ${NETWORK_LABELS[network]}` : ''}
+                <span className="text-sm leading-[22px] text-text-secondary md:shrink-0 md:text-[13px] md:leading-5 md:text-text-muted">
+                  {shortAddress(wallet.address)}
+                  <span className="md:sr-only">
+                    {' '}
+                    · {wallet.role === 'primary' ? 'principal' : 'secundária'}
+                    {checked ? ` · Rede ${NETWORK_LABELS[network]}` : ''}
+                  </span>
                 </span>
               </span>
             </label>
@@ -506,6 +519,11 @@ function WalletChoices({
       ) : null}
     </div>
   )
+}
+
+function namesProvider(wallet: Wallet) {
+  const brand = PROVIDER_LABELS[wallet.provider].split(' ')[0].toLowerCase()
+  return wallet.label.toLowerCase().includes(brand)
 }
 
 function WalletConnectionPanel({
