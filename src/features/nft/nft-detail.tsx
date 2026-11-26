@@ -514,8 +514,9 @@ export function NftDetailsSection({ nft }: { nft: Nft }) {
       </div>
       <div className="mt-3 flex flex-col gap-3 text-sm leading-6 text-text-secondary">
         <p>
-          {nft.description} A propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e
-          um registro permanente de procedência registrado na rede.
+          {/* On mobile the description is already the first paragraph of the purchase area, right above. */}
+          <span className="max-md:hidden">{nft.description} </span>A propriedade inclui a arte em alta resolução,
+          lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede.
         </p>
         <div>
           <h3 className="font-bold text-foreground">Rede:</h3>
@@ -523,13 +524,11 @@ export function NftDetailsSection({ nft }: { nft: Nft }) {
         </div>
         <div>
           <h3 className="font-bold text-foreground">Contrato:</h3>
-          <p>
-            Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.
-          </p>
+          <p>0x7A42...19E8 • Contrato inteligente ERC-721 verificado (simulado).</p>
         </div>
         <div>
           <h3 className="font-bold text-foreground">Direitos autorais:</h3>
-          <p>0x7A42...19E8 • Contrato inteligente ERC-721 verificado (simulado).</p>
+          <p>5% para o criador nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.</p>
         </div>
       </div>
     </section>
