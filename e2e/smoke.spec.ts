@@ -11,6 +11,8 @@ test('lists NFTs over REST and applies nft.updated received by socket.io-client'
     if (new URL(request.url()).pathname === '/api/nfts') catalogRequests.push(request.url())
   })
 
+  // Reconnection backoff is driven by the page clock (`runFor` below), never by real waits.
+  await page.clock.install()
   await openWithScenario(page, '/')
 
   const cards = page.getByTestId('nft-card')
@@ -50,7 +52,9 @@ test('lists NFTs over REST and applies nft.updated received by socket.io-client'
 
   const requestsBeforeReconnect = catalogRequests.length
   await page.evaluate(() => window.__mocks!.restoreSocket())
-  await expect(page.getByTestId('realtime-status')).toHaveAttribute('data-status', 'connected', { timeout: 10_000 })
+  // Skips whatever backoff delay the client was in (at most 2 s).
+  await page.clock.runFor(2_000)
+  await expect(page.getByTestId('realtime-status')).toHaveAttribute('data-status', 'connected')
   await expect(first.getByTestId('nft-price')).toHaveText('0.0008 ETH')
   expect(catalogRequests.length).toBeGreaterThan(requestsBeforeReconnect)
 })

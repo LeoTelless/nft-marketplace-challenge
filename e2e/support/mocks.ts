@@ -1,5 +1,13 @@
 import type { Page } from '@playwright/test'
 
+/** An event as emitted by the simulated Socket.IO server (opaque to the tests, except these fields). */
+export interface RealtimeEventPayload {
+  eventId: string
+  type: 'nft.updated' | 'order.updated'
+  version: number
+  resource: { type: string; id: string }
+}
+
 /**
  * Typed access to `window.__mocks` (see `src/mocks/control.ts`). Every call changes the
  * simulated backend or emits through the simulated Socket.IO server; tests never touch the
@@ -33,8 +41,10 @@ export interface MocksControl {
   resolveOrder(orderId: string, outcome: 'confirmed' | 'rejected'): unknown
   expireSessions(): void
   disconnectWallets(): void
-  replayLastEvent(type?: 'nft.updated' | 'order.updated'): unknown
-  emitStaleNftEvent(nftId: string): unknown
+  replayLastEvent(type?: 'nft.updated' | 'order.updated'): RealtimeEventPayload | null
+  /** Re-sends an event emitted earlier (same `eventId`), also after a reload or a new login. */
+  replayEvent(event: RealtimeEventPayload): RealtimeEventPayload
+  emitStaleNftEvent(nftId: string): RealtimeEventPayload | null
   dropSocket(): void
   restoreSocket(): void
   connectedSockets(): Array<{ userId: string | null }>
