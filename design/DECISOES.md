@@ -19,3 +19,5 @@ O Figma tem inconsistências (apontadas nos 70 comentários do arquivo original,
 - Pagamento: primeira opção de carteira é WalletConnect (como no mobile). No mobile, os dados do colecionador também são exigidos, em seção anterior à carteira.
 - Pedido pendente e recusado: mesmo padrão visual da confirmação, com ícone, texto e ações próprios; o recibo só aparece no confirmado.
 - Ícones informativos no lugar das letras dos destaques do Início (lucide, equivalente aos sugeridos).
+- Pagamento (fluxos): "Nome ENS" e "Código de indicação" marcados como obrigatórios no Figma ficam **opcionais** (validados só quando preenchidos): exigi-los bloquearia compradores sem ENS ou sem indicação. "Endereço da carteira" e "Tipo de carteira" vêm da carteira cadastrada selecionada (requisito de usar as carteiras cadastradas), não de digitação livre; "Usar outra carteira?" = escolher a carteira secundária.
+- Pagamento: a confirmação tem um passo de revisão ("Revisar pedido" → "Confirmar compra"); se a cotação mudar depois da revisão, o botão fica bloqueado até "Aceitar novos valores".
