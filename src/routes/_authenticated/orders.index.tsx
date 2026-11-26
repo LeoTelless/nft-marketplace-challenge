@@ -2,9 +2,9 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { CircleCheck, CircleX, Hourglass, ShoppingCart, TriangleAlert } from 'lucide-react'
 import type { Order } from '@/contracts'
 import { AccountHeading, AccountLayout } from '@/features/account/account-layout'
+import { exactEth } from '@/features/cart/format'
 import { formatOrderDate } from '@/features/orders/format'
 import { useOrders } from '@/features/orders/use-order'
-import { formatEth } from '@/shared/lib/eth'
 import { apiErrorMessage } from '@/shared/lib/form-errors'
 import { cn } from '@/shared/lib/utils'
 import { Button, buttonVariants } from '@/shared/ui/button'
@@ -74,7 +74,8 @@ function OrderRow({ order }: { order: Order }) {
   const units = order.receipt.lines.reduce((sum, line) => sum + line.quantity, 0)
   return (
     <li className="relative flex flex-wrap items-center gap-x-6 gap-y-2 bg-surface px-4 py-4 md:px-6">
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
+      {/* Below sm the text takes the whole row and the total and status go to the next one. */}
+      <div className="flex min-w-0 flex-1 basis-full flex-col gap-1 sm:basis-0">
         <Link
           to="/orders/$orderId"
           params={{ orderId: order.id }}
@@ -86,7 +87,7 @@ function OrderRow({ order }: { order: Order }) {
           {formatOrderDate(order.createdAt)} · {units} {units === 1 ? 'item' : 'itens'} · {order.receipt.lines.map((l) => l.nftName).join(', ')}
         </span>
       </div>
-      <span className="text-lg font-bold text-brand-accent">{formatEth(order.receipt.total, { maxDecimals: 6 })}</span>
+      <span className="text-lg font-bold text-brand-accent">{exactEth(order.receipt.total)}</span>
       <span className={cn('inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm', status.className)}>
         <Icon className="size-4" aria-hidden="true" />
         {status.label}
