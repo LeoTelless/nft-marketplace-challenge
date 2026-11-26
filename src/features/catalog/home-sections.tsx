@@ -145,7 +145,8 @@ export function HomeHero() {
             >
               EXPLORAR
             </Link>
-            <div className="mt-6 flex justify-end lg:mt-11 lg:pr-0">{dots}</div>
+            {/* 8px row as in the frame; the 24px hit areas overflow it without adding height. */}
+            <div className="mt-6 flex h-2 items-center justify-end lg:mt-11">{dots}</div>
           </div>
           {artwork('(min-width: 1024px) 450px, 300px', 'aspect-square w-[300px] shrink-0 rounded-3xl lg:w-[450px]')}
         </div>
@@ -202,31 +203,32 @@ const PROMOS = [
 
 export function HomePromos() {
   return (
-    <section aria-label="Coleções em destaque" className="container-page grid gap-7 md:grid-cols-2">
+    <section aria-label="Coleções em destaque" className="container-page grid gap-7 lg:grid-cols-2">
       {PROMOS.map((promo) => (
-        <article key={promo.image} className="flex min-h-[200px] overflow-hidden rounded-md bg-surface md:h-[250px]">
-          <div className="w-[42%] shrink-0 md:w-1/2">
+        <article key={promo.image} className="flex h-[220px] overflow-hidden rounded-md bg-surface md:h-[250px]">
+          {/* Frame: 292px artwork + 264px right-aligned text column with 30px right padding. */}
+          <div className="w-[42%] shrink-0 md:w-[292px]">
             <NftImage
               image={{ url: `/images/nft/${promo.image}-800.webp`, alt: '', width: 800, height: 800 }}
-              sizes="(min-width: 768px) 290px, 40vw"
+              sizes="(min-width: 768px) 292px, 40vw"
               alt=""
               className="rounded-[18px]"
             />
           </div>
-          <div className="flex flex-1 flex-col items-end justify-center gap-3 p-4 text-right md:pr-[30px]">
+          <div className="flex min-w-0 flex-1 flex-col items-end p-4 text-right md:pt-[37px] md:pr-[30px] md:pb-[30px] md:pl-2">
             <h3 className="text-base leading-6 font-bold text-foreground md:text-lg">
               {promo.title[0]}
               <br />
               {promo.title[1]}
             </h3>
-            <p className="text-[13px] leading-6 text-text-secondary md:text-sm">{promo.text}</p>
+            <p className="mt-2 text-[13px] leading-6 text-text-secondary md:text-sm">{promo.text}</p>
             <Link
               to="/"
               search={{ ...promo.search }}
               hash="catalogo"
               activeOptions={{ includeHash: true }}
               aria-label={promo.label}
-              className={cn(buttonVariants(), 'h-10 w-[140px] font-medium')}
+              className={cn(buttonVariants(), 'mt-auto h-10 w-[140px] shrink-0 font-medium')}
             >
               Explorar <ArrowRightIcon className="size-[18px]" />
             </Link>

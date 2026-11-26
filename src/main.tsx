@@ -3,6 +3,7 @@ import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createQueryClient } from '@/shared/api/query-client'
+import { parseSearch, stringifySearch } from '@/shared/lib/search-serialization'
 import { routeTree } from './routeTree.gen'
 import './index.css'
 
@@ -15,6 +16,8 @@ const router = createRouter({
   // Route loaders reuse the Query cache; Router's own cache would only duplicate it.
   defaultPreloadStaleTime: 0,
   scrollRestoration: true,
+  parseSearch,
+  stringifySearch,
 })
 
 declare module '@tanstack/react-router' {

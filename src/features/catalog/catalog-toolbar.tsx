@@ -1,44 +1,47 @@
 import type { NftSort } from '@/contracts'
 import { cn } from '@/shared/lib/utils'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select'
-import { SORT_OPTIONS } from './catalog-search'
+import { CATALOG_VIEWS, SORT_OPTIONS, type CatalogView } from './catalog-search'
 
 /**
- * "Todos os NFTs" / "Em alta" (featured) views and the sort select. Views are toggle buttons
+ * Catalog views (the three tabs of the layout) and the sort select. Views are toggle buttons
  * (`aria-pressed`): they filter the same grid, they are not tab panels.
  */
 export function CatalogViews({
-  featured,
+  view,
   onChange,
   className,
 }: {
-  featured: boolean
-  onChange: (featured: boolean | undefined) => void
+  view: CatalogView
+  onChange: (view: CatalogView) => void
   className?: string
 }) {
-  const views = [
-    { label: 'Todos os NFTs', active: !featured, value: undefined },
-    { label: 'Em alta', active: featured, value: true },
-  ] as const
   return (
-    <div role="group" aria-label="Visualização do catálogo" className={cn('flex items-center gap-5', className)}>
-      {views.map((view) => (
-        <button
-          key={view.label}
-          type="button"
-          aria-pressed={view.active}
-          onClick={() => onChange(view.value)}
-          className={cn(
-            'relative cursor-pointer pb-1 text-sm leading-4 whitespace-nowrap transition-colors md:text-[15px]',
-            'after:absolute after:inset-x-0 after:-bottom-[3px] after:h-0.5 after:bg-brand after:transition-opacity',
-            view.active
-              ? 'font-bold text-brand-accent after:opacity-100 md:font-medium'
-              : 'text-foreground after:opacity-0 hover:text-brand-accent',
-          )}
-        >
-          {view.label}
-        </button>
-      ))}
+    <div
+      role="group"
+      aria-label="Visualização do catálogo"
+      className={cn('scrollbar-none flex items-center gap-4 overflow-x-auto md:gap-5', className)}
+    >
+      {CATALOG_VIEWS.map((item) => {
+        const active = item.value === view
+        return (
+          <button
+            key={item.value}
+            type="button"
+            aria-pressed={active}
+            onClick={() => onChange(item.value)}
+            className={cn(
+              'relative shrink-0 cursor-pointer pb-1 text-sm leading-4 whitespace-nowrap transition-colors md:pb-1.5 md:text-[15px] md:font-medium',
+              'after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-brand after:transition-opacity',
+              active
+                ? 'font-bold text-brand-accent after:opacity-100'
+                : 'text-foreground after:opacity-0 hover:text-brand-accent',
+            )}
+          >
+            {item.label}
+          </button>
+        )
+      })}
     </div>
   )
 }

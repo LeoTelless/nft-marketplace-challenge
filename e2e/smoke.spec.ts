@@ -14,7 +14,7 @@ test('lists NFTs over REST and applies nft.updated received by socket.io-client'
   await openWithScenario(page, '/')
 
   const cards = page.getByTestId('nft-card')
-  await expect(cards).toHaveCount(12)
+  await expect(cards).toHaveCount(9)
   await expect(page.getByTestId('realtime-status')).toHaveAttribute('data-status', 'connected')
 
   const first = cards.first()

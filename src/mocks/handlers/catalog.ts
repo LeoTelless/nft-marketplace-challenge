@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import { endpoints, nftListQuerySchema, type FieldErrors, type NftListResponse } from '@/contracts'
+import { endpoints, nftListQuerySchema, RECENT_LISTING_DAYS, type FieldErrors, type NftListResponse } from '@/contracts'
 import { compareEth } from '@/shared/lib/eth'
 import { db, findNft } from '../db/store'
 import { is } from '../scenarios'
@@ -14,6 +14,7 @@ function parseListQuery(url: URL) {
     maxPrice: params.get('maxPrice') || undefined,
     availability: params.get('availability') || undefined,
     featured: params.has('featured') ? params.get('featured') === 'true' : undefined,
+    recent: params.has('recent') ? params.get('recent') === 'true' : undefined,
     sort: params.get('sort') || undefined,
     page: params.has('page') ? Number(params.get('page')) : undefined,
     pageSize: params.has('pageSize') ? Number(params.get('pageSize')) : undefined,
@@ -46,6 +47,12 @@ export const catalogHandlers = [
       if (query.availability === 'available') items = items.filter((nft) => nft.totalAvailable > 0)
       if (query.availability === 'sold_out') items = items.filter((nft) => nft.totalAvailable === 0)
       if (query.featured !== undefined) items = items.filter((nft) => nft.featured === query.featured)
+      if (query.recent) {
+        // Relative to the newest listing (not the wall clock), so the fixtures stay deterministic.
+        const newest = Math.max(...db().nfts.map((nft) => Date.parse(nft.createdAt)))
+        const since = newest - RECENT_LISTING_DAYS * 86_400_000
+        items = items.filter((nft) => Date.parse(nft.createdAt) >= since)
+      }
 
       items.sort((a, b) => {
         switch (query.sort) {

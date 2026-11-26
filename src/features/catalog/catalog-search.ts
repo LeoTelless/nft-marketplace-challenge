@@ -9,7 +9,8 @@ import {
 } from '@/contracts'
 import { isEthAmount } from '@/shared/lib/eth'
 
-export const CATALOG_PAGE_SIZE = 12
+/** 3×3 grid of the desktop frame (48 NFTs → 6 pages). */
+export const CATALOG_PAGE_SIZE = 9
 
 /** Portuguese labels of the API categories ("Coleções" in the layout), in alphabetical order. */
 export const CATEGORY_LABELS: Record<NftCategory, string> = {
@@ -32,6 +33,15 @@ export const SORT_OPTIONS: ReadonlyArray<{ value: NftSort; label: string }> = [
   { value: 'price_desc', label: 'Maior preço' },
 ]
 
+export type CatalogView = 'all' | 'new' | 'trending'
+
+/** Tabs of the layout. "Novos lançamentos" = `recent` filter, "Em alta" = `featured` filter. */
+export const CATALOG_VIEWS: ReadonlyArray<{ value: CatalogView; label: string }> = [
+  { value: 'all', label: 'Todos os NFTs' },
+  { value: 'new', label: 'Novos lançamentos' },
+  { value: 'trending', label: 'Em alta' },
+]
+
 export const AVAILABILITY_LABELS = {
   all: 'Todos',
   available: 'Disponíveis',
@@ -51,15 +61,27 @@ const ethParam = z
  * Defaults are stripped from the URL (see the route), keeping links short and canonical.
  */
 export const catalogSearchSchema = z.object({
-  q: z.string().trim().max(100).optional().catch(undefined),
+  // "true"/"false" come back from the URL as booleans (see `searchSerialization` in main.tsx).
+  q: z
+    .union([z.string(), z.number(), z.boolean()])
+    .transform((value) => String(value).trim())
+    .pipe(z.string().max(100))
+    .optional()
+    .catch(undefined),
   category: z
-    .preprocess((value) => (typeof value === 'string' ? [value] : value), z.array(nftCategorySchema))
+    // Readable URL: `?category=art,music` (an array is also accepted).
+    .preprocess(
+      (value) => (typeof value === 'string' ? value.split(',').filter(Boolean) : value),
+      z.array(nftCategorySchema),
+    )
     .optional()
     .catch(undefined),
   minPrice: ethParam,
   maxPrice: ethParam,
   availability: nftAvailabilityFilterSchema.default('all').catch('all'),
   featured: z.boolean().optional().catch(undefined),
+  /** "Novos lançamentos" tab (listed in the last 30 days). Exclusive with `featured` in the tabs. */
+  recent: z.boolean().optional().catch(undefined),
   sort: nftSortSchema.default('newest').catch('newest'),
   page: z.coerce.number().int().min(1).default(1).catch(1),
 })
@@ -81,6 +103,7 @@ export function toListQuery(search: CatalogSearch): NftListQuery {
     maxPrice: search.maxPrice,
     availability: search.availability,
     featured: search.featured,
+    recent: search.recent,
     sort: search.sort,
     page: search.page,
     pageSize: CATALOG_PAGE_SIZE,
@@ -94,7 +117,8 @@ export function hasActiveFilters(search: CatalogSearch): boolean {
     search.minPrice ||
     search.maxPrice ||
     search.availability !== 'all' ||
-    search.featured,
+    search.featured ||
+    search.recent,
   )
 }
 

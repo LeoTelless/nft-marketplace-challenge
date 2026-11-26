@@ -15,7 +15,7 @@ export interface FavoriteControl {
 /**
  * NFT card (frame 206 of the Figma grid, the reference card): artwork on a Surface Card box,
  * name and price below, always aligned. On mobile the box gets the rounded gradient of the
- * mobile frame. The whole card is one link; the favorite button is a sibling (never nested).
+ * mobile frame. Names wrap to two lines on mobile (never cut the token number). The whole card is one link; the favorite button is a sibling (never nested).
  */
 export function NftCard({
   nft,
@@ -53,11 +53,11 @@ export function NftCard({
         </div>
       </div>
       <div className="flex flex-col gap-1.5 px-2 pt-2 md:gap-3 md:px-0 md:pt-3">
-        <Heading className="truncate text-[15px] leading-5 font-normal text-foreground md:text-base md:leading-4">
+        <Heading className="line-clamp-2 min-h-10 text-[15px] leading-5 font-normal break-words text-foreground md:line-clamp-1 md:min-h-0 md:text-base md:leading-4">
           <Link
             to="/nft/$nftId"
             params={{ nftId: nft.id }}
-            className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:rounded-[20px] focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-brand-accent md:focus-visible:after:rounded-none"
+            className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-0 focus-visible:after:rounded-[20px] focus-visible:after:outline-2 focus-visible:after:outline-solid focus-visible:after:outline-offset-2 focus-visible:after:outline-brand-accent md:focus-visible:after:rounded-none"
           >
             {nft.name}
           </Link>
@@ -103,7 +103,7 @@ export function NftCardSkeleton({ className }: { className?: string }) {
         <Skeleton className="aspect-square w-full rounded-2xl md:rounded-[15px]" />
       </div>
       <div className="flex flex-col gap-1.5 px-2 pt-2 md:gap-3 md:px-0 md:pt-3">
-        <Skeleton className="h-5 w-3/4 md:h-4" />
+        <Skeleton className="h-10 w-3/4 md:h-4" />
         <Skeleton className="h-4 w-1/3" />
       </div>
     </div>

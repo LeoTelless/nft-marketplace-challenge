@@ -61,6 +61,9 @@ export type NftSort = z.infer<typeof nftSortSchema>
 export const nftAvailabilityFilterSchema = z.enum(['all', 'available', 'sold_out'])
 export type NftAvailabilityFilter = z.infer<typeof nftAvailabilityFilterSchema>
 
+/** Window of the "Novos lançamentos" filter, counted back from the most recent listing. */
+export const RECENT_LISTING_DAYS = 30
+
 /**
  * `GET /nfts` query. Arrays are sent as repeated params (`category=art&category=music`).
  * Price bounds apply to `minPrice`. Filters combine with AND (categories with OR).
@@ -72,6 +75,8 @@ export const nftListQuerySchema = z.object({
   maxPrice: ethAmountSchema.optional(),
   availability: nftAvailabilityFilterSchema.default('all'),
   featured: z.boolean().optional(),
+  /** "Novos lançamentos": only NFTs listed in the last `RECENT_LISTING_DAYS` days (see the mock). */
+  recent: z.boolean().optional(),
   sort: nftSortSchema.default('newest'),
   page: z.number().int().min(1).default(1),
   pageSize: z.number().int().min(1).max(48).default(12),
