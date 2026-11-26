@@ -1,18 +1,23 @@
 import { Link, useRouterState } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/utils'
 import { HeartIcon, HomeIcon, ShopIcon, UserIcon } from '@/shared/ui/icons'
+import { MobileMenu } from './site-header'
 
 /**
  * Bottom tab bar of the mobile frame (< 768px): Início, Favoritos, Carrinho (with counter) and
  * Conta. The central "scan" button of the layout was left out: scanning is not in scope
  * (DECISOES.md). Favorites is a private page: visitors are sent to login by its guard.
+ * "Conta" opens the navigation/account drawer (login or profile, wallets, logout), since the
+ * Início and Detalhe frames have no header on mobile.
  */
 export function MobileTabBar({
   cartCount,
-  accountHref,
+  account,
 }: {
   cartCount: number
-  accountHref: '/account/profile' | '/login'
+  /** Account block of the drawer (`LoginButton` or `UserMenu`). */
+  account: ReactNode
 }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   const item = (active: boolean) =>
@@ -64,16 +69,19 @@ export function MobileTabBar({
           </Link>
         </li>
         <li className="flex flex-1">
-          <Link
-            to={accountHref}
-            aria-current={pathname === accountHref ? 'page' : undefined}
-            className={item(
-              pathname === '/account/profile' || pathname === '/account/wallets' || pathname === '/login',
-            )}
-          >
-            <UserIcon className="size-5" />
-            Conta
-          </Link>
+          <MobileMenu
+            account={account}
+            trigger={
+              <button
+                type="button"
+                className={item(pathname.startsWith('/account') || pathname === '/login')}
+                data-testid="tab-account"
+              >
+                <UserIcon className="size-5" />
+                Conta
+              </button>
+            }
+          />
         </li>
       </ul>
     </nav>

@@ -72,7 +72,7 @@ function Newsletter() {
           onChange={(event) => setEmail(event.target.value)}
           aria-invalid={message?.tone === 'error' || undefined}
           aria-describedby={message ? `${id}-message` : undefined}
-          className="min-w-0 flex-1 rounded-l-sm bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-text-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-accent"
+          className="min-w-0 flex-1 rounded-l-sm bg-transparent px-3 text-sm text-foreground placeholder:text-text-muted focus-visible:outline-2 focus-visible:outline-solid focus-visible:-outline-offset-2 focus-visible:outline-brand-accent"
         />
         <button
           type="submit"
@@ -98,7 +98,7 @@ export function SiteFooter() {
     <footer className="container-page mt-16 md:mt-24">
       <section
         aria-label="Serviços KURIO"
-        className="grid grid-cols-1 gap-8 bg-surface p-6 md:grid-cols-2 md:p-8 lg:grid-cols-[repeat(3,1fr)_1.35fr] lg:gap-0"
+        className="grid grid-cols-1 gap-8 bg-surface p-6 md:grid-cols-2 md:p-8 lg:grid-cols-[265px_265px_265px_1fr] lg:gap-0"
       >
         {SERVICES.map(({ icon: Icon, title, text }) => (
           <div key={title} className="flex flex-col gap-3 lg:border-r lg:border-brand lg:px-4">
@@ -109,12 +109,12 @@ export function SiteFooter() {
             <p className="max-w-[204px] text-sm leading-[22px] text-text-secondary">{text}</p>
           </div>
         ))}
-        <div className="lg:px-4">
+        <div className="lg:pl-4">
           <Newsletter />
         </div>
       </section>
 
-      <div className="grid gap-4 bg-surface-dark px-6 py-6 text-sm leading-[22px] text-foreground sm:grid-cols-2 md:px-8 lg:grid-cols-4 lg:items-center lg:py-8">
+      <div className="grid gap-4 bg-surface-dark px-6 py-6 text-sm leading-[22px] text-foreground sm:grid-cols-2 md:px-8 lg:grid-cols-[211px_211px_211px_1fr] lg:items-center lg:gap-x-[91px] lg:py-8">
         <Link to="/" className="text-sm font-bold tracking-[0.1em]">
           KURIO
         </Link>
@@ -131,7 +131,7 @@ export function SiteFooter() {
         </a>
       </div>
 
-      <div className="grid gap-10 bg-surface px-6 py-8 sm:grid-cols-2 md:px-8 lg:grid-cols-4">
+      <div className="grid gap-10 bg-surface px-6 py-8 sm:grid-cols-2 md:px-8 lg:grid-cols-[211px_211px_211px_1fr] lg:gap-x-[91px]">
         <nav aria-labelledby="footer-profile" className="flex flex-col gap-2">
           <h2 id="footer-profile" className={columnTitle}>
             Meu perfil
@@ -143,13 +143,22 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <Link to="/account/wallets" className={linkItem}>
-                Minhas carteiras
+              {/* "Minha coleção" = what the collector bought (orders). */}
+              <Link to="/orders" className={linkItem}>
+                Minha coleção
               </Link>
             </li>
-            <li className={soonItem}>Atividade (em breve)</li>
+            <li>
+              <Link to="/orders" className={linkItem}>
+                Atividade
+              </Link>
+            </li>
             <li className={soonItem}>Estúdio do criador (em breve)</li>
-            <li className={soonItem}>Lista de interesse (em breve)</li>
+            <li>
+              <Link to="/account/favorites" className={linkItem}>
+                Lista de interesse
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className="flex flex-col gap-2">

@@ -44,7 +44,11 @@ test('the login dialog traps focus, maps API errors and closes back to the page'
   // In-app navigation (the header button), so closing returns to the cart.
   const headerLogin = page.getByTestId('header-login').first()
   if (await headerLogin.isVisible()) await headerLogin.click()
-  else await page.getByRole('link', { name: 'Conta', exact: true }).click()
+  else {
+    // Mobile: the "Conta" tab opens the navigation/account drawer, which has the login button.
+    await page.getByRole('button', { name: 'Conta', exact: true }).click()
+    await page.getByRole('dialog', { name: 'Menu' }).getByTestId('header-login').click()
+  }
   const dialog = authDialog(page)
   await expect(dialog).toBeVisible()
   await dialog.getByRole('button', { name: 'Entrar', exact: true }).click()

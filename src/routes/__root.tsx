@@ -1,4 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query'
+import type { CSSProperties } from 'react'
 import { createRootRouteWithContext, Outlet, useRouterState } from '@tanstack/react-router'
 import { SessionProvider } from '@/features/auth/session-provider'
 import { DemoPanel } from '@/features/demo/demo-panel'
@@ -31,12 +32,24 @@ function useHidesTabBar() {
   })
 }
 
+/** Screens whose mobile frame has no header (the tab bar gives access to menu and account). */
+function useHidesMobileHeader() {
+  return useRouterState({
+    select: (state) => state.matches.some((match) => match.routeId === '/' || match.routeId === '/nft/$nftId'),
+  })
+}
+
 function AccountSlot({ variant }: { variant: 'header' | 'menu' }) {
   const { user, status } = useSession()
   const logout = useLogout()
   if (status === 'loading') {
     // Reserve the button box while the stored session is validated (no layout shift).
-    return <span aria-hidden="true" className={cn('block h-[35px] rounded-sm bg-surface', variant === 'header' ? 'w-[100px]' : 'w-full')} />
+    return (
+      <span
+        aria-hidden="true"
+        className={cn('block h-[35px] rounded-sm bg-surface', variant === 'header' ? 'w-[100px]' : 'w-full')}
+      />
+    )
   }
   if (!user) return <LoginButton className={variant === 'menu' ? 'w-full' : undefined} />
   return <UserMenu name={user.name} email={user.email} onLogout={() => logout.mutate()} loggingOut={logout.isPending} />
@@ -44,8 +57,8 @@ function AccountSlot({ variant }: { variant: 'header' | 'menu' }) {
 
 function RootLayout() {
   const cartCount = useCartCount()
-  const { user } = useSession()
   const hideTabBar = useHidesTabBar()
+  const hideMobileHeader = useHidesMobileHeader()
 
   return (
     <SessionProvider>
@@ -60,6 +73,7 @@ function RootLayout() {
           cart={<CartButton count={cartCount} />}
           account={<AccountSlot variant="header" />}
           mobileAccount={<AccountSlot variant="menu" />}
+          hideBelowMd={hideMobileHeader}
         />
         <main id="conteudo" tabIndex={-1} className={cn('flex-1 outline-none', !hideTabBar && 'max-md:pb-6')}>
           <Outlet />
@@ -68,8 +82,10 @@ function RootLayout() {
           <SiteFooter />
         </div>
       </div>
-      <DemoPanel />
-      {hideTabBar ? null : <MobileTabBar cartCount={cartCount} accountHref={user ? '/account/profile' : '/login'} />}
+      <div className="contents" style={{ '--mobile-bar-offset': hideTabBar ? '184px' : '96px' } as CSSProperties}>
+        <DemoPanel />
+      </div>
+      {hideTabBar ? null : <MobileTabBar cartCount={cartCount} account={<AccountSlot variant="menu" />} />}
     </SessionProvider>
   )
 }

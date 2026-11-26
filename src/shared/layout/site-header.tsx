@@ -47,9 +47,12 @@ const navItemClass = (active: boolean) =>
 /** Pages outside the scope (editorial): shown, but clearly not navigable. */
 function ComingSoon({ children, className }: { children: string; className?: string }) {
   return (
-    <span aria-disabled="true" title="Em breve" className={cn('cursor-not-allowed', className)}>
+    <span aria-disabled="true" className={cn('cursor-not-allowed text-text-secondary', className)}>
       {children}
-      <span className="sr-only"> (em breve)</span>
+      {/* Visible text, not only color/cursor (A11Y-10). */}
+      <span className="ml-1 self-start rounded-xs border border-line-soft px-1 text-[10px] leading-[14px] font-normal tracking-normal text-text-muted">
+        <span className="sr-only">(</span>em breve<span className="sr-only">)</span>
+      </span>
     </span>
   )
 }
@@ -128,7 +131,7 @@ function HeaderSearch() {
               placeholder="Explorar coleções"
               value={term}
               onChange={(event) => setTerm(event.target.value)}
-              className="h-10 min-w-0 flex-1 rounded-sm border border-line bg-surface-dark px-3 text-sm text-foreground outline-none placeholder:text-text-muted focus-visible:border-brand"
+              className="h-10 min-w-0 flex-1 rounded-sm border border-line bg-surface-dark px-3 text-sm text-foreground placeholder:text-text-muted focus-visible:border-brand"
             />
             <button
               type="submit"
@@ -144,22 +147,39 @@ function HeaderSearch() {
 }
 
 /** Mobile/tablet (< 1024px) navigation drawer (Radix Dialog: focus trapped, Esc closes, focus returns). */
-function MobileMenu({ account }: { account: ReactNode }) {
+/**
+ * Navigation + account drawer. Opened by the hamburger of the compact header (tablet and screens
+ * without a mobile frame) or by the "Conta" tab of the mobile tab bar.
+ */
+export function MobileMenu({ account, trigger }: { account: ReactNode; trigger?: ReactNode }) {
   const active = useActiveNav()
+  const [open, setOpen] = useState(false)
   const linkClass = (isActive: boolean) =>
     cn(
       'flex h-12 items-center border-b border-line text-base',
       isActive ? 'font-bold text-brand-accent' : 'text-foreground',
     )
   return (
-    <Sheet>
-      <SheetTrigger
-        aria-label="Abrir menu"
-        className="grid size-10 cursor-pointer place-content-center rounded-full text-foreground hover:text-brand-accent lg:hidden"
+    <Sheet open={open} onOpenChange={setOpen}>
+      {trigger ? (
+        <SheetTrigger asChild>{trigger}</SheetTrigger>
+      ) : (
+        <SheetTrigger
+          aria-label="Abrir menu"
+          className="grid size-10 cursor-pointer place-content-center rounded-full text-foreground hover:text-brand-accent lg:hidden"
+        >
+          <Menu className="size-6" aria-hidden="true" />
+        </SheetTrigger>
+      )}
+      <SheetContent
+        side="right"
+        className="w-[85%] max-w-sm gap-0 p-0"
+        // Any link followed from the drawer (account links included, even from the portaled
+        // user menu: React events bubble through portals) closes it.
+        onClickCapture={(event) => {
+          if ((event.target as HTMLElement).closest('a[href]')) setOpen(false)
+        }}
       >
-        <Menu className="size-6" aria-hidden="true" />
-      </SheetTrigger>
-      <SheetContent side="right" className="w-[85%] max-w-sm gap-0 p-0">
         <SheetHeader className="px-6 pt-6">
           <SheetTitle>Menu</SheetTitle>
           <SheetDescription className="sr-only">Navegação principal e conta</SheetDescription>
@@ -212,18 +232,21 @@ export function SiteHeader({
   cart,
   account,
   mobileAccount,
+  hideBelowMd = false,
 }: {
   cart: ReactNode
   account: ReactNode
   mobileAccount: ReactNode
+  /** Screens whose mobile frame has no header (Início, Detalhe): the tab bar takes over. */
+  hideBelowMd?: boolean
 }) {
   return (
-    <header className="container-page pt-4 md:pt-6">
+    <header className={cn('container-page pt-4 md:pt-6', hideBelowMd && 'max-md:hidden')}>
       <div className="relative flex h-[45px] items-start justify-between border-b border-brand/30">
         <div className="flex h-[35px] items-center lg:w-40">
           <Logo />
         </div>
-        <div className="absolute left-1/2 hidden -translate-x-1/2 lg:block">
+        <div className="absolute left-1/2 hidden -translate-x-1/2 lg:block xl:left-[376px] xl:translate-x-0">
           <DesktopNav />
         </div>
         <div className="flex h-[35px] items-center gap-1 md:gap-2 lg:gap-4">

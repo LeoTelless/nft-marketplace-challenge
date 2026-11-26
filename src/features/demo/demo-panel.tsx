@@ -16,7 +16,9 @@ export function DemoPanel() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
-        className="fixed top-1/2 left-0 z-30 inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-r-full border border-l-0 border-line bg-surface-raised/95 px-2 text-xs font-medium text-text-secondary opacity-80 shadow-raised hover:border-brand hover:text-brand-accent hover:opacity-100 md:top-auto md:bottom-4 md:left-4 md:rounded-full md:border-l md:px-3 md:opacity-100"
+        // Mobile: round button at the right, just above the bottom bar (`--mobile-bar-offset`, set
+        // by the root layout: tab bar or the detail/checkout action bar), never over the content edge.
+        className="fixed right-3 bottom-[var(--mobile-bar-offset,96px)] z-30 inline-flex size-9 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-line bg-surface-raised/95 text-xs font-medium text-text-secondary shadow-raised hover:border-brand hover:text-brand-accent md:right-auto md:bottom-4 md:left-4 md:size-auto md:h-9 md:px-3"
       >
         <FlaskConical className="size-4" aria-hidden="true" />
         <span className="max-md:sr-only">Demo</span>
@@ -26,8 +28,8 @@ export function DemoPanel() {
         <SheetHeader>
           <SheetTitle>Painel de demonstração</SheetTitle>
           <SheetDescription>
-            Controla o servidor simulado (MSW + Socket.IO). As mudanças chegam à interface pela API e pelos eventos, como em
-            produção.
+            Controla o servidor simulado (MSW + Socket.IO). As mudanças chegam à interface pela API e pelos eventos,
+            como em produção.
           </SheetDescription>
         </SheetHeader>
         {open ? (
