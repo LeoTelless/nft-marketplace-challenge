@@ -171,8 +171,9 @@ function PriceFilter({
           }}
         />
         <p className="text-[15px] leading-5 text-foreground" aria-live="polite">
-          Preço: {formatSliderValue(sliderValue[0]).replace('.', ',')} -{' '}
-          {draftMax ? formatSliderValue(sliderValue[1]).replace('.', ',') : `${PRICE_MAX}+`} ETH
+          {`Preço: ${formatSliderValue(sliderValue[0]).replace('.', ',')} - ${
+            draftMax ? formatSliderValue(sliderValue[1]).replace('.', ',') : `${PRICE_MAX}+`
+          } ETH`}
         </p>
         <div className="grid grid-cols-2 gap-2">
           <PriceField

@@ -12,6 +12,13 @@ import { FEATURED_QUERY, useNftList } from './queries'
 
 /** Shown until the featured NFTs arrive: same file as the first featured NFT (no swap flash). */
 const HERO_PLACEHOLDER: NftImageData = { url: '/images/nft/emerald-ape-800.webp', alt: '', width: 800, height: 800 }
+/** Mobile frame: the small square artwork is a different piece (sage-nomad) from the main one. */
+const HERO_SECONDARY_FALLBACK: NftImageData = {
+  url: '/images/nft/sage-nomad-256.webp',
+  alt: '',
+  width: 256,
+  height: 256,
+}
 
 function useFeatured() {
   return useNftList(FEATURED_QUERY)
@@ -27,14 +34,19 @@ export function HomeHero() {
   const slides = featured.data?.items.slice(0, 3) ?? []
   const [index, setIndex] = useState(0)
   const current: Nft | undefined = slides[index]
-  const next: Nft | undefined = slides[(index + 1) % Math.max(slides.length, 1)]
   const image = current?.images[0] ?? HERO_PLACEHOLDER
+  // Secondary artwork of the mobile banner: the next featured piece with a different image
+  // (featured NFTs may share an artwork), else the frame's own second artwork.
+  const secondary =
+    [...slides.slice(index + 1), ...slides.slice(0, index)].find((slide) => slide.images[0]?.url !== image.url)
+      ?.images[0] ?? HERO_SECONDARY_FALLBACK
   // One variant is rendered (not both hidden by CSS), so only one hero image is downloaded.
   const isDesktop = useMediaQuery('(min-width: 768px)')
 
   const dots =
     slides.length > 1 ? (
-      <div role="group" aria-label="Destaques" className="flex items-center gap-1.5 md:gap-2">
+      // 24px hit areas side by side (WCAG 2.5.8): the visible dots keep the frame's size and color.
+      <div role="group" aria-label="Destaques" className="flex items-center">
         {slides.map((slide, i) => (
           <button
             key={slide.id}
@@ -48,7 +60,7 @@ export function HomeHero() {
               aria-hidden="true"
               className={cn(
                 'block size-[7px] rounded-full bg-brand transition-all md:size-2',
-                i === index ? 'w-5 md:w-5' : 'opacity-60',
+                i === index && 'w-5 md:w-5',
               )}
             />
           </button>
@@ -77,7 +89,9 @@ export function HomeHero() {
   return (
     <section aria-label="Boas-vindas e destaques" className="container-page">
       {!isDesktop ? (
-        <div className="relative overflow-hidden rounded-[30px] bg-linear-120 from-brand/20 to-brand/10 p-4">
+        // Frame: 366x190 banner, content 6px from the top and 16px from the sides, 16px to the dots,
+        // dots 5px from the bottom. In flow, so narrower screens grow instead of cutting the copy.
+        <div className="relative overflow-hidden rounded-[30px] bg-linear-120 from-brand/20 to-brand/10 px-4 pt-1.5 pb-[5px]">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -top-8 -left-20 size-[248px] rounded-full bg-linear-150 from-[#DD9A5F]/45 to-brand/5"
@@ -89,7 +103,7 @@ export function HomeHero() {
           <div className="relative flex gap-2">
             <div className="flex min-w-0 flex-1 flex-col">
               <p className="text-xs leading-4 font-medium text-foreground">Bem-vindo à Kurio</p>
-              <h1 className="mt-1.5 text-lg leading-[29px] font-bold tracking-wide text-foreground uppercase">
+              <h1 className="mt-1.5 text-lg leading-[29px] font-bold text-foreground uppercase max-[359px]:text-base max-[359px]:leading-6">
                 Seja dono da
                 <br />
                 cultura digital
@@ -103,24 +117,23 @@ export function HomeHero() {
                 search={(prev) => prev}
                 hash="catalogo"
                 activeOptions={{ includeHash: true }}
-                className="mt-1 inline-flex w-fit items-center gap-2 py-1 text-xs leading-[14px] font-bold text-brand-accent"
+                className="-my-1 inline-flex w-fit items-center gap-2 py-1 text-xs leading-4 font-bold text-brand-accent"
               >
                 EXPLORAR <ArrowRightIcon className="size-4" />
               </Link>
             </div>
-            <div className="relative w-[138px] shrink-0 pt-1">
-              {artwork('138px', 'size-[138px] rounded-2xl')}
-              {next && next.id !== current?.id ? (
-                <div
-                  aria-hidden="true"
-                  className="absolute top-[89px] left-[14px] size-[58px] overflow-hidden rounded-2xl border-2 border-surface"
-                >
-                  <NftImage image={next.images[0]} sizes="58px" alt="" />
-                </div>
-              ) : null}
+            {/* Below 360px the artwork shrinks so the headline keeps short lines. */}
+            <div className="relative w-[138px] shrink-0 pt-[5px] max-[359px]:w-28">
+              {artwork('138px', 'size-[138px] rounded-[16px] max-[359px]:size-28')}
+              <div
+                aria-hidden="true"
+                className="absolute top-[93px] left-[14px] size-[58px] overflow-hidden rounded-[16px] max-[359px]:top-[77px] max-[359px]:size-12"
+              >
+                <NftImage image={secondary} sizes="58px" alt="" />
+              </div>
             </div>
           </div>
-          <div className="relative mt-1 flex justify-center">{dots}</div>
+          <div className="relative mt-4 flex h-[7px] items-center justify-center">{dots}</div>
         </div>
       ) : (
         <div className="flex items-center gap-10 lg:gap-[110px] lg:pl-10">
@@ -205,17 +218,21 @@ export function HomePromos() {
   return (
     <section aria-label="Coleções em destaque" className="container-page grid gap-7 lg:grid-cols-2">
       {PROMOS.map((promo) => (
-        <article key={promo.image} className="flex h-[220px] overflow-hidden rounded-md bg-surface md:h-[250px]">
+        // Mobile: the height grows with the text (a fixed 220px cut the copy and the CTA at 320-414px).
+        <article
+          key={promo.image}
+          className="flex min-h-[220px] overflow-hidden rounded-md bg-surface md:min-h-[250px]"
+        >
           {/* Frame: 287-292px artwork + ~265px right-aligned text column with 30px right padding. */}
-          <div className="w-[42%] shrink-0 md:w-[287px]">
+          <div className="relative w-[42%] shrink-0 md:w-[287px]">
             <NftImage
               image={{ url: `/images/nft/${promo.image}-800.webp`, alt: '', width: 800, height: 800 }}
               sizes="(min-width: 768px) 287px, 40vw"
               alt=""
-              className="rounded-[18px]"
+              className="absolute inset-0 rounded-[18px]"
             />
           </div>
-          <div className="flex min-w-0 flex-1 flex-col items-end p-4 text-right md:pt-[37px] md:pr-6 md:pb-[30px] md:pl-3">
+          <div className="flex min-w-0 flex-1 flex-col items-end p-4 text-right md:pt-[37px] md:pr-[30px] md:pb-[30px] md:pl-1">
             <h3 className="text-base leading-6 font-bold text-foreground md:text-lg">
               {promo.title[0]}
               <br />

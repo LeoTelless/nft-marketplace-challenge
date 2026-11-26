@@ -15,7 +15,7 @@ export const Route = createFileRoute('/')({
 
 function HomePage() {
   return (
-    <div className="flex flex-col gap-10 pt-6 md:gap-16 md:pt-8 xl:gap-24">
+    <div className="flex flex-col gap-10 pt-10 md:gap-16 md:pt-8 xl:gap-24">
       <div className="flex flex-col gap-4">
         <CatalogCompactBar />
         <HomeHero />

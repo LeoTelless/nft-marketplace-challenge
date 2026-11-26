@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronLeft, ChevronRight, LoaderCircle, SearchX, TriangleAlert } from 'lucide-react'
+import { LoaderCircle, SearchX } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
 import { useFavorites } from '@/features/favorites/use-favorites'
 import { apiErrorMessage } from '@/shared/lib/form-errors'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
-import { FilterIcon } from '@/shared/ui/icons'
+import { ChevronLeftIcon, ChevronRightIcon, DangerTriangleIcon, FilterIcon } from '@/shared/ui/icons'
 import { getPageRange, Pagination, PaginationList, paginationItemClass } from '@/shared/ui/pagination'
 import {
   Sheet,
@@ -18,7 +18,14 @@ import {
   SheetTrigger,
 } from '@/shared/ui/sheet'
 import { CatalogFilters } from './catalog-filters'
-import { clearedFilters, hasActiveFilters, toListQuery, CATALOG_PAGE_SIZE, type CatalogSearch, type CatalogView } from './catalog-search'
+import {
+  clearedFilters,
+  hasActiveFilters,
+  toListQuery,
+  CATALOG_PAGE_SIZE,
+  type CatalogSearch,
+  type CatalogView,
+} from './catalog-search'
 import { CatalogSearchField } from './catalog-search-field'
 import { CatalogSort, CatalogViews } from './catalog-toolbar'
 import { NftCard, NftCardSkeleton } from './nft-card'
@@ -26,8 +33,12 @@ import { useNftList } from './queries'
 import { useCatalogSearch } from './use-catalog-search'
 
 const GRID = 'grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-x-6 md:gap-y-12 xl:gap-x-8 xl:gap-y-[72px]'
-/** Mobile composition: the right column is offset 32px (staggered grid of the mobile frame). */
-const STAGGER = 'max-md:[&>*:nth-child(even)]:translate-y-8 max-md:pb-8'
+/**
+ * Mobile composition: the right column is offset 32px (staggered grid of the mobile frame) and
+ * its artwork sits 20px from the top of the box (12px in the left column).
+ */
+const STAGGER =
+  'max-md:[&>*:nth-child(even)]:translate-y-8 max-md:pb-8 max-md:[&>*:nth-child(even)_[data-slot=nft-card-box]]:pt-5'
 
 /**
  * Search bar + filter button of the mobile frame (below `lg`). Rendered by the page above the
@@ -148,7 +159,7 @@ export function CatalogSection({ sidebarExtra }: { sidebarExtra?: ReactNode }) {
               <>
                 {list.isError ? (
                   <p role="alert" className="mb-4 flex items-center gap-2 text-sm text-coral">
-                    <TriangleAlert className="size-4" aria-hidden="true" /> Não foi possível atualizar a lista.
+                    <DangerTriangleIcon className="size-4" /> Não foi possível atualizar a lista.
                     <Button variant="link" size="xs" onClick={() => void list.refetch()}>
                       Tentar novamente
                     </Button>
@@ -261,7 +272,7 @@ function CatalogError({ message, onRetry, retrying }: { message: string; onRetry
       className="flex flex-col items-center gap-4 bg-surface px-6 py-16 text-center"
       data-testid="catalog-error"
     >
-      <TriangleAlert className="size-10 text-coral" aria-hidden="true" />
+      <DangerTriangleIcon className="size-10 text-coral" />
       <h3 className="text-lg leading-6 font-bold">Não foi possível carregar o catálogo</h3>
       <p className="max-w-sm text-sm leading-6 text-text-secondary">{message}</p>
       <Button onClick={onRetry} disabled={retrying} aria-busy={retrying || undefined}>
@@ -296,7 +307,7 @@ function CatalogPagination({ page, totalPages }: { page: number; totalPages: num
               aria-label="Página anterior"
               className={paginationItemClass()}
             >
-              <ChevronLeft className="size-[18px]" aria-hidden="true" />
+              <ChevronLeftIcon className="size-[18px]" />
             </Link>
           </li>
         ) : null}
@@ -334,7 +345,7 @@ function CatalogPagination({ page, totalPages }: { page: number; totalPages: num
               aria-label="Próxima página"
               className={paginationItemClass()}
             >
-              <ChevronRight className="size-[18px]" aria-hidden="true" />
+              <ChevronRightIcon className="size-[18px]" />
             </Link>
           </li>
         ) : null}

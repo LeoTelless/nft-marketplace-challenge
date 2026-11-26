@@ -1,7 +1,6 @@
-import { X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/shared/lib/utils'
-import { SearchIcon } from '@/shared/ui/icons'
+import { CloseIcon, SearchIcon } from '@/shared/ui/icons'
 
 const DEBOUNCE_MS = 350
 
@@ -82,7 +81,7 @@ export function CatalogSearchField({
           }}
           className="absolute right-2 grid size-7 cursor-pointer place-content-center rounded-full text-text-secondary hover:text-foreground"
         >
-          <X className="size-4" aria-hidden="true" />
+          <CloseIcon className="size-4" />
         </button>
       ) : null}
     </form>
