@@ -194,12 +194,15 @@ export function connectRealtime(options: ConnectRealtimeOptions): RealtimeConnec
       // Defense in depth: the server only targets the owner, but never apply another user's data.
       if (!userId || parsed.data.userId !== userId) return
       const event = parsed.data
-      orderQueue = orderQueue.then(() => {
-        if (disposed) return
-        if (!orderEvents.accept(event, cachedOrderVersion(queryClient, userId, event.resource.id))) return
-        applyOrderUpdated(queryClient, event)
-        notice({ type: 'order.updated', event })
-      })
+      orderQueue = orderQueue
+        .then(() => {
+          if (disposed) return
+          if (!orderEvents.accept(event, cachedOrderVersion(queryClient, userId, event.resource.id))) return
+          applyOrderUpdated(queryClient, event)
+          notice({ type: 'order.updated', event })
+        })
+        // A failing listener must not stall the queue for the next events.
+        .catch((error: unknown) => console.error('[realtime] failed to apply "order.updated"', error))
     })
 
     created.on(REALTIME_EVENTS.resync, (payload: unknown) => {
