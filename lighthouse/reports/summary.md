@@ -43,13 +43,13 @@ nenhuma nota ou métrica e ocupam cerca de metade de cada arquivo.
 
 ## Produção (https://nft-marketplace-challenge-ivory.vercel.app)
 
-Gerado em 2026-11-26T19:19:15.294Z. Mediana de 3 execuções por página e perfil.
+Gerado em 2026-11-26T22:35:00.131Z. Mediana de 3 execuções por página e perfil.
 
 | Página | Perfil | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Início | Mobile | 87 | 100 | 100 | 100 | 2.73 s | 0 | 376 ms |
-| Início | Desktop | 100 | 100 | 100 | 100 | 0.59 s | 0 | 0 ms |
-| Detalhe do NFT | Mobile | 91 | 100 | 100 | 100 | 2.76 s | 0 | 241 ms |
+| Início | Mobile | 91 | 100 | 100 | 100 | 2.73 s | 0 | 250 ms |
+| Início | Desktop | 100 | 100 | 100 | 100 | 0.58 s | 0 | 0 ms |
+| Detalhe do NFT | Mobile | 93 | 100 | 100 | 100 | 2.74 s | 0 | 191 ms |
 | Detalhe do NFT | Desktop | 100 | 100 | 100 | 100 | 0.59 s | 0 | 0 ms |
 
 Execuções individuais. Todas têm relatório HTML e JSON; o da execução mediana está completo e os demais
@@ -58,18 +58,18 @@ nenhuma nota ou métrica e ocupam cerca de metade de cada arquivo.
 
 | Página | Perfil | # | Perf | A11y | BP | SEO | LCP (ms) | CLS | TBT (ms) | Relatório |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Início | Mobile | 1 | 85 | 100 | 100 | 100 | 2995 | 0.000 | 378 |  |
-| Início | Mobile | 2 | 87 | 100 | 100 | 100 | 2726 | 0.000 | 376 | [html](./production/inicio-mobile-run2.html), [json](./production/inicio-mobile-run2.json) (mediana, completo) |
-| Início | Mobile | 3 | 88 | 100 | 100 | 100 | 2728 | 0.000 | 346 |  |
-| Início | Desktop | 1 | 100 | 100 | 100 | 100 | 582 | 0.000 | 0 |  |
-| Início | Desktop | 2 | 100 | 100 | 100 | 100 | 586 | 0.000 | 0 | [html](./production/inicio-desktop-run2.html), [json](./production/inicio-desktop-run2.json) (mediana, completo) |
-| Início | Desktop | 3 | 100 | 100 | 100 | 100 | 589 | 0.000 | 0 |  |
-| Detalhe do NFT | Mobile | 1 | 91 | 100 | 100 | 100 | 2792 | 0.000 | 241 |  |
-| Detalhe do NFT | Mobile | 2 | 92 | 100 | 100 | 100 | 2755 | 0.000 | 213 |  |
-| Detalhe do NFT | Mobile | 3 | 91 | 100 | 100 | 100 | 2761 | 0.000 | 261 | [html](./production/detalhe-mobile-run3.html), [json](./production/detalhe-mobile-run3.json) (mediana, completo) |
-| Detalhe do NFT | Desktop | 1 | 100 | 100 | 100 | 100 | 587 | 0.000 | 0 | [html](./production/detalhe-desktop-run1.html), [json](./production/detalhe-desktop-run1.json) (mediana, completo) |
-| Detalhe do NFT | Desktop | 2 | 100 | 100 | 100 | 100 | 590 | 0.000 | 0 |  |
-| Detalhe do NFT | Desktop | 3 | 100 | 100 | 100 | 100 | 586 | 0.000 | 0 |  |
+| Início | Mobile | 1 | 86 | 100 | 100 | 100 | 2910 | 0.000 | 359 | [html](./production/inicio-mobile-run1.html), [json](./production/inicio-mobile-run1.json) (sem capturas) |
+| Início | Mobile | 2 | 91 | 100 | 100 | 100 | 2725 | 0.000 | 250 | [html](./production/inicio-mobile-run2.html), [json](./production/inicio-mobile-run2.json) (mediana, completo) |
+| Início | Mobile | 3 | 92 | 100 | 100 | 100 | 2716 | 0.000 | 241 | [html](./production/inicio-mobile-run3.html), [json](./production/inicio-mobile-run3.json) (sem capturas) |
+| Início | Desktop | 1 | 100 | 100 | 100 | 100 | 582 | 0.000 | 0 | [html](./production/inicio-desktop-run1.html), [json](./production/inicio-desktop-run1.json) (sem capturas) |
+| Início | Desktop | 2 | 100 | 100 | 100 | 100 | 581 | 0.000 | 0 | [html](./production/inicio-desktop-run2.html), [json](./production/inicio-desktop-run2.json) (mediana, completo) |
+| Início | Desktop | 3 | 100 | 100 | 100 | 100 | 578 | 0.000 | 0 | [html](./production/inicio-desktop-run3.html), [json](./production/inicio-desktop-run3.json) (sem capturas) |
+| Detalhe do NFT | Mobile | 1 | 92 | 100 | 100 | 100 | 2773 | 0.000 | 219 | [html](./production/detalhe-mobile-run1.html), [json](./production/detalhe-mobile-run1.json) (sem capturas) |
+| Detalhe do NFT | Mobile | 2 | 94 | 100 | 100 | 100 | 2734 | 0.000 | 176 | [html](./production/detalhe-mobile-run2.html), [json](./production/detalhe-mobile-run2.json) (sem capturas) |
+| Detalhe do NFT | Mobile | 3 | 93 | 100 | 100 | 100 | 2738 | 0.000 | 191 | [html](./production/detalhe-mobile-run3.html), [json](./production/detalhe-mobile-run3.json) (mediana, completo) |
+| Detalhe do NFT | Desktop | 1 | 100 | 100 | 100 | 100 | 586 | 0.000 | 0 | [html](./production/detalhe-desktop-run1.html), [json](./production/detalhe-desktop-run1.json) (mediana, completo) |
+| Detalhe do NFT | Desktop | 2 | 100 | 100 | 100 | 100 | 586 | 0.000 | 0 | [html](./production/detalhe-desktop-run2.html), [json](./production/detalhe-desktop-run2.json) (sem capturas) |
+| Detalhe do NFT | Desktop | 3 | 100 | 100 | 100 | 100 | 584 | 0.000 | 0 | [html](./production/detalhe-desktop-run3.html), [json](./production/detalhe-desktop-run3.json) (sem capturas) |
 
 ### Ambiente e condições
 
