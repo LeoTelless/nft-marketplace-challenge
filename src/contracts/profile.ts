@@ -27,11 +27,11 @@ export type Profile = z.infer<typeof profileSchema>
 
 /** `PATCH /profile` returns Profile. 409 `email_conflict`, 422 `validation_error`. */
 export const updateProfileRequestSchema = z.object({
-  name: z.string().trim().min(2, 'Informe o nome de exibição').max(60),
+  name: z.string().trim().min(2, 'Informe o nome de exibição').max(60, 'Use no máximo 60 caracteres'),
   email: z.email('Informe um e-mail válido'),
   username: usernameSchema,
   ensName: ensNameSchema,
-  bio: z.string().max(280),
+  bio: z.string().max(280, 'Use no máximo 280 caracteres'),
 })
 export type UpdateProfileRequest = z.infer<typeof updateProfileRequestSchema>
 
@@ -47,7 +47,7 @@ export type UpdateAvatarRequest = z.infer<typeof updateAvatarRequestSchema>
 
 /** `POST /profile/password` returns 204. 422 with `fieldErrors.currentPassword` when it does not match. */
 export const changePasswordRequestSchema = z.object({
-  currentPassword: z.string().min(1),
+  currentPassword: z.string().min(1, 'Informe a senha atual'),
   newPassword: passwordSchema,
 })
 export type ChangePasswordRequest = z.infer<typeof changePasswordRequestSchema>

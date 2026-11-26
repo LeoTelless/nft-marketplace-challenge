@@ -190,7 +190,7 @@ test.describe('wallets', () => {
   // DEFECT (src/features/wallets/components/wallets-page.tsx): with every network unchecked the field shows the raw Zod
   // message "Demasiado pequeno: esperava que o vetor tivesse >= 1 elementos" instead of the intended
   // "Selecione ao menos uma rede" (the fallback is never used because `errors.networks.message` is set).
-  test.fixme('unchecking every network shows the friendly message', async ({ page }) => {
+  test('unchecking every network shows the friendly message', async ({ page }) => {
     const form = await openWalletsAsBruno(page)
     await form.getByText('Ethereum', { exact: true }).click()
     await form.getByLabel('Apelido da carteira').fill('Cofre')

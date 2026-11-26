@@ -123,13 +123,14 @@ function ProfileForm({ profile, primaryWallet, walletsLoading }: { profile: Prof
     <form noValidate onSubmit={onSubmit} aria-label="Perfil do colecionador" className="flex flex-col gap-8">
       <AccountHeading title="Perfil do colecionador" />
       <div className="grid gap-x-7 gap-y-6 md:grid-cols-2">
-        <TextField label="Nome de exibição" required autoComplete="name" error={errors.name?.message} {...form.register('name')} />
-        <TextField label="Nome de usuário" required autoComplete="username" error={errors.username?.message} {...form.register('username')} />
-        <TextField label="E-mail" type="email" required autoComplete="email" error={errors.email?.message} {...form.register('email')} />
+        <TextField className="gap-2.5" label="Nome de exibição" required autoComplete="name" error={errors.name?.message} {...form.register('name')} />
+        <TextField className="gap-2.5" label="Nome de usuário" required autoComplete="username" error={errors.username?.message} {...form.register('username')} />
+        <TextField className="gap-2.5" label="E-mail" type="email" required autoComplete="email" error={errors.email?.message} {...form.register('email')} />
         <EnsInput error={errors.ensName?.message} register={form.register('ensName')} />
-        <TextField
+        <TextField className="gap-2.5"
           label="Apelido da carteira"
-          hint={walletsLoading ? 'Carregando carteiras…' : primaryWallet ? `Carteira principal (${primaryWallet.address.slice(0, 6)}…)` : 'Cadastre uma carteira em Carteiras para definir o apelido.'}
+          placeholder={walletsLoading ? 'Carregando carteiras…' : 'Apelido da carteira principal'}
+          hint={!walletsLoading && !primaryWallet ? 'Cadastre uma carteira em Carteiras para definir o apelido.' : undefined}
           disabled={!primaryWallet}
           error={errors.walletLabel?.message}
           {...form.register('walletLabel')}
@@ -139,19 +140,19 @@ function ProfileForm({ profile, primaryWallet, walletsLoading }: { profile: Prof
 
       <fieldset className="flex flex-col gap-6 md:max-w-[417px]">
         <legend className="mb-6 text-base leading-4 font-bold">Alterar senha</legend>
-        <PasswordField label="Senha atual" autoComplete="current-password" error={errors.currentPassword?.message} {...form.register('currentPassword')} />
-        <PasswordField
+        <PasswordField className="gap-2.5" label="Senha atual" autoComplete="current-password" error={errors.currentPassword?.message} {...form.register('currentPassword')} />
+        <PasswordField className="gap-2.5"
           label="Nova senha"
           autoComplete="new-password"
-          hint="Mínimo de 8 caracteres, com letras e números."
+          placeholder="Mínimo de 8 caracteres, com letras e números"
           error={errors.newPassword?.message}
           {...form.register('newPassword')}
         />
-        <PasswordField label="Confirmar nova senha" autoComplete="new-password" error={errors.confirmPassword?.message} {...form.register('confirmPassword')} />
+        <PasswordField className="gap-2.5" label="Confirmar nova senha" autoComplete="new-password" error={errors.confirmPassword?.message} {...form.register('confirmPassword')} />
       </fieldset>
 
       <FormAlert message={errors.root?.server?.message} />
-      <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting || undefined} className="h-10 w-full font-bold md:w-[155px]">
+      <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting || undefined} className="h-10 w-full font-bold md:w-[131px]">
         {isSubmitting ? 'Salvando…' : 'Salvar'}
       </Button>
     </form>
@@ -172,16 +173,17 @@ function EnsInput({ error, register }: { error?: string; register: ReturnType<Re
         <input
           id={id}
           aria-invalid={error ? true : undefined}
+          placeholder="seunome"
           aria-describedby={error ? `${id}-error` : `${id}-hint`}
-          className="h-10 min-w-0 flex-1 rounded-sm border border-line bg-surface-dark px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
+          className="h-10 min-w-0 flex-1 rounded-[5px] border border-line bg-transparent px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
           {...register}
         />
       </div>
-      <p id={`${id}-hint`} className="text-xs text-text-muted">
+      <p id={`${id}-hint`} className="sr-only">
         Sem o sufixo .eth.
       </p>
       {error ? (
-        <p id={`${id}-error`} className="text-[13px] text-coral">
+        <p id={`${id}-error`} className="mt-1.5 text-[13px] text-coral">
           {error}
         </p>
       ) : null}
@@ -269,7 +271,7 @@ function AvatarField({ profile }: { profile: Profile }) {
           </>
         )}
       </div>
-      <p id={`${id}-hint`} className="text-xs text-text-muted">
+      <p id={`${id}-hint`} className="sr-only">
         PNG, JPEG ou WebP, até 1 MB.
       </p>
       {error ? (

@@ -24,7 +24,8 @@ function useFieldIds(error?: string, hint?: ReactNode) {
   const id = useId()
   const errorId = `${id}-error`
   const hintId = `${id}-hint`
-  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined
+  // The hint is replaced by the error (never both read together).
+  const describedBy = (error ? errorId : hint ? hintId : undefined) as string | undefined
   return { id, errorId, hintId, describedBy }
 }
 
@@ -45,21 +46,19 @@ export function FieldLabel({ htmlFor, label, required, hidden }: { htmlFor: stri
 }
 
 export function FieldMessages({ errorId, hintId, error, hint }: { errorId: string; hintId: string; error?: string; hint?: ReactNode }) {
-  return (
-    <>
-      {hint ? (
-        <p id={hintId} className="text-xs leading-4 text-text-muted">
-          {hint}
-        </p>
-      ) : null}
-      {error ? (
-        <p id={errorId} className="flex items-start gap-1.5 text-[13px] leading-4 text-coral">
-          <CircleAlert className="mt-px size-3.5 shrink-0" aria-hidden="true" />
-          <span>{error}</span>
-        </p>
-      ) : null}
-    </>
-  )
+  if (error) {
+    return (
+      <p id={errorId} className="mt-1.5 flex items-start gap-1.5 text-[13px] leading-4 text-coral">
+        <CircleAlert className="mt-px size-3.5 shrink-0" aria-hidden="true" />
+        <span>{error}</span>
+      </p>
+    )
+  }
+  return hint ? (
+    <p id={hintId} className="mt-1.5 text-xs leading-4 text-text-muted">
+      {hint}
+    </p>
+  ) : null
 }
 
 const tallInput = 'h-[50px] rounded-[10px] px-4 md:h-10 md:rounded-sm'
@@ -76,7 +75,7 @@ export function TextField({
 }: FieldChrome & ComponentProps<'input'> & { tall?: boolean }) {
   const { id, errorId, hintId, describedBy } = useFieldIds(error, hint)
   return (
-    <div className={cn('flex min-w-0 flex-col gap-2.5', hideLabel && 'gap-1.5', className)}>
+    <div className={cn('flex min-w-0 flex-col', className)}>
       <FieldLabel htmlFor={id} label={label} required={required} hidden={hideLabel} />
       <Input
         id={id}
@@ -105,7 +104,7 @@ export function PasswordField({
   const { id, errorId, hintId, describedBy } = useFieldIds(error, hint)
   const [visible, setVisible] = useState(false)
   return (
-    <div className={cn('flex min-w-0 flex-col gap-2.5', hideLabel && 'gap-1.5', className)}>
+    <div className={cn('flex min-w-0 flex-col', className)}>
       <FieldLabel htmlFor={id} label={label} required={required} hidden={hideLabel} />
       <div className="relative">
         <Input
@@ -145,7 +144,7 @@ export function SelectField({
 }: FieldChrome & ComponentProps<'select'>) {
   const { id, errorId, hintId, describedBy } = useFieldIds(error, hint)
   return (
-    <div className={cn('flex min-w-0 flex-col gap-2.5', className)}>
+    <div className={cn('flex min-w-0 flex-col', className)}>
       <FieldLabel htmlFor={id} label={label} required={required} hidden={hideLabel} />
       <div className="relative">
         <select
@@ -153,7 +152,7 @@ export function SelectField({
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           aria-required={required || undefined}
-          className="h-10 w-full cursor-pointer appearance-none rounded-sm border border-line bg-surface-dark py-2 pr-10 pl-3 text-sm text-foreground outline-hidden hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-coral"
+          className="h-10 w-full cursor-pointer appearance-none rounded-[5px] border border-line bg-transparent py-2 pr-10 pl-3 [&>option]:bg-surface text-sm text-foreground outline-hidden hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-coral"
           {...props}
         >
           {children}

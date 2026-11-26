@@ -26,11 +26,11 @@ export type WalletList = z.infer<typeof walletListSchema>
 
 /** `POST /wallets` returns Wallet (201). 409 `wallet_conflict` when the role slot or the address is taken. */
 export const createWalletRequestSchema = z.object({
-  label: z.string().trim().min(1).max(40),
+  label: z.string().trim().min(1, 'Informe o apelido da carteira').max(40, 'Use no máximo 40 caracteres'),
   address: walletAddressSchema,
   provider: walletProviderSchema,
   role: walletRoleSchema,
-  networks: z.array(networkSchema).min(1),
+  networks: z.array(networkSchema, 'Selecione ao menos uma rede').min(1, 'Selecione ao menos uma rede'),
 })
 export type CreateWalletRequest = z.infer<typeof createWalletRequestSchema>
 

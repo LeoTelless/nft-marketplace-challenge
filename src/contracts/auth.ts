@@ -29,8 +29,8 @@ export const passwordSchema = z
 
 /** 401 `invalid_credentials`. */
 export const loginRequestSchema = z.object({
-  email: z.email(),
-  password: z.string().min(1),
+  email: z.email('Informe um e-mail válido'),
+  password: z.string().min(1, 'Informe a senha'),
   /** Visitor cart to merge into the account cart. */
   guestCartId: z.string().optional(),
 })
@@ -38,8 +38,8 @@ export type LoginRequest = z.infer<typeof loginRequestSchema>
 
 /** 409 `email_conflict`, 422 `validation_error`. */
 export const registerRequestSchema = z.object({
-  name: z.string().trim().min(2).max(60),
-  email: z.email(),
+  name: z.string().trim().min(2, 'Informe um nome com pelo menos 2 caracteres').max(60, 'Use no máximo 60 caracteres'),
+  email: z.email('Informe um e-mail válido'),
   password: passwordSchema,
   guestCartId: z.string().optional(),
 })

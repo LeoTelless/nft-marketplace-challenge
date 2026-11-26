@@ -136,15 +136,15 @@ function WalletEditor({ wallet, role, onCancel }: { wallet: Wallet | null; role:
   return (
     <form noValidate onSubmit={onSubmit} aria-label={`${wallet ? 'Editar' : 'Adicionar'} carteira ${title}`} className="flex flex-col gap-6">
       <div className="grid gap-x-7 gap-y-6 md:grid-cols-2">
-        <TextField label="Apelido da carteira" required error={errors.label?.message} {...form.register('label')} />
-        <SelectField label="Tipo de carteira" required error={errors.provider?.message} {...form.register('provider')}>
+        <TextField className="gap-2.5" label="Apelido da carteira" required error={errors.label?.message} {...form.register('label')} />
+        <SelectField className="gap-2.5" label="Tipo de carteira" required error={errors.provider?.message} {...form.register('provider')}>
           {walletProviderSchema.options.map((provider) => (
             <option key={provider} value={provider}>
               {PROVIDER_LABELS[provider]}
             </option>
           ))}
         </SelectField>
-        <TextField
+        <TextField className="gap-2.5"
           label="Endereço da carteira"
           required
           placeholder="Endereço 0x da carteira"

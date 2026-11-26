@@ -12,12 +12,12 @@ export const TERMINAL_ORDER_STATUSES: readonly OrderStatus[] = ['confirmed', 're
  * optional (a required referral code would block buyers without one; see design/DECISOES.md).
  */
 export const collectorSchema = z.object({
-  displayName: z.string().trim().min(2, 'Informe o nome de exibição').max(60),
+  displayName: z.string().trim().min(2, 'Informe o nome de exibição').max(60, 'Use no máximo 60 caracteres'),
   username: z
     .string()
     .trim()
     .regex(/^[a-z0-9_.]{3,30}$/i, 'Use de 3 a 30 letras, números, "_" ou "."'),
-  profileName: z.string().trim().min(2, 'Informe o nome do perfil').max(60),
+  profileName: z.string().trim().min(2, 'Informe o nome do perfil').max(60, 'Use no máximo 60 caracteres'),
   email: z.email('Informe um e-mail válido'),
   /** Without the `.eth` suffix. */
   ensName: z
