@@ -319,7 +319,8 @@ export function HomeJournal() {
                   {post.date} <span aria-hidden="true">&nbsp;|&nbsp;</span>
                   <span className="sr-only">, </span>Leitura de {post.read} min
                 </p>
-                <h3 className="text-base leading-[21px] font-bold text-foreground">{post.title}</h3>
+                {/* Two title lines reserved in the 4-column row, so the descriptions line up across cards. */}
+                <h3 className="text-base leading-[21px] font-bold text-foreground lg:min-h-[42px]">{post.title}</h3>
                 <p className="text-xs leading-4 font-medium text-text-secondary">{post.text}</p>
                 <p className="mt-auto text-xs leading-[14px] font-bold text-text-muted">Em breve</p>
               </div>
