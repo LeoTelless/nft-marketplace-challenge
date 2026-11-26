@@ -46,6 +46,12 @@ export default defineConfig({
     tanstackRouter({
       target: 'react',
       autoCodeSplitting: true,
+      // The plugin's default leaves `pendingComponent` in the route file, which the route tree imports
+      // statically: the private area's skeletons (profile, wallets, checkout, order) would join the
+      // startup chunk of every page. Split it like the other components.
+      codeSplittingOptions: {
+        defaultBehavior: [['component'], ['errorComponent'], ['notFoundComponent'], ['pendingComponent']],
+      },
       routesDirectory: './src/routes',
       generatedRouteTree: './src/routeTree.gen.ts',
       quoteStyle: 'single',
