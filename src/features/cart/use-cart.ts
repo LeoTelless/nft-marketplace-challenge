@@ -30,10 +30,21 @@ function cartQueryOptions(owner: CartOwner | null) {
   }
 }
 
-/** Server cart (survives refresh: visitor id in localStorage, account cart on the server). */
+/**
+ * Server cart (survives refresh: visitor id in localStorage, account cart on the server).
+ * `sessionError`: the stored session could not be validated (network/5xx after the retries), so
+ * the owner, and therefore the cart, is unknown; `retrySession` asks `GET /session` again.
+ */
 export function useCart() {
+  const session = useSession()
   const owner = useCartOwner()
-  return { owner, ...useQuery(cartQueryOptions(owner)) }
+  return {
+    owner,
+    sessionError: session.status === 'error' ? session.error : null,
+    retrySession: session.retry,
+    retryingSession: session.retrying,
+    ...useQuery(cartQueryOptions(owner)),
+  }
 }
 
 /** Total units in the cart, for the header badge. 0 while unknown. */

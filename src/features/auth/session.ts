@@ -1,5 +1,5 @@
 import { queryOptions, useQuery, type QueryClient } from '@tanstack/react-query'
-import { useSyncExternalStore } from 'react'
+import { useCallback, useSyncExternalStore } from 'react'
 import type { Session, User } from '@/contracts'
 import { queryKeys } from '@/shared/api/query-keys'
 import { clearNotices } from '@/shared/feedback/notifications'
@@ -32,6 +32,11 @@ export interface SessionState {
   /** `loading` while `GET /session` validates a stored token (e.g. right after a refresh). */
   status: SessionStatus
   isAuthenticated: boolean
+  /** Failure of `GET /session` after the automatic retries (network, timeout, 5xx); 401 ends the session instead. */
+  error: unknown
+  /** Asks `GET /session` again (status `error`); `retrying` while it runs. */
+  retry: () => void
+  retrying: boolean
 }
 
 /** Current session, recovered from `GET /session` (so it survives refresh). */
@@ -41,7 +46,17 @@ export function useSession(): SessionState {
   const user = token ? (query.data?.user ?? null) : null
   const status: SessionStatus =
     token === null ? 'anonymous' : query.data ? 'authenticated' : query.isError ? 'error' : 'loading'
-  return { token, user, status, isAuthenticated: status === 'authenticated' }
+  const { refetch } = query
+  const retry = useCallback(() => void refetch(), [refetch])
+  return {
+    token,
+    user,
+    status,
+    isAuthenticated: status === 'authenticated',
+    error: status === 'error' ? query.error : null,
+    retry,
+    retrying: status === 'error' && query.isFetching,
+  }
 }
 
 export function useCurrentUser(): User | null {

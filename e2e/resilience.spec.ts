@@ -212,4 +212,28 @@ test.describe('failure feedback and recovery', () => {
     await line.getByRole('button', { name: /Aumentar quantidade/ }).click()
     await expect(line.locator('output')).toHaveText('2')
   })
+
+  test('session: when it cannot be validated (5xx) the cart shows an error with "Tentar novamente" and recovers', async ({ page }, testInfo) => {
+    await openWithScenario(page, '/', 'instant')
+    await login(page, USERS.ana, '/cart')
+    const [pick] = await pickEditions(page, 1)
+    await addToCartViaApi(page, pick)
+
+    await withClock(page)
+    await page.evaluate(() => window.__mocks!.setScenario('server-error'))
+    await page.goto('/cart')
+    // `GET /session` keeps failing after the automatic retries: the owner of the cart is unknown.
+    await page.clock.runFor(6_000)
+    const error = page.getByTestId('cart-session-error')
+    await expect(error).toBeVisible()
+    await expect(error).toContainText('Não conseguimos verificar a sua sessão.')
+    if (testInfo.project.name === 'chromium-desktop') {
+      await expect(page.getByRole('banner').getByRole('button', { name: /Não foi possível verificar a sessão/ })).toBeVisible()
+    }
+
+    await page.evaluate(() => window.__mocks!.setScenario('instant'))
+    await error.getByRole('button', { name: 'Tentar novamente' }).click()
+    await expect(main(page).getByRole('list', { name: 'Itens do carrinho' }).getByRole('listitem', { name: `${pick.nftName} (${pick.editionName})` })).toBeVisible()
+    await expect(page.getByTestId('cart-session-error')).toHaveCount(0)
+  })
 })

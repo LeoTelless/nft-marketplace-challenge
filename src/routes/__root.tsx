@@ -5,7 +5,9 @@ import { DemoPanel } from '@/features/demo/demo-panel'
 import { useSession } from '@/features/auth/session'
 import { useLogout } from '@/features/auth/use-auth'
 import { useCartCount } from '@/features/cart/use-cart'
+import { RotateCw } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
+import { Button } from '@/shared/ui/button'
 import { CartButton } from '@/shared/layout/cart-button'
 import { MobileTabBar } from '@/shared/layout/mobile-tab-bar'
 import { SiteFooter } from '@/shared/layout/site-footer'
@@ -43,8 +45,24 @@ function useHidesMobileHeader() {
 }
 
 function AccountSlot({ variant }: { variant: 'header' | 'menu' }) {
-  const { user, status } = useSession()
+  const { user, status, retry, retrying } = useSession()
   const logout = useLogout()
+  if (status === 'error') {
+    // The stored session could not be validated (network/5xx): neither "Entrar" nor the account menu is right.
+    return (
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={retry}
+        disabled={retrying}
+        aria-label="Não foi possível verificar a sessão. Tentar novamente"
+        className={cn('h-[35px] gap-1.5', variant === 'menu' && 'w-full')}
+      >
+        <RotateCw className={cn('size-4', retrying && 'animate-spin')} aria-hidden="true" />
+        Tentar novamente
+      </Button>
+    )
+  }
   if (status === 'loading') {
     // Reserve the button box while the stored session is validated (no layout shift).
     return (

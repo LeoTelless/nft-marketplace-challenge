@@ -42,7 +42,22 @@ export function CartPage() {
       <MobileScreenHeader title="Carrinho de NFTs" />
       <h1 className="sr-only max-md:hidden">Carrinho de NFTs</h1>
 
-      {cart.isError && !cart.data ? (
+      {cart.sessionError ? (
+        // The session could not be validated, so whose cart to show is unknown.
+        <StatusPage
+          icon={TriangleAlert}
+          tone="error"
+          title="Não foi possível carregar o carrinho"
+          testId="cart-session-error"
+          actions={
+            <Button onClick={cart.retrySession} disabled={cart.retryingSession}>
+              {cart.retryingSession ? 'Tentando…' : 'Tentar novamente'}
+            </Button>
+          }
+        >
+          <p>Não conseguimos verificar a sua sessão. {apiErrorMessage(cart.sessionError)}</p>
+        </StatusPage>
+      ) : cart.isError && !cart.data ? (
         <StatusPage
           icon={TriangleAlert}
           tone="error"
