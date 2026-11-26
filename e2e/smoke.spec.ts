@@ -15,7 +15,7 @@ test('lists NFTs over REST and applies nft.updated received by socket.io-client'
 
   const cards = page.getByTestId('nft-card')
   await expect(cards).toHaveCount(12)
-  await expect(page.getByTestId('realtime-status')).toHaveText('Realtime: connected')
+  await expect(page.getByTestId('realtime-status')).toHaveAttribute('data-status', 'connected')
 
   const first = cards.first()
   const nftId = await first.getAttribute('data-nft-id')
@@ -44,13 +44,13 @@ test('lists NFTs over REST and applies nft.updated received by socket.io-client'
 
   // 3. While disconnected, changes are missed; on reconnection the client reconciles via REST.
   await page.evaluate(() => window.__mocks!.dropSocket())
-  await expect(page.getByTestId('realtime-status')).not.toHaveText('Realtime: connected')
+  await expect(page.getByTestId('realtime-status')).not.toHaveAttribute('data-status', 'connected')
   await page.evaluate((id) => window.__mocks!.updateNft(id, { price: '0.0008' }), nftId!)
   await expect(first.getByTestId('nft-price')).toHaveText('0.0007 ETH')
 
   const requestsBeforeReconnect = catalogRequests.length
   await page.evaluate(() => window.__mocks!.restoreSocket())
-  await expect(page.getByTestId('realtime-status')).toHaveText('Realtime: connected', { timeout: 10_000 })
+  await expect(page.getByTestId('realtime-status')).toHaveAttribute('data-status', 'connected', { timeout: 10_000 })
   await expect(first.getByTestId('nft-price')).toHaveText('0.0008 ETH')
   expect(catalogRequests.length).toBeGreaterThan(requestsBeforeReconnect)
 })

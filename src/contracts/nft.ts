@@ -55,7 +55,7 @@ export const nftSchema = z.object({
 })
 export type Nft = z.infer<typeof nftSchema>
 
-export const nftSortSchema = z.enum(['newest', 'oldest', 'price_asc', 'price_desc', 'name_asc'])
+export const nftSortSchema = z.enum(['newest', 'oldest', 'price_asc', 'price_desc', 'name_asc', 'name_desc'])
 export type NftSort = z.infer<typeof nftSortSchema>
 
 export const nftAvailabilityFilterSchema = z.enum(['all', 'available', 'sold_out'])

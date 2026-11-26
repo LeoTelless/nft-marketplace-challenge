@@ -55,6 +55,8 @@ export const catalogHandlers = [
             return compareEth(b.minPrice, a.minPrice) || a.id.localeCompare(b.id)
           case 'name_asc':
             return a.name.localeCompare(b.name)
+          case 'name_desc':
+            return b.name.localeCompare(a.name)
           case 'oldest':
             return a.createdAt.localeCompare(b.createdAt)
           default:
