@@ -64,7 +64,7 @@ export function CatalogSort({
         <SelectTrigger
           id={id}
           aria-labelledby={`${id}-label ${id}`}
-          className="h-auto border-0 bg-transparent px-1 py-1 text-[15px] leading-5 hover:text-brand-accent"
+          className="h-5 border-0 bg-transparent px-1 py-0 data-[size=default]:h-5 text-[15px] leading-5 hover:text-brand-accent"
         >
           <SelectValue />
         </SelectTrigger>

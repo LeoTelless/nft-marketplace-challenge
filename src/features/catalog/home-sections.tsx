@@ -206,16 +206,16 @@ export function HomePromos() {
     <section aria-label="Coleções em destaque" className="container-page grid gap-7 lg:grid-cols-2">
       {PROMOS.map((promo) => (
         <article key={promo.image} className="flex h-[220px] overflow-hidden rounded-md bg-surface md:h-[250px]">
-          {/* Frame: 292px artwork + 264px right-aligned text column with 30px right padding. */}
-          <div className="w-[42%] shrink-0 md:w-[292px]">
+          {/* Frame: 287-292px artwork + ~265px right-aligned text column with 30px right padding. */}
+          <div className="w-[42%] shrink-0 md:w-[287px]">
             <NftImage
               image={{ url: `/images/nft/${promo.image}-800.webp`, alt: '', width: 800, height: 800 }}
-              sizes="(min-width: 768px) 292px, 40vw"
+              sizes="(min-width: 768px) 287px, 40vw"
               alt=""
               className="rounded-[18px]"
             />
           </div>
-          <div className="flex min-w-0 flex-1 flex-col items-end p-4 text-right md:pt-[37px] md:pr-[30px] md:pb-[30px] md:pl-2">
+          <div className="flex min-w-0 flex-1 flex-col items-end p-4 text-right md:pt-[37px] md:pr-6 md:pb-[30px] md:pl-3">
             <h3 className="text-base leading-6 font-bold text-foreground md:text-lg">
               {promo.title[0]}
               <br />

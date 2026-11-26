@@ -118,7 +118,7 @@ export function SiteFooter() {
         <Link to="/" className="text-sm font-bold tracking-[0.1em]">
           KURIO
         </Link>
-        <p>
+        <p className="lg:whitespace-nowrap">
           Feito para colecionadores,
           <br />
           criadores e cultura

@@ -87,7 +87,7 @@ export function CatalogSection({ sidebarExtra }: { sidebarExtra?: ReactNode }) {
   const filtersPanel = (idPrefix: string) => <CatalogFilters search={search} update={update} idPrefix={idPrefix} />
 
   return (
-    <section id="catalogo" aria-labelledby="catalog-title" className="container-page scroll-mt-24">
+    <section id="catalogo" aria-labelledby="catalog-title" className="container-page scroll-mt-24 max-md:-mt-6">
       <h2 id="catalog-title" className="sr-only">
         Catálogo de NFTs
       </h2>
@@ -110,7 +110,7 @@ export function CatalogSection({ sidebarExtra }: { sidebarExtra?: ReactNode }) {
         </aside>
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center justify-between gap-x-6">
+          <div className="flex items-start justify-between gap-x-6">
             <CatalogViews view={viewOf(search)} onChange={(view) => update(viewPatch(view))} />
             <div className="hidden lg:block">
               <CatalogSort id="catalog-sort" value={search.sort} onChange={(sort) => update({ sort })} />
