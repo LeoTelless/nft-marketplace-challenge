@@ -2,8 +2,9 @@ import { Minus, Plus } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 
 /**
- * Cart quantity stepper. Desktop: the orange 20x30 pills of the cart table; mobile: the dark
- * 24px squares of the mobile cart. Decrease is disabled at 1, increase at the edition limit.
+ * Cart quantity stepper. Desktop: the orange 20x30 pills of the cart table (an invisible
+ * 28x30 hit area around each, so the target is at least 24px wide); mobile: the dark 24px
+ * circles of the mobile cart. Decrease is disabled at 1, increase at the edition limit.
  */
 export function CartStepper({
   label,
@@ -20,7 +21,7 @@ export function CartStepper({
   disabled?: boolean
 }) {
   const button =
-    'grid cursor-pointer place-content-center transition-colors disabled:cursor-not-allowed disabled:opacity-40 size-6 rounded-[6px] border border-line bg-surface-raised text-foreground hover:border-brand md:h-[30px] md:w-5 md:rounded-[20px] md:border-ink md:bg-brand md:text-ink md:shadow-button md:hover:bg-brand-accent'
+    'relative grid shrink-0 cursor-pointer place-content-center transition-colors after:absolute after:inset-y-0 after:-inset-x-1 disabled:cursor-not-allowed disabled:opacity-40 size-6 rounded-full border border-line bg-surface-raised text-foreground hover:border-brand md:h-[30px] md:w-5 md:rounded-[20px] md:border-ink md:bg-brand md:text-ink md:shadow-button md:hover:bg-brand-accent'
   return (
     <div role="group" aria-label={`Quantidade de ${label}`} className="flex items-center gap-3">
       <button

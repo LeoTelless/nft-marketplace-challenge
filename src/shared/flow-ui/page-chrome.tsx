@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouter } from '@tanstack/react-router'
-import { ChevronLeft } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/utils'
+import { ChevronLeftIcon } from '@/shared/ui/icons'
 import type { Crumb } from './crumbs'
 
 /** "Início / Mercado / …" trail of the desktop frames (hidden on mobile, which has a screen header). */
@@ -30,23 +30,45 @@ export function Breadcrumb({ items, className }: { items: Crumb[]; className?: s
 }
 
 /**
- * Mobile screen header (Figma: round back button + centered 20px title). The title is the
- * page `h1` on mobile; desktop pages render their own heading and hide this one.
+ * Mobile screen header (Figma: 35px round back button with the #B39463 Iconly arrow + 20px
+ * title, 44px tall). The title is the page `h1` on mobile (desktop pages render their own
+ * heading and hide this one); `titleAs="p"` when the screen state already has its own `h1`
+ * (empty cart). `align="start"` puts the title 24px after the button, as in the payment frame.
  */
-export function MobileScreenHeader({ title, fallback = '/', className }: { title: string; fallback?: '/' | '/cart'; className?: string }) {
+export function MobileScreenHeader({
+  title,
+  fallback = '/',
+  align = 'center',
+  titleAs: Title = 'h1',
+  className,
+}: {
+  title: string
+  fallback?: '/' | '/cart'
+  align?: 'center' | 'start'
+  titleAs?: 'h1' | 'p'
+  className?: string
+}) {
   const router = useRouter()
   const navigate = useNavigate()
   return (
-    <div className={cn('relative flex min-h-11 items-center justify-center md:hidden', className)}>
+    // 44px block as in the frames: the 35px row (button and title share its center) + 9px.
+    <div className={cn('relative mb-[9px] flex min-h-[35px] items-center md:hidden', align === 'center' ? 'justify-center' : 'justify-start', className)}>
       <button
         type="button"
         aria-label="Voltar"
         onClick={() => (router.history.canGoBack() ? router.history.back() : void navigate({ to: fallback }))}
-        className="absolute left-0 grid size-[35px] cursor-pointer place-content-center rounded-full border border-line bg-surface-raised text-brand-accent hover:border-brand"
+        className="absolute top-0 left-0 grid size-[35px] cursor-pointer place-content-center rounded-full border border-line bg-surface-raised text-text-muted hover:border-brand hover:text-brand-accent"
       >
-        <ChevronLeft className="size-5" aria-hidden="true" />
+        <ChevronLeftIcon className="size-5" />
       </button>
-      <h1 className="px-12 text-center text-lg leading-6 font-bold text-foreground min-[400px]:text-xl">{title}</h1>
+      <Title
+        className={cn(
+          'text-lg leading-4 font-bold text-foreground min-[400px]:text-xl',
+          align === 'center' ? 'px-12 text-center' : 'pr-2 pl-[59px] text-left',
+        )}
+      >
+        {title}
+      </Title>
     </div>
   )
 }

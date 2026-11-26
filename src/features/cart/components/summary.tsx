@@ -1,14 +1,10 @@
-import { X } from 'lucide-react'
+import { CircleAlert, X } from 'lucide-react'
 import { useId, useState, type FormEvent } from 'react'
 import type { Network, Quote } from '@/contracts'
-import { CircleAlert } from 'lucide-react'
-import { formatEth } from '@/shared/lib/eth'
 import { cn } from '@/shared/lib/utils'
 import { Skeleton } from '@/shared/ui/skeleton'
-import { cartItemLabel } from '../format'
+import { cartItemLabel, exactEth } from '../format'
 import { useCoupon } from '../use-quote'
-
-const eth = (value: string) => formatEth(value, { maxDecimals: 6 })
 
 /** Issue text built in the UI language (edition names translated), not the API's text. */
 function issueMessage(quote: Quote, issue: Quote['issues'][number]) {
@@ -19,20 +15,51 @@ function issueMessage(quote: Quote, issue: Quote['issues'][number]) {
 }
 
 /**
- * Subtotal, discount, network fee and total exactly as computed by the API quote.
- * Shimmer while the first quote loads; while a newer quote is computed the previous values
- * stay visible, dimmed, with an "Atualizando…" note (`aria-busy`).
+ * Subtotal, discount, network fee and total exactly as computed by the API quote (the full
+ * value, never rounded). Shimmer while the first quote loads; while a newer quote is computed
+ * the previous values stay visible, dimmed, with an "Atualizando…" note (`aria-busy`).
+ *
+ * `variant`: the cart summary (estimated-fee note on the right, full-width total) or the
+ * payment summary of the desktop frame (note centered, rule above a 321px centered total).
  */
-export function SummaryRows({ quote, updating, className }: { quote: Quote | undefined; updating: boolean; className?: string }) {
+export function SummaryRows({
+  quote,
+  updating,
+  className,
+  variant = 'cart',
+}: {
+  quote: Quote | undefined
+  updating: boolean
+  className?: string
+  variant?: 'cart' | 'checkout'
+}) {
+  const checkout = variant === 'checkout'
   if (!quote) {
+    // Same rows and heights as the loaded summary (subtotal, discount, fee + note, total), so
+    // nothing below moves when the quote arrives.
     return (
       <div aria-busy="true" aria-label="Calculando valores" className={cn('flex flex-col gap-3', className)}>
-        {Array.from({ length: 4 }, (_, i) => (
-          <div key={i} className="flex justify-between gap-4">
-            <Skeleton className="h-5 w-32" />
+        <div className="flex h-5 justify-between gap-4">
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="h-5 w-24" />
+        </div>
+        <div className="flex h-5 justify-between gap-4">
+          <Skeleton className="h-5 w-40" />
+          <Skeleton className="h-5 w-20" />
+        </div>
+        <div className="flex flex-col gap-0 md:gap-3">
+          <div className="flex h-5 justify-between gap-4">
+            <Skeleton className="h-5 w-28" />
             <Skeleton className="h-5 w-24" />
           </div>
-        ))}
+          <div className={cn('flex h-4', checkout ? 'justify-end md:justify-center' : 'justify-end')}>
+            <Skeleton className="h-4 w-24" />
+          </div>
+        </div>
+        <div className={cn('flex h-4 justify-between gap-4 md:mt-3', checkout && 'md:mx-auto md:mt-0 md:w-full md:max-w-[321px]')}>
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-28" />
+        </div>
       </div>
     )
   }
@@ -42,7 +69,7 @@ export function SummaryRows({ quote, updating, className }: { quote: Quote | und
         <div className="flex items-baseline justify-between gap-4">
           <dt className="text-[15px] leading-5">Subtotal</dt>
           <dd className="text-right text-base leading-4 md:text-lg" data-testid="summary-subtotal">
-            {eth(quote.subtotal)}
+            {exactEth(quote.subtotal)}
           </dd>
         </div>
         <div className="flex items-baseline justify-between gap-4">
@@ -50,22 +77,28 @@ export function SummaryRows({ quote, updating, className }: { quote: Quote | und
             {quote.coupon ? `Desconto (${quote.coupon.code}, −${quote.coupon.percentOff}%)` : 'Desconto do lançamento'}
           </dt>
           <dd className="text-right text-[15px] leading-5" data-testid="summary-discount">
-            (-) {eth(quote.discount)}
+            (-) {exactEth(quote.discount)}
           </dd>
         </div>
         <div className="flex flex-col gap-0 md:gap-3">
           <div className="flex items-baseline justify-between gap-4">
             <dt className="text-[15px] leading-5">Taxa de rede</dt>
             <dd className="text-right text-base leading-4 md:text-lg" data-testid="summary-fee">
-              {eth(quote.networkFee)}
+              {exactEth(quote.networkFee)}
             </dd>
           </div>
-          <p className="text-right text-xs leading-4 text-brand-accent">Taxa estimada</p>
+          <p className={cn('text-right text-xs leading-4 text-brand-accent', checkout && 'md:text-center')}>Taxa estimada</p>
         </div>
-        <div className="mt-1 flex items-baseline justify-between gap-4 md:mt-3">
+        {checkout ? <div aria-hidden="true" className="h-px bg-brand/30 max-md:hidden" /> : null}
+        <div
+          className={cn(
+            'flex items-baseline justify-between gap-4 md:mt-3',
+            checkout && 'md:mx-auto md:mt-0 md:w-full md:max-w-[321px]',
+          )}
+        >
           <dt className="text-base leading-4 font-bold">Total</dt>
           <dd className="text-right text-lg leading-4 font-bold text-brand-accent" data-testid="summary-total">
-            {eth(quote.total)}
+            {exactEth(quote.total)}
           </dd>
         </div>
       </dl>
@@ -86,11 +119,13 @@ export function SummaryRows({ quote, updating, className }: { quote: Quote | und
 
 /**
  * "Código promocional": validated by the API (invalid and expired have distinct messages);
- * once applied it shows as a removable chip.
+ * once applied it shows as a removable chip. "Aplicar" keeps the look of the frame at rest
+ * (never dimmed): an empty submit is answered with a message instead of a disabled button.
  */
 export function CouponForm({ network, compact = false }: { network?: Network; compact?: boolean }) {
   const coupon = useCoupon(network)
   const [code, setCode] = useState('')
+  const [empty, setEmpty] = useState(false)
   const id = useId()
 
   if (coupon.applied) {
@@ -112,8 +147,14 @@ export function CouponForm({ network, compact = false }: { network?: Network; co
 
   const submit = (event: FormEvent) => {
     event.preventDefault()
-    if (code.trim()) coupon.apply(code, { onSuccess: () => setCode('') })
+    if (!code.trim()) {
+      setEmpty(true)
+      return
+    }
+    setEmpty(false)
+    coupon.apply(code, { onSuccess: () => setCode('') })
   }
+  const error = empty ? 'Digite um código promocional.' : coupon.error
 
   return (
     <form onSubmit={submit} aria-label="Cupom" className="flex flex-col gap-2" noValidate>
@@ -122,32 +163,37 @@ export function CouponForm({ network, compact = false }: { network?: Network; co
       </label>
       <div
         className={cn(
-          'flex h-[50px] items-stretch overflow-hidden rounded-full border border-line bg-surface md:h-10 md:rounded-none md:border-brand md:bg-transparent',
-          coupon.error && 'border-coral md:border-coral',
+          // Mobile: the 50px pill with the frame shadow; desktop: 40px box with a 3px radius.
+          'flex h-[50px] items-stretch overflow-hidden rounded-full border border-line bg-surface shadow-[0_6px_20px_#0A060473] md:h-10 md:rounded-[3px] md:border-brand md:bg-transparent md:shadow-none',
+          error && 'border-coral md:border-coral',
         )}
       >
         <input
           id={id}
           value={code}
-          onChange={(event) => setCode(event.target.value)}
+          onChange={(event) => {
+            setCode(event.target.value)
+            if (empty) setEmpty(false)
+          }}
           placeholder="Digite o código promocional..."
           autoComplete="off"
-          aria-invalid={coupon.error ? true : undefined}
-          aria-describedby={coupon.error ? `${id}-error` : undefined}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${id}-error` : undefined}
           className="min-w-0 flex-1 bg-transparent px-3 text-xs min-[400px]:px-4 min-[400px]:text-[13px] text-foreground outline-hidden placeholder:text-text-muted focus-visible:outline-2 focus-visible:outline-solid focus-visible:-outline-offset-2 focus-visible:outline-brand-accent md:px-2 md:text-xs"
         />
         <button
           type="submit"
-          disabled={coupon.isApplying || !code.trim()}
-          className="w-[88px] shrink-0 cursor-pointer rounded-full min-[400px]:w-[97px] bg-linear-120 from-brand to-[#a86c3c] text-[15px] font-bold text-foreground disabled:cursor-not-allowed disabled:opacity-60 md:w-[102px] md:rounded-none md:bg-brand md:bg-none md:text-ink"
+          disabled={coupon.isApplying}
+          aria-busy={coupon.isApplying || undefined}
+          className="w-[88px] shrink-0 cursor-pointer rounded-full min-[400px]:w-[97px] bg-linear-120 from-brand/55 to-brand text-[15px] font-bold text-foreground disabled:cursor-progress md:w-[102px] md:rounded-none md:bg-brand md:bg-none md:text-ink md:hover:bg-brand-accent"
         >
           {coupon.isApplying ? 'Aplicando…' : 'Aplicar'}
         </button>
       </div>
-      {coupon.error ? (
+      {error ? (
         <p id={`${id}-error`} role="alert" className="flex items-start gap-1.5 text-[13px] leading-4 text-coral">
           <CircleAlert className="mt-px size-3.5 shrink-0" aria-hidden="true" />
-          {coupon.error}
+          {error}
         </p>
       ) : null}
     </form>
