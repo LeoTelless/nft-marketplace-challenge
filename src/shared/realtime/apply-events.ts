@@ -11,6 +11,40 @@ function newer<T extends { version: number }>(current: T | undefined, incoming: 
   return !current || incoming.version > current.version
 }
 
+/** Version of resource `id` inside a cached value: a snapshot (`{ id, version }`) or a page/list (`{ items }`). */
+function versionIn(data: unknown, id: string): number {
+  if (!data || typeof data !== 'object') return 0
+  const record = data as { id?: unknown; version?: unknown; items?: unknown }
+  let version = record.id === id && typeof record.version === 'number' ? record.version : 0
+  if (Array.isArray(record.items)) {
+    for (const item of record.items as Array<{ id?: unknown; version?: unknown }>) {
+      if (item?.id === id && typeof item.version === 'number') version = Math.max(version, item.version)
+    }
+  }
+  return version
+}
+
+function cachedVersion(queryClient: QueryClient, queryKey: readonly unknown[], id: string): number {
+  let version = 0
+  for (const query of queryClient.getQueryCache().findAll({ queryKey })) {
+    version = Math.max(version, versionIn(query.state.data, id))
+  }
+  return version
+}
+
+/**
+ * Highest version of the NFT already in the cache (detail or any list page), as returned by
+ * REST or applied from an earlier event. An event at or below it carries nothing new.
+ */
+export function cachedNftVersion(queryClient: QueryClient, nftId: string): number {
+  return cachedVersion(queryClient, queryKeys.nfts.all(), nftId)
+}
+
+/** Same for an order of `userId` (detail or the orders list). */
+export function cachedOrderVersion(queryClient: QueryClient, userId: string, orderId: string): number {
+  return cachedVersion(queryClient, queryKeys.user.orders(userId), orderId)
+}
+
 function cartReferencesNft(data: unknown, nftId: string): boolean {
   if (!data || typeof data !== 'object') return false
   if ('items' in data && Array.isArray((data as Cart).items)) {

@@ -36,9 +36,23 @@ export const orderUpdatedEventSchema = z.object({
 })
 export type OrderUpdatedEvent = z.infer<typeof orderUpdatedEventSchema>
 
+/**
+ * Sent to every socket when the server's data was replaced as a whole (in the simulation:
+ * `window.__mocks.reset()`), so no per-resource event describes the change. The client
+ * reconciles by refetching everything it shows. Versions and event ids stay monotonic across
+ * such a replacement, so the duplicate/stale rules above keep working.
+ */
+export const systemResyncEventSchema = z.object({
+  type: z.literal('system.resync'),
+  reason: z.literal('reset'),
+  occurredAt: isoDateSchema,
+})
+export type SystemResyncEvent = z.infer<typeof systemResyncEventSchema>
+
 export const REALTIME_EVENTS = {
   nftUpdated: 'nft.updated',
   orderUpdated: 'order.updated',
+  resync: 'system.resync',
 } as const
 
 export type RealtimeEvent = NftUpdatedEvent | OrderUpdatedEvent
