@@ -12,7 +12,7 @@ export interface FavoriteControl {
   onToggle: () => void
 }
 
-/** "Drifting Lighthouse #12" → ["Drifting Lighthouse", " #12"]: the second part never shrinks. */
+/** "Drifting Lighthouse #12" → ["Drifting Lighthouse", " #12"]: the token number never wraps alone. */
 function splitTokenNumber(name: string): [string, string] {
   const match = / #\d+$/.exec(name)
   return match ? [name.slice(0, match.index), match[0]] : [name, '']
@@ -21,9 +21,9 @@ function splitTokenNumber(name: string): [string, string] {
 /**
  * NFT card (frame 206 of the Figma grid, the reference card): artwork on a Surface Card box,
  * name and price below, always aligned. On mobile the box gets the rounded gradient of the
- * mobile frame. Names stay on one line, as in the frames: only the title is shortened with an
- * ellipsis, the token number ("#12") is always visible (full name in the accessible name and
- * the tooltip). The whole card is one link; the favorite button is a sibling (never nested).
+ * mobile frame. Names are never cut: short names take one line, as in the frames; long ones wrap
+ * (the token number stays with the last word) and only that row grows, with no space reserved
+ * in the other cards. The whole card is one link; the favorite button is a sibling (never nested).
  */
 export function NftCard({
   nft,
@@ -70,16 +70,14 @@ export function NftCard({
         </div>
       </div>
       <div className="flex flex-col px-2 pt-2 md:gap-3 md:px-0 md:pt-3">
-        <Heading className="flex min-w-0 text-[15px] leading-5 font-normal text-foreground md:text-base md:leading-4">
+        <Heading className="text-[15px] leading-5 font-normal break-words text-foreground md:text-base md:leading-5 xl:leading-4">
           <Link
             to="/nft/$nftId"
             params={{ nftId: nft.id }}
-            aria-label={nft.name}
-            title={nft.name}
-            className="flex min-w-0 after:absolute after:inset-0 after:content-[''] focus-visible:outline-0 focus-visible:after:rounded-[20px] focus-visible:after:outline-2 focus-visible:after:outline-solid focus-visible:after:outline-offset-2 focus-visible:after:outline-brand-accent md:focus-visible:after:rounded-none"
+            className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-0 focus-visible:after:rounded-[20px] focus-visible:after:outline-2 focus-visible:after:outline-solid focus-visible:after:outline-offset-2 focus-visible:after:outline-brand-accent md:focus-visible:after:rounded-none"
           >
-            <span className="truncate">{title}</span>
-            {token ? <span className="shrink-0 whitespace-pre">{token}</span> : null}
+            {title}
+            {token ? <span className="whitespace-nowrap">{token}</span> : null}
           </Link>
         </Heading>
         <p className="text-base leading-4 font-bold text-brand-accent md:text-lg">
