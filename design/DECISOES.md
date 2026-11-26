@@ -36,15 +36,15 @@ O Figma tem inconsistências (várias delas apontadas nos comentários do própr
 - Imagens: as 4 artes do Figma (PNG de 1254 px, ~2 MB) foram convertidas para AVIF/WebP em 256/512/800 px e distribuídas entre as 48 fixtures. Os ícones SVG do Figma viraram componentes (`scripts/generate-icons.mjs`).
 
 ## Desvios dos fluxos (carrinho, pagamento, pedido, auth, conta)
-- Carrinho: nome do NFT em até 2 linhas (sem corte com reticências); preço alterado e falta de estoque aparecem na linha com ícone e texto (não só cor); cupom aplicado vira um selo removível e o desconto mostra o código; "Colecionadores também viram" usa os NFTs em destaque; no mobile o stepper é o quadrado escuro do frame e o resumo fica no painel arredondado, sem barra fixa. Como nos frames mobile, Carrinho e Pagamento não têm o header compacto nem a barra de abas abaixo de 768 px (só o cabeçalho "voltar + título"). Abaixo de 1440 px os 3 pontos do carrossel "Colecionadores também viram" são substituídos pela rolagem horizontal (como no Início).
+- Carrinho: nome do NFT em até 2 linhas (sem corte com reticências); preço alterado e falta de estoque aparecem na linha com ícone e texto (não só cor); cupom aplicado vira um selo removível e o desconto mostra o código; "Colecionadores também viram" mostra os 15 NFTs listados mais recentemente que não estão no carrinho, em carrossel de 3 páginas de 5 com os pontos do frame (em todas as larguras a partir de 768 px); no mobile o stepper é o par de círculos escuros de 24 px do frame e o resumo fica no painel arredondado, sem barra fixa. Como nos frames mobile, Carrinho e Pagamento não têm o header compacto, a barra de abas, as recomendações nem o rodapé abaixo de 768 px: a tela termina no painel de resumo/CTA (o botão "Demo" continua depois dele).
 - Pagamento: "Rede" lista só as redes da carteira selecionada; "Endereço da carteira" e "Tipo de carteira" são somente leitura (vêm da carteira cadastrada); o slot "ENS ou carteira secundária" virou o "Nome ENS (opcional)" com sufixo `.eth` e o segundo campo "Nome ENS" foi removido (duplicado). "Carteira e rede" lista as carteiras cadastradas com a marca do provedor (W/M/Coinbase), em vez de provedores genéricos; a conexão simulada é explícita ("Conectar carteira"). "Confirmar compra" abre um diálogo de revisão com o total da cotação, e a confirmação final acontece nele (substitui o passo "Revisar pedido"). "Tem um código promocional? Aplique aqui" abre o campo de cupom. Mobile: ordem do frame ("Carteira e rede", depois os dados do colecionador, depois itens e resumo) e barra fixa com total e "Confirmar compra" (a barra de abas some nessa rota). Campos sem preenchimento (como o `Input`), passo de 81 px entre linhas. "Seus NFTs": quantidade "(x n)" abaixo do subtotal, para o nome caber.
 - Confirmação: é a rota `/orders/$orderId` (acesso direto e refresh), com o cartão do modal do frame centralizado; o X volta ao início. "Carteira" mostra o endereço curto (o recibo guarda o endereço, não o provedor); o ID da transação é abreviado com o hash completo no `title`; subtotal e desconto entram no resumo; "Ver no Etherscan" informa que o link é simulado. Pendente e recusado usam o mesmo cartão sem recibo.
-- Login/Cadastro: os campos mantêm só placeholders visíveis, como no frame, com rótulos acessíveis ocultos; o olho mostra/oculta a senha; login social e "Esqueceu a senha?" ficam desabilitados com "(em breve)". Atrás do modal desktop fica o hero do Início escurecido. No mobile o título do cadastro é "Criar conta" (o frame diz "Criar perfil de colecionador"), igual ao botão.
+- Login/Cadastro: os campos mantêm só placeholders visíveis, como no frame, com rótulos acessíveis ocultos; o olho mostra/oculta a senha; login social e "Esqueceu a senha?" ficam desabilitados com "(em breve)". Atrás do modal desktop fica o hero do Início escurecido. No mobile o título e o botão do cadastro são "Criar conta" (o frame diz "Criar perfil de colecionador" e "Criar perfil"), iguais à aba e ao botão do modal desktop.
 - Perfil: "Nome ENS" é opcional e o `.eth` é um sufixo fixo (não um select); "Apelido da carteira" edita a carteira principal; avatar com pré-visualização antes de "Enviar avatar"; um único "Salvar" grava dados, apelido e senha (a senha só é validada se preenchida). Menu "Meu perfil": "Atividade" = pedidos (`/orders`), "Lista de interesse" = favoritos; Ofertas, Arquivos baixados e Suporte ficam "(em breve)". Abaixo de 1024 px o menu vira uma linha de abas roláveis.
 - Carteiras: os campos de perfil repetidos no frame (Nome de exibição, Nome do perfil, E-mail, Código de indicação, Nome ENS) saíram; "Rede" virou "Redes" (seleção múltipla, como no contrato); "Igual à carteira principal" foi removido (a API recusa endereço repetido). A secundária é editável e pode ser promovida ("Tornar principal").
 - Favoritos e Atividade (pedidos) não têm frame: derivados do menu da conta, com os cards do catálogo e linhas de pedido com status em texto e ícone.
 - Painel "Demo" (botão discreto → sheet) para cenários, reset e mudanças no servidor simulado; aparece só com os mocks ativos. A partir de 1440 px fica flutuante no canto inferior esquerdo (na margem vazia ao lado do conteúdo de 1200 px); abaixo disso é um botão comum depois do footer (nunca sobre cards, CTA, total ou campos, inclusive em tablet e em 1024-1439 px).
-- Perfil: dicas de formato (ENS sem `.eth`, avatar PNG/JPEG/WebP até 1 MB) ficam acessíveis mas não visíveis, e a regra da nova senha vai no placeholder, para manter a grade do frame; Salvar com 131 px.
+- Perfil: dicas de formato (ENS sem `.eth`, avatar PNG/JPEG/WebP até 1 MB) ficam acessíveis mas não visíveis; a regra da nova senha fica num placeholder curto ("Mín. 8, letras e números") e, completa, ligada ao campo por `aria-describedby` e mostrada sob o erro, para manter a grade do frame; Salvar com 131 px.
 - Carteiras: o "Adicionar" do topo aparece só enquanto não há carteira secundária (com as duas cadastradas, não há o que adicionar).
 - Header: "Mercado" não fica sublinhado no Carrinho e no Pagamento (o sublinhado indica a seção atual, e essas telas não são o catálogo).
 - Resumo (carrinho, pagamento): o desconto zero aparece como `(-) 0 ETH`, no mesmo formato dos demais valores da cotação, em vez do texto fixo `(-) 00.00` do Figma.
@@ -98,3 +98,101 @@ Medido no app (Chromium, área útil de 1440 e 414 px, dados das fixtures) contr
 | --- | --- | --- | --- |
 | Pontos da galeria | atrás da arte (invisíveis), 3 pontos, 7 px entre eles | sobre a arte, 4 pontos, passo de 24 px | a galeria precisa ser visível e operável (4 vistas); alvo de 24 px |
 | "Compartilhar este NFT" | ausente | ausente no mobile (só desktop/tablet) | igual ao frame |
+
+## Fluxos (carrinho, pagamento, pedido, login, cadastro, conta): o que ainda difere do Figma
+
+Medido no app (Chromium, área útil de 1440 e 414 px, mesmos itens e quantidades dos frames) contra `design/nodes`. Tudo o que não está aqui segue o valor do frame (diferença ≤ 2 px de posição/tamanho, ≤ 1 px de fonte, mesma cor, peso, raio e sombra): por exemplo o modal de login 500×600 e o de cadastro 500×656 com raio 8, os blocos do login mobile a 256/312/592/756 px, os raios de 3 px dos campos e botões do pagamento, do perfil e das carteiras, e o preço do recibo numa linha só. Diferenças que são consequência de outra não são repetidas.
+
+### Regras comuns dos fluxos
+- **Valores em ETH**: carrinho, pagamento, recibo e pedidos mostram o valor exato devolvido pela API (todas as casas decimais, sem arredondar nem truncar; só os zeros à direita saem), por exemplo `0.6703701 ETH`. Subtotal, desconto, taxa e total são sempre os da cotação; o total da linha do carrinho é o `lineTotal` da cotação (enquanto ela não chega, preço × quantidade com aritmética decimal exata). Os valores do Figma (`26.846 ETH`, `0.016 ETH`) são exemplos.
+- **Campos**: raio de 3 px no pagamento, perfil e carteiras e de 5 px no modal de login/cadastro (10 px no mobile), como nos nós; a frase "raio de 5 px" do design system vale para o primitivo `Input`.
+- **Botões nunca apagados em repouso**: "Aplicar" (cupom) e "Salvar carteira" ficam com a cor do frame mesmo sem nada para enviar; o envio vazio responde com uma mensagem ("Digite um código promocional.", "Nenhuma alteração para salvar.") em vez de um botão desabilitado, que no layout pareceria outro componente.
+- **Header nas telas de conta**: nenhum item da navegação fica ativo em Perfil, Carteiras, Atividade e Lista de interesse. O frame copia o header do Início com "Início" ativo, mas o sublinhado indica a seção atual, e essas telas não são o Início (mesma regra do Carrinho e do Pagamento).
+- **Rodapé**: aparece em Perfil, Carteiras, Confirmação e nas telas sem frame (os frames de 1080 px cortam a página no fim do conteúdo); só sai no Carrinho e no Pagamento mobile, cujos frames terminam no resumo.
+- **Carregando**: rotas privadas mostram header, rodapé e o esqueleto da tela pedida enquanto a sessão é validada (antes ficava tudo vazio); os esqueletos têm as alturas finais (CLS medido com o cenário `slow`: 0 em perfil, pedidos e carrinho; 0,0099 no pagamento desktop).
+
+### Carrinho desktop (1440)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Nome longo na linha | 1 linha | até 2 linhas, o ID desce | nomes das fixtures são maiores; não cortamos o nome |
+| Desconto sem cupom | `(-) 00.00` | `(-) 0 ETH` | mesmo formato dos outros valores da cotação |
+| "Colecionadores também viram" | 5 cards fixos | carrossel de 15 (3 páginas de 5) com os 3 pontos | os pontos passam a ter função; NFTs que não estão no carrinho |
+| Pontos do carrossel | 12 px, 8 px entre eles | 12 px, passo de 28 px | alvo de toque de 24 px |
+| Card recomendado | nome 15 px, preço 16 px | nome 16 px, preço 18 px | card único do catálogo (Layout, 1º item) |
+| "Conectar e finalizar" antes da cotação | — | mesmo botão com `aria-disabled` | não leva ao pagamento sem totais |
+
+### Carrinho mobile (414)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Linha da edição | "Edição: 1/50" | "Edição: Padrão" | o item do carrinho não tem número de série nem tiragem |
+| Título | x 124 (14 px à direita do centro) | centralizado | o deslocamento é defeito do frame |
+| Remover | só no item 3, sobre o "+" | em todos os cards, 24 px acima do stepper | remover é obrigatório e não pode sobrepor outro controle |
+| Nome longo | 1 linha | até 2 linhas antes do stepper; o card cresce até ~6 px | o nome nunca passa por baixo do stepper |
+| Em 320 px | — | arte de 80 px | o texto cabe sem encostar no stepper |
+| Botão "Demo" | — | depois do painel de resumo | ferramenta da demonstração (ver "Painel Demo") |
+
+### Pagamento desktop (1440)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| "ENS ou carteira secundária" + "Nome ENS" | dois campos, ambos obrigatórios | um "Nome ENS (opcional)" com sufixo `.eth` (78 px) e placeholder "seunome" | campo duplicado; ENS não pode ser exigido |
+| Endereço e Tipo de carteira | digitáveis | somente leitura, da carteira selecionada (endereço completo no `title`) | requisito de usar as carteiras cadastradas |
+| Opções de "Carteira e rede" | selo de marcas, MetaMask, Coinbase | as carteiras cadastradas: apelido + endereço curto, 45 px, raio 3 | o pagamento usa a carteira do usuário |
+| Caixa "Carteira desconectada / Conectar carteira" | ausente | entre as opções e o CTA (o CTA desce ~140 px) | a conexão simulada é obrigatória e explícita |
+| 2ª linha de "Seus NFTs" | "ID do token: #0042" | igual, mais " · Rara/Lendária" quando a edição não é a padrão | linhas do mesmo NFT em edições diferentes |
+| "(x n)" | à esquerda do valor | abaixo do valor | o nome cabe na linha |
+| Observação | textarea 350×152 | igual, sem alça de redimensionar | — |
+
+### Pagamento mobile (414)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| "Carteira conectada" + cards + "Carteira e rede" com provedores | duas listas | uma lista "Carteira e rede" com as carteiras cadastradas (cards de 93 px do frame) | as carteiras vêm do cadastro; não há provedor genérico |
+| Menu ⋮ dos cards | presente | ausente | sem ação no escopo (editar carteira fica em Carteiras, via "Trocar carteira") |
+| Total + CTA | soltos no fim da tela | barra fixa com "Total:" 16/18 px e o CTA de 358×60 com o gradiente do frame | o total e a confirmação ficam sempre à vista; o foco nunca fica sob a barra |
+| Dados do colecionador, itens e resumo | fora do frame (896 px) | abaixo de "Carteira e rede" | dados obrigatórios do pedido |
+
+### Confirmação de pedido (1440)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Fundo | página coberta, só o modal | rota com header e rodapé, cartão em y 166 | acesso direto e refresh |
+| Data | "29 Jul, 2026" | "26 nov. 2026" | formato pt-BR |
+| Carteira | "MetaMask" | endereço curto | o recibo guarda o endereço |
+| Totais | Taxa + Total | Subtotal, Desconto (se houver), Taxa, Total | o recibo mostra a cotação inteira |
+| Abaixo de "Ver no Etherscan" | — | "Referência simulada…" | o hash não existe na rede real |
+| Altura do cartão | 821 | ~860 (uma linha a mais nos totais e a nota) | consequência das duas linhas acima |
+| Mobile (sem frame) | — | o mesmo cartão em coluna, quantidade e valor sob o nome | derivado do desktop |
+
+### Login e Cadastro (1440 e 414)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Fundo do modal desktop | Início inteiro, sem escurecer | hero do Início escurecido 60% | foco no diálogo (Layout) |
+| Estado inicial | senha preenchida e focada | e-mail focado, campos vazios | estado real de abertura |
+| "Esqueceu a senha?" e login social | ativos | opacidade 70% + "(em breve)" | fora do escopo |
+| Olho em "Confirmar senha" (cadastro desktop) | ausente | presente | igual ao frame mobile; mostrar a senha vale para os dois campos |
+| Dica da senha | ausente | lida por leitores de tela; visível só sob o erro | regra conhecida sem deslocar a grade |
+| Botão X no mobile | ausente | glifo de 18 px no canto | saída por toque (Esc só existe com teclado) |
+| Link "Crie uma conta" / "Entre" | linha inteira #CFB28C | mesma cor, link sublinhado | link identificável sem depender de cor |
+| Cadastro mobile: título/botão | "Criar perfil de colecionador" / "Criar perfil" | "Criar conta" nos dois | igual à aba e ao botão do desktop |
+| Cadastro mobile: placeholder "Nome de usuário" | centralizado | à esquerda | o centralizado é defeito (os outros campos são à esquerda) |
+
+### Perfil do colecionador (1440; mobile derivado)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Nome ENS | label com *, select ".eth" com seta | "(opcional)", sufixo fixo ".eth" de 78 px | ENS opcional; só existe `.eth` |
+| Apelido da carteira | com * | sem * | só é editável quando há carteira principal |
+| Ícone do avatar vazio | Iconly "Image 2" | lucide "image-plus" de 24 px | o asset não foi exportado do arquivo |
+| "Remover" | sempre | só com avatar enviado | não há o que remover |
+| Placeholder da nova senha | vazio | "Mín. 8, letras e números" | regra visível antes do erro |
+| Menu: itens "em breve" | opacidade 100% | 60% + "(em breve)" | sem destino no escopo |
+| Abaixo de 1024 px | — | menu em abas roláveis, campos em 1 coluna | derivado do desktop |
+
+### Carteiras (1440; mobile derivado)
+| Elemento | Figma | Adotado | Motivo |
+| --- | --- | --- | --- |
+| Campos | 10 (repete o perfil) | Apelido, Tipo, Endereço, Redes | dados do perfil ficam no Perfil; "ENS ou carteira secundária" vira a carteira secundária própria |
+| Rede | select | "Redes": 4 caixas de seleção | a carteira tem várias redes no contrato |
+| "Igual à carteira principal" | rádio | ausente | a API recusa endereço repetido |
+| "Adicionar" do topo | sempre | só sem carteira secundária | com as duas, não há o que adicionar |
+| Secundária cadastrada | — | formulário próprio + "Tornar principal" | requisito de editar e promover |
+
+### Atividade (`/orders`) e Lista de interesse (sem frame)
+- Derivadas do menu da conta. Pedidos: em < 640 px o texto ocupa a linha inteira e total e status vão para a linha de baixo. Favoritos: cards do catálogo.
