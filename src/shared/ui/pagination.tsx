@@ -16,8 +16,8 @@ function PaginationList({ className, ...props }: React.ComponentProps<'ul'>) {
 
 function paginationItemClass({ current = false, disabled = false }: { current?: boolean; disabled?: boolean } = {}) {
   return cn(
-    'grid h-[35px] min-w-[35px] place-content-center rounded-xs border px-2 text-lg leading-4 transition-colors outline-none',
-    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent',
+    'grid h-[35px] min-w-[35px] place-content-center rounded-xs border px-2 text-lg leading-4 transition-colors',
+    'focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent',
     current ? 'border-brand bg-brand font-bold text-ink' : 'border-line text-foreground hover:border-brand',
     disabled && 'pointer-events-none opacity-40',
   )
