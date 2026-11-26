@@ -39,9 +39,10 @@ test('visitor cart persists after refresh and is merged into the account on logi
 })
 
 test('the login dialog traps focus, maps API errors and closes back to the page', async ({ page }) => {
-  await openWithScenario(page, '/cart')
-  await expect(main(page).getByText('Seu carrinho está vazio.')).toBeVisible()
-  // In-app navigation (the header button), so closing returns to the cart.
+  // Start on the home page: the cart and checkout have no header/tab bar on mobile (as the frames).
+  await openWithScenario(page, '/')
+  await expect(main(page).getByRole('heading', { level: 1 }).first()).toBeAttached()
+  // In-app navigation (the header button), so closing returns to the page.
   const headerLogin = page.getByTestId('header-login').first()
   if (await headerLogin.isVisible()) await headerLogin.click()
   else {
@@ -63,7 +64,7 @@ test('the login dialog traps focus, maps API errors and closes back to the page'
 
   await page.keyboard.press('Escape')
   await expect(dialog).toBeHidden()
-  await expect(page).toHaveURL(/\/cart$/)
+  await expect(page).toHaveURL(/:\d+\/$/)
 })
 
 test('favorite removal is optimistic and rolls back when the API fails', async ({ page }) => {

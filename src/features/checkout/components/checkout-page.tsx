@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { CircleCheck, Loader2, PlugZap, ShoppingCart, Unplug } from 'lucide-react'
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useForm, useWatch, type UseFormReturn } from 'react-hook-form'
 import type { Quote, Wallet } from '@/contracts'
 import { useCurrentUser } from '@/features/auth/session'
@@ -19,6 +19,7 @@ import { MARKET_CRUMBS } from '@/shared/flow-ui/crumbs'
 import { Breadcrumb, MobileScreenHeader } from '@/shared/flow-ui/page-chrome'
 import { StatusPage } from '@/shared/layout/status-page'
 import { formatEth } from '@/shared/lib/eth'
+import { isApiError } from '@/shared/api/api-error'
 import { applyApiErrors } from '@/shared/lib/form-errors'
 import { cn } from '@/shared/lib/utils'
 import { Button, buttonVariants } from '@/shared/ui/button'
@@ -74,6 +75,24 @@ export function CheckoutPage() {
     if (selectedWallet && !selectedWallet.networks.includes(network)) form.setValue('network', selectedWallet.networks[0])
   }, [selectedWallet, network, form])
 
+  // Focus after the review dialog closes: the first field the API rejected, else the button
+  // that opened it ("Confirmar compra"). Radix would otherwise drop focus on <body>.
+  const confirmButton = useRef<HTMLButtonElement>(null)
+  const focusAfterClose = useRef<(typeof CHECKOUT_FIELDS)[number] | null>(null)
+  const applyFieldErrors = (error: unknown) => {
+    const applied = applyApiErrors(error, form.setError, CHECKOUT_FIELDS)
+    if (applied && isApiError(error)) {
+      focusAfterClose.current = CHECKOUT_FIELDS.find((field) => error.fieldErrors[field]?.length) ?? null
+    }
+    return applied
+  }
+  const restoreFocus = () => {
+    const field = focusAfterClose.current
+    focusAfterClose.current = null
+    if (field && field !== 'walletId') form.setFocus(field)
+    else confirmButton.current?.focus()
+  }
+
   const handleOutcome = (outcome: CheckoutOutcome) => {
     switch (outcome.type) {
       case 'created':
@@ -87,7 +106,7 @@ export function CheckoutPage() {
         setResult({ tone: 'error', message: outcome.message })
         return
       case 'failed':
-        if (applyApiErrors(outcome.error, form.setError, CHECKOUT_FIELDS)) checkout.backToForm()
+        if (applyFieldErrors(outcome.error)) checkout.backToForm()
         setResult({ tone: 'error', message: outcome.message })
         return
       case 'blocked':
@@ -106,13 +125,13 @@ export function CheckoutPage() {
     setResult(null)
     checkout.review()
   })
-  const onConfirm = form.handleSubmit(async (values) => handleOutcome(await checkout.confirm(values)))
+  const onConfirm = () => form.handleSubmit(async (values) => handleOutcome(await checkout.confirm(values)))()
   // Re-sends the stored attempt as is (same key and body): no form validation needed.
   const onRecover = async () => handleOutcome(await checkout.confirm(form.getValues()))
 
   if (cart.isSuccess && cart.data.items.length === 0 && !checkout.pendingAttempt) {
     return (
-      <div className="container-page pt-4 md:pt-8">
+      <div className="container-page min-h-dvh pt-4 md:pt-8">
         <MobileScreenHeader title="Pagamento com carteira" fallback="/cart" />
         <StatusPage
           icon={ShoppingCart}
@@ -133,7 +152,7 @@ export function CheckoutPage() {
   const errors = form.formState.errors
 
   return (
-    <div className="container-page pt-4 pb-40 md:pt-8 md:pb-0">
+    <div className="container-page min-h-dvh pt-4 pb-40 md:pt-8 md:pb-0">
       <Breadcrumb items={[...MARKET_CRUMBS, { label: 'Pagamento' }]} />
       <MobileScreenHeader title="Pagamento com carteira" fallback="/cart" />
       <h1 className="sr-only max-md:hidden">Pagamento</h1>
@@ -153,7 +172,7 @@ export function CheckoutPage() {
         className="mt-6 flex flex-col gap-8 md:mt-8 lg:flex-row lg:gap-8"
       >
         {/* Collector profile */}
-        <section aria-labelledby="collector-title" className="flex min-w-0 flex-1 flex-col gap-3 lg:max-w-[763px]">
+        <section aria-labelledby="collector-title" className="flex min-w-0 flex-1 flex-col gap-3 max-md:order-2 lg:max-w-[763px]">
           <h2 id="collector-title" className="text-[17px] leading-4 font-bold">
             Perfil do colecionador
           </h2>
@@ -173,7 +192,7 @@ export function CheckoutPage() {
               readOnly
               value={selectedWallet?.address ?? ''}
               placeholder="Endereço 0x da carteira"
-              hint="Preenchido pela carteira selecionada."
+              title="Preenchido pela carteira selecionada"
             />
             <EnsField form={form} />
             <TextField
@@ -188,7 +207,7 @@ export function CheckoutPage() {
 
           <UseOtherWallet wallets={walletList} selected={selectedWallet} onSelect={(id) => form.setValue('walletId', id, { shouldDirty: true })} />
 
-          <div className="mt-3 flex flex-col gap-2.5 md:max-w-[350px]">
+          <div className="mt-3 flex flex-col gap-3 md:max-w-[350px]">
             <label htmlFor="collector-note" className="text-[15px] leading-[15px]">
               Observação do colecionador (opcional)
             </label>
@@ -197,7 +216,7 @@ export function CheckoutPage() {
               rows={6}
               aria-invalid={errors.collector?.note ? true : undefined}
               aria-describedby={errors.collector?.note ? 'collector-note-error' : undefined}
-              className="min-h-[152px] rounded-sm border border-line bg-surface-dark p-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
+              className="min-h-[152px] rounded-[5px] border border-line bg-transparent p-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
               {...form.register('collector.note')}
             />
             {errors.collector?.note ? (
@@ -209,8 +228,9 @@ export function CheckoutPage() {
         </section>
 
         {/* Items, summary, wallet */}
-        <div className="flex flex-col gap-8 lg:w-[405px] lg:shrink-0 lg:gap-3">
-          <section aria-labelledby="items-title" className="flex flex-col gap-3">
+        {/* Below md the column dissolves so the frame order applies: wallet, collector, items. */}
+        <div className="flex flex-col gap-8 max-md:contents lg:w-[405px] lg:shrink-0 lg:gap-3">
+          <section aria-labelledby="items-title" className="flex flex-col gap-3 max-md:order-3">
             <h2 id="items-title" className="text-[17px] leading-4 font-bold">
               Seus NFTs
             </h2>
@@ -227,7 +247,7 @@ export function CheckoutPage() {
             </section>
           </section>
 
-          <section aria-labelledby="wallet-title" className="flex flex-col gap-5 lg:mt-3">
+          <section aria-labelledby="wallet-title" className="flex flex-col gap-5 max-md:order-1 lg:mt-3">
             <div className="flex items-baseline justify-between gap-3">
               <h2 id="wallet-title" className="text-[17px] leading-4 font-bold">
                 Carteira e rede
@@ -259,6 +279,7 @@ export function CheckoutPage() {
                 <span className="text-[22px] text-brand-accent">{quote ? eth(quote.total) : '—'}</span>
               </p>
               <Button
+                ref={confirmButton}
                 type="submit"
                 disabled={!quote || checkout.quote.isUpdating}
                 className="h-[60px] w-full rounded-full text-base font-bold md:h-[45px] md:rounded-sm md:text-[15px]"
@@ -290,6 +311,7 @@ export function CheckoutPage() {
         submitting={checkout.isSubmitting}
         result={result}
         onConfirm={() => void onConfirm()}
+        onRestoreFocus={restoreFocus}
       />
     </div>
   )
@@ -299,25 +321,25 @@ function EnsField({ form }: { form: UseFormReturn<CheckoutFormValues> }) {
   const id = useId()
   const error = form.formState.errors.collector?.ensName?.message
   return (
-    <div className="flex min-w-0 flex-col gap-2.5">
+    <div className="flex min-w-0 flex-col">
       <label htmlFor={id} className="flex h-[29px] items-center text-[15px] leading-[15px]">
         Nome ENS (opcional)
       </label>
       <div className="flex gap-3">
         <input
           id={id}
-          placeholder="ENS da carteira"
+          placeholder="ENS ou carteira secundária (opcional)"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${id}-error` : `${id}-suffix`}
-          className="h-10 min-w-0 flex-1 rounded-sm border border-line bg-surface-dark px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
+          className="h-10 min-w-0 flex-1 rounded-[5px] border border-line bg-transparent px-3 text-sm text-foreground outline-hidden placeholder:text-text-muted hover:border-line-soft focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-brand-accent aria-invalid:border-coral"
           {...form.register('collector.ensName')}
         />
-        <span id={`${id}-suffix`} className="grid h-10 w-[78px] place-content-center rounded-sm border border-line text-base">
+        <span id={`${id}-suffix`} className="grid h-10 w-[78px] place-content-center rounded-[5px] border border-line text-base">
           .eth
         </span>
       </div>
       {error ? (
-        <p id={`${id}-error`} className="text-[13px] text-coral">
+        <p id={`${id}-error`} className="mt-1.5 text-[13px] text-coral">
           {error}
         </p>
       ) : null}
@@ -361,21 +383,21 @@ function QuoteLines({ quote }: { quote: Quote | undefined }) {
   return (
     <ul className="mt-3 flex flex-col gap-3">
       {quote.lines.map((line) => (
-        <li key={`${line.nftId}-${line.editionId}`} className="flex min-h-[70px] flex-wrap items-center gap-x-2 gap-y-1 bg-surface py-1 pr-4 pl-1">
+        <li key={`${line.nftId}-${line.editionId}`} className="flex min-h-[70px] items-center gap-2 bg-surface py-1 pr-4 pl-1">
           <div className="size-[66px] shrink-0 overflow-hidden rounded-[10px]">
             <NftImage image={cartItemImage(line)} sizes="70px" />
           </div>
-          <div className="flex min-w-[130px] flex-1 flex-col gap-1.5">
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
             <span className="line-clamp-2 text-base leading-[18px] font-bold break-words">{line.nftName}</span>
             <span className="text-sm leading-4 text-text-muted">
               {editionLabel({ name: line.editionName })} · ID {tokenLabel(line.nftId)}
             </span>
           </div>
-          <span className="ml-auto flex items-center gap-3">
-            <span className="text-sm text-text-secondary">
+          <span className="ml-auto flex flex-col items-end gap-1.5">
+            <span className="text-right text-lg leading-4 font-bold whitespace-nowrap text-brand-accent">{eth(line.lineTotal)}</span>
+            <span className="text-sm leading-4 text-text-secondary">
               <span className="sr-only">Quantidade: </span>(x {line.quantity})
             </span>
-            <span className="min-w-[88px] text-right text-lg leading-4 font-bold text-brand-accent">{eth(line.lineTotal)}</span>
           </span>
         </li>
       ))}
@@ -418,8 +440,9 @@ function WalletChoices({
   if (loading) {
     return (
       <div aria-busy="true" aria-label="Carregando carteiras" className="flex flex-col gap-4">
-        <Skeleton className="h-[45px] w-full" />
-        <Skeleton className="h-[45px] w-full" />
+        {/* Same height as the wallet cards (two-line cards on mobile), so nothing below moves. */}
+        <Skeleton className="h-[98px] w-full rounded-[15px] md:h-[62px] md:rounded-none" />
+        <Skeleton className="h-[98px] w-full rounded-[15px] md:h-[62px] md:rounded-none" />
       </div>
     )
   }
@@ -538,6 +561,7 @@ function ReviewDialog({
   submitting,
   result,
   onConfirm,
+  onRestoreFocus,
 }: {
   open: boolean
   onClose: () => void
@@ -552,11 +576,18 @@ function ReviewDialog({
   submitting: boolean
   result: Result
   onConfirm: () => void
+  onRestoreFocus: () => void
 }) {
   const blockMessage = !quoteChanged && block && block !== 'not_reviewed' ? BLOCK_MESSAGES[block] : undefined
   return (
     <Dialog open={open} onOpenChange={(next) => (next || submitting ? undefined : onClose())}>
-      <DialogContent className="max-h-[calc(100dvh-2rem)] gap-5 overflow-y-auto rounded-none border-0 border-b-[10px] border-b-brand bg-surface px-6 pt-10 pb-8 sm:max-w-[578px] md:px-11">
+      <DialogContent
+        onCloseAutoFocus={(event) => {
+          event.preventDefault()
+          onRestoreFocus()
+        }}
+        className="max-h-[calc(100dvh-2rem)] gap-5 overflow-y-auto rounded-none border-0 border-b-[10px] border-b-brand bg-surface px-6 pt-10 pb-8 sm:max-w-[578px] md:px-11"
+      >
         <div className="flex flex-col gap-2 text-center">
           <DialogTitle className="text-xl leading-6">Revise seu pedido</DialogTitle>
           <DialogDescription>Confira os itens, os valores da cotação e a carteira antes de confirmar.</DialogDescription>

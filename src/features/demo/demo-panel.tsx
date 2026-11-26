@@ -16,12 +16,12 @@ export function DemoPanel() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
-        // Mobile: round button at the right, just above the bottom bar (`--mobile-bar-offset`, set
-        // by the root layout: tab bar or the detail/checkout action bar), never over the content edge.
-        className="fixed right-3 bottom-[var(--mobile-bar-offset,96px)] z-30 inline-flex size-9 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-line bg-surface-raised/95 text-xs font-medium text-text-secondary shadow-raised hover:border-brand hover:text-brand-accent md:right-auto md:bottom-4 md:left-4 md:size-auto md:h-9 md:px-3"
+        // Mobile: an ordinary button at the end of the page (after the footer, inside its bottom-bar padding),
+        // so it never covers content, totals or fields. Desktop: discreet floating button.
+        className="z-30 mx-auto mt-4 mb-4 flex h-9 w-fit cursor-pointer items-center justify-center gap-1.5 rounded-full border border-line bg-surface-raised/95 px-3 text-xs font-medium text-text-secondary shadow-raised hover:border-brand hover:text-brand-accent md:fixed md:bottom-4 md:left-4 md:m-0"
       >
         <FlaskConical className="size-4" aria-hidden="true" />
-        <span className="max-md:sr-only">Demo</span>
+        <span>Demo</span>
         <span className="sr-only">: painel de cenários simulados</span>
       </SheetTrigger>
       <SheetContent side="left" className="w-full overflow-y-auto sm:max-w-[400px]">

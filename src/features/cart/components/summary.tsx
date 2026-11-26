@@ -5,9 +5,18 @@ import { CircleAlert } from 'lucide-react'
 import { formatEth } from '@/shared/lib/eth'
 import { cn } from '@/shared/lib/utils'
 import { Skeleton } from '@/shared/ui/skeleton'
+import { cartItemLabel } from '../format'
 import { useCoupon } from '../use-quote'
 
 const eth = (value: string) => formatEth(value, { maxDecimals: 6 })
+
+/** Issue text built in the UI language (edition names translated), not the API's text. */
+function issueMessage(quote: Quote, issue: Quote['issues'][number]) {
+  const line = quote.lines.find((l) => l.nftId === issue.nftId && l.editionId === issue.editionId)
+  if (!line) return issue.message
+  const label = cartItemLabel(line)
+  return issue.type === 'sold_out' ? `${label} está esgotado.` : `Restam apenas ${line.available} unidade(s) de ${label}.`
+}
 
 /**
  * Subtotal, discount, network fee and total exactly as computed by the API quote.
@@ -67,7 +76,7 @@ export function SummaryRows({ quote, updating, className }: { quote: Quote | und
           {quote.issues.map((issue) => (
             <li key={`${issue.nftId}-${issue.editionId}`} className="flex gap-1.5">
               <CircleAlert className="mt-px size-3.5 shrink-0" aria-hidden="true" />
-              {issue.message}
+              {issueMessage(quote, issue)}
             </li>
           ))}
         </ul>
@@ -126,12 +135,12 @@ export function CouponForm({ network, compact = false }: { network?: Network; co
           autoComplete="off"
           aria-invalid={coupon.error ? true : undefined}
           aria-describedby={coupon.error ? `${id}-error` : undefined}
-          className="min-w-0 flex-1 bg-transparent px-3 text-xs sm:px-4 sm:text-[13px] text-foreground outline-hidden placeholder:text-text-muted focus-visible:outline-2 focus-visible:outline-solid focus-visible:-outline-offset-2 focus-visible:outline-brand-accent md:px-2 md:text-xs"
+          className="min-w-0 flex-1 bg-transparent px-3 text-xs min-[400px]:px-4 min-[400px]:text-[13px] text-foreground outline-hidden placeholder:text-text-muted focus-visible:outline-2 focus-visible:outline-solid focus-visible:-outline-offset-2 focus-visible:outline-brand-accent md:px-2 md:text-xs"
         />
         <button
           type="submit"
           disabled={coupon.isApplying || !code.trim()}
-          className="w-[88px] shrink-0 cursor-pointer rounded-full sm:w-[97px] bg-linear-120 from-brand to-[#a86c3c] text-[15px] font-bold text-foreground disabled:cursor-not-allowed disabled:opacity-60 md:w-[102px] md:rounded-none md:bg-brand md:bg-none md:text-ink"
+          className="w-[88px] shrink-0 cursor-pointer rounded-full min-[400px]:w-[97px] bg-linear-120 from-brand to-[#a86c3c] text-[15px] font-bold text-foreground disabled:cursor-not-allowed disabled:opacity-60 md:w-[102px] md:rounded-none md:bg-brand md:bg-none md:text-ink"
         >
           {coupon.isApplying ? 'Aplicando…' : 'Aplicar'}
         </button>

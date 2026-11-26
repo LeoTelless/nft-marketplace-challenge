@@ -1,6 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query'
-import type { CSSProperties } from 'react'
-import { createRootRouteWithContext, Outlet, useRouterState } from '@tanstack/react-router'
+import { createRootRouteWithContext, HeadContent, Outlet, useRouterState } from '@tanstack/react-router'
 import { SessionProvider } from '@/features/auth/session-provider'
 import { DemoPanel } from '@/features/demo/demo-panel'
 import { useSession } from '@/features/auth/session'
@@ -19,24 +18,28 @@ export interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  // Default title; routes override it with their own `head` (rendered by <HeadContent />).
+  head: () => ({ meta: [{ title: 'KURIO · Marketplace de NFTs' }] }),
   component: RootLayout,
   notFoundComponent: NotFoundPage,
   errorComponent: RouteErrorPage,
 })
 
-/** Screens with their own bottom action bar on mobile (the tab bar would cover it). */
+/** Screens with their own bottom action bar on mobile, or whose mobile frame has no tab bar. */
+const NO_TAB_BAR = new Set(['/nft/$nftId', '/_authenticated/checkout', '/cart'])
+const ACTION_BAR = new Set(['/nft/$nftId', '/_authenticated/checkout'])
 function useHidesTabBar() {
-  return useRouterState({
-    select: (state) =>
-      state.matches.some((match) => match.routeId === '/nft/$nftId' || match.routeId === '/_authenticated/checkout'),
-  })
+  return useRouterState({ select: (state) => state.matches.some((match) => NO_TAB_BAR.has(match.routeId)) })
+}
+/** Fixed purchase bar at the bottom on mobile (detail, checkout). */
+function useHasActionBar() {
+  return useRouterState({ select: (state) => state.matches.some((match) => ACTION_BAR.has(match.routeId)) })
 }
 
 /** Screens whose mobile frame has no header (the tab bar gives access to menu and account). */
+const NO_MOBILE_HEADER = new Set(['/', '/nft/$nftId', '/cart', '/_authenticated/checkout', '/login', '/register'])
 function useHidesMobileHeader() {
-  return useRouterState({
-    select: (state) => state.matches.some((match) => match.routeId === '/' || match.routeId === '/nft/$nftId'),
-  })
+  return useRouterState({ select: (state) => state.matches.some((match) => NO_MOBILE_HEADER.has(match.routeId)) })
 }
 
 function AccountSlot({ variant }: { variant: 'header' | 'menu' }) {
@@ -59,9 +62,11 @@ function RootLayout() {
   const cartCount = useCartCount()
   const hideTabBar = useHidesTabBar()
   const hideMobileHeader = useHidesMobileHeader()
+  const actionBar = useHasActionBar()
 
   return (
     <SessionProvider>
+      <HeadContent />
       <a
         href="#conteudo"
         className="fixed top-2 left-2 z-[60] -translate-y-20 rounded-sm bg-brand px-4 py-2 text-sm font-bold text-ink transition-transform focus:translate-y-0"
@@ -78,12 +83,11 @@ function RootLayout() {
         <main id="conteudo" tabIndex={-1} className={cn('flex-1 outline-none', !hideTabBar && 'max-md:pb-6')}>
           <Outlet />
         </main>
-        <div className={hideTabBar ? 'max-md:pb-44' : 'max-md:pb-24'}>
+        <div className={actionBar ? 'max-md:pb-44' : hideTabBar ? undefined : 'max-md:pb-24'}>
           <SiteFooter />
+          {/* Mobile: an ordinary button after the footer (above the bottom bar); desktop: floating. */}
+          <DemoPanel />
         </div>
-      </div>
-      <div className="contents" style={{ '--mobile-bar-offset': hideTabBar ? '184px' : '96px' } as CSSProperties}>
-        <DemoPanel />
       </div>
       {hideTabBar ? null : <MobileTabBar cartCount={cartCount} account={<AccountSlot variant="menu" />} />}
     </SessionProvider>

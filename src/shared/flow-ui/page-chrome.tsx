@@ -46,7 +46,7 @@ export function MobileScreenHeader({ title, fallback = '/', className }: { title
       >
         <ChevronLeft className="size-5" aria-hidden="true" />
       </button>
-      <h1 className="px-12 text-center text-xl leading-6 font-bold text-foreground">{title}</h1>
+      <h1 className="px-12 text-center text-lg leading-6 font-bold text-foreground min-[400px]:text-xl">{title}</h1>
     </div>
   )
 }

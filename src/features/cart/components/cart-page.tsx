@@ -37,7 +37,7 @@ export function CartPage() {
   const empty = cart.isSuccess && items.length === 0
 
   return (
-    <div className="container-page pt-4 md:pt-8">
+    <div className="container-page min-h-dvh pt-4 md:pt-8">
       <Breadcrumb items={[...MARKET_CRUMBS, { label: 'Carrinho' }]} />
       <MobileScreenHeader title="Carrinho de NFTs" />
       <h1 className="sr-only max-md:hidden">Carrinho de NFTs</h1>
@@ -70,7 +70,7 @@ export function CartPage() {
       ) : (
         <div className="mt-3 flex flex-col gap-6 lg:flex-row lg:justify-between lg:gap-10">
           <section aria-labelledby="cart-items-title" className="min-w-0 lg:w-[782px]">
-            <h2 id="cart-items-title" className="sr-only">
+            <h2 id="cart-items-title" tabIndex={-1} className="sr-only">
               NFTs no carrinho
             </h2>
             <div aria-hidden="true" className={cn('hidden border-b border-brand/30 pr-6 pb-3 text-base leading-4', COLUMNS)}>
@@ -97,7 +97,12 @@ export function CartPage() {
 
           <section
             aria-labelledby="cart-summary-title"
-            className="flex flex-col gap-6 max-md:-mx-6 max-md:rounded-t-[40px] max-md:bg-surface max-md:px-6 max-md:pt-6 max-md:pb-9 lg:w-[332px] lg:shrink-0"
+            // Mobile: the summary sits below the list, so it waits for the cart (the number of lines
+            // is unknown while loading and it would jump); desktop keeps it with its own skeleton.
+            className={cn(
+              'flex flex-col gap-6 max-md:-mx-6 max-md:rounded-t-[40px] max-md:bg-surface max-md:px-6 max-md:pt-6 max-md:pb-9 lg:w-[332px] lg:shrink-0',
+              cart.isPending && 'max-md:hidden',
+            )}
           >
             <SectionTitle id="cart-summary-title" className="max-md:sr-only">
               Resumo da carteira
@@ -125,7 +130,8 @@ export function CartPage() {
         </div>
       )}
 
-      {empty ? null : <CartRecommendations />}
+      {/* After the cart is known, so the section never pushes the list or the summary around. */}
+      {cart.isSuccess && !empty ? <CartRecommendations /> : null}
     </div>
   )
 }
@@ -144,9 +150,15 @@ function CartLine({ item }: { item: CartItem }) {
     </span>
   ) : null
   const stockNote = state.soldOut ? (
-    <span className="text-xs leading-4 text-coral">Esgotado: remova o item para finalizar.</span>
+    <span className="inline-flex items-center gap-1 text-xs leading-4 text-coral">
+      <TriangleAlert className="size-3" aria-hidden="true" />
+      Esgotado: remova o item para finalizar.
+    </span>
   ) : state.exceedsAvailability ? (
-    <span className="text-xs leading-4 text-coral">Restam apenas {item.available} unidade(s).</span>
+    <span className="inline-flex items-center gap-1 text-xs leading-4 text-coral">
+      <TriangleAlert className="size-3" aria-hidden="true" />
+      Restam apenas {item.available} unidade(s).
+    </span>
   ) : null
 
   return (
@@ -182,12 +194,9 @@ function CartLine({ item }: { item: CartItem }) {
         </div>
       </div>
       {/* Price (desktop) */}
-      <p className="flex flex-col gap-1 text-base leading-4 font-bold text-text-secondary max-md:hidden">
-        <span>
-          <span className="sr-only">Preço unitário: </span>
-          {eth(item.unitPrice)}
-        </span>
-        {priceNote}
+      <p className="text-base leading-4 font-bold whitespace-nowrap text-text-secondary max-md:hidden">
+        <span className="sr-only">Preço unitário: </span>
+        {eth(item.unitPrice)}
       </p>
       {/* Quantity */}
       <div className="absolute right-4 bottom-4 md:static">
@@ -200,22 +209,35 @@ function CartLine({ item }: { item: CartItem }) {
         />
       </div>
       {/* Total (desktop) */}
-      <p className="flex flex-col gap-1 text-base leading-4 font-bold text-brand-accent max-md:hidden">
-        <span>
-          <span className="sr-only">Total do item: </span>
-          {eth(lineTotal(item))}
-        </span>
-        {stockNote}
+      <p className="text-base leading-4 font-bold whitespace-nowrap text-brand-accent max-md:hidden">
+        <span className="sr-only">Total do item: </span>
+        {eth(lineTotal(item))}
       </p>
       <button
         type="button"
         aria-label={`Remover ${label}`}
         disabled={optimistic || remove.isPending}
-        onClick={() => remove.mutate({ item })}
+        onClick={(event) => {
+          // Keep keyboard users in place: next line's "Remover", else the previous one, else the list title.
+          const line = event.currentTarget.closest('li')
+          const sibling = line?.nextElementSibling ?? line?.previousElementSibling
+          const next = sibling?.querySelector<HTMLElement>('button[aria-label^="Remover"]')
+          remove.mutate({ item })
+          if (next) requestAnimationFrame(() => next.focus())
+          // Last line: the list becomes the empty state, so focus the main region once it rendered.
+          else setTimeout(() => (document.getElementById('cart-items-title') ?? document.getElementById('conteudo'))?.focus(), 300)
+        }}
         className="absolute top-3 right-3 grid size-8 cursor-pointer place-content-center rounded-sm text-text-muted hover:text-coral disabled:opacity-40 md:static md:size-6"
       >
         <Trash2 className="size-5" aria-hidden="true" />
       </button>
+      {priceNote || stockNote ? (
+        // Desktop: the notes get a full-width strip under the row, never squeezed into a column.
+        <p className="col-span-full -mt-2 mb-3 flex flex-wrap gap-x-5 gap-y-1 pl-[86px] max-md:hidden">
+          {priceNote}
+          {stockNote}
+        </p>
+      ) : null}
     </li>
   )
 }

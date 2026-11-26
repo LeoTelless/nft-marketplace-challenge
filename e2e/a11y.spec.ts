@@ -95,8 +95,9 @@ test.describe('keyboard navigation', () => {
 
 test.describe('dialogs and sheets: focus is trapped and returned', () => {
   test('the login dialog keeps focus inside, closes with Escape and returns focus to where the user was', async ({ page }) => {
-    await openWithScenario(page, '/cart')
-    await expect(main(page).getByText('Seu carrinho está vazio.')).toBeVisible()
+    // Start on the home page: the cart and checkout have no header/tab bar on mobile (as the frames).
+    await openWithScenario(page, '/')
+    await expect(main(page).getByRole('heading', { level: 1 }).first()).toBeAttached()
     // In-app navigation, opening the dialog from the page controls.
     if (isDesktop(page) || (page.viewportSize()?.width ?? 0) >= 768) {
       await page.getByTestId('header-login').first().focus()
@@ -121,7 +122,7 @@ test.describe('dialogs and sheets: focus is trapped and returned', () => {
 
     await page.keyboard.press('Escape')
     await expect(dialog).toBeHidden()
-    await expect(page).toHaveURL(/\/cart$/)
+    await expect(page).toHaveURL(/:\d+\/$/)
     // Focus left the (removed) dialog: it is back in the page, not lost on <body> of an inert dialog.
     await expect.poll(() => page.evaluate(() => document.activeElement?.closest('[role="dialog"]') === null)).toBe(true)
   })
@@ -147,7 +148,7 @@ test.describe('dialogs and sheets: focus is trapped and returned', () => {
 
   // DEFECT (src/features/checkout/components/checkout-page.tsx, review dialog): after closing the dialog with Escape the
   // focus ends on <body> instead of going back to the page's "Confirmar compra" button that opened it.
-  test.fixme('closing the purchase review dialog returns focus to the button that opened it', async ({ page }) => {
+  test('closing the purchase review dialog returns focus to the button that opened it', async ({ page }) => {
     await openWithScenario(page, '/', 'instant')
     await login(page, USERS.ana, '/cart')
     const [pick] = await pickEditions(page, 1)
