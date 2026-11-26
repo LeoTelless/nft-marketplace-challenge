@@ -210,21 +210,21 @@ function CartLine({ item, quote }: { item: CartItem; quote: Quote | undefined })
     >
       {/* NFT */}
       <div className="flex min-w-0 items-center gap-2 md:gap-4">
-        <div className="size-[100px] shrink-0 self-start overflow-hidden rounded-l-[14px] bg-surface-raised md:size-[70px] md:self-auto md:rounded-[6px]">
+        <div className="size-[100px] shrink-0 self-start overflow-hidden max-[359px]:size-20 rounded-l-[14px] bg-surface-raised md:size-[70px] md:self-auto md:rounded-[6px]">
           <NftImage image={cartItemImage(item)} sizes="100px" />
         </div>
-        {/* Mobile: the name stops before the remove button; the edition line is short and the
-            price sits below the (vertically centered) stepper. */}
+        {/* Mobile: name and edition stop before the stepper column (they wrap instead of running
+            under it); the price sits below the vertically centered stepper. */}
         <div className="flex min-w-0 flex-col gap-1.5 self-start py-3 pr-12 md:self-auto md:py-0 md:pr-0">
           <Link
             to="/nft/$nftId"
             params={{ nftId: item.nftId }}
             search={{ edition: item.editionId }}
-            className="line-clamp-2 text-[15px] leading-4 font-bold break-words text-foreground hover:text-brand-accent md:text-base"
+            className="line-clamp-2 text-[15px] leading-4 font-bold break-words text-foreground hover:text-brand-accent max-md:mr-14 md:text-base"
           >
             {item.nftName}
           </Link>
-          <span className="text-sm leading-4 text-text-secondary max-md:mr-[49px] md:text-text-muted">
+          <span className="text-sm leading-4 text-text-secondary max-md:mr-14 md:text-text-muted">
             <span className="md:hidden">Edição: {editionLabel({ name: item.editionName })}</span>
             <span className="max-md:hidden">ID do token: {tokenLabel(item.nftId)}</span>
           </span>
