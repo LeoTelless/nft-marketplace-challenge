@@ -21,11 +21,17 @@ export const CATEGORY_LABELS: Record<NftCategory, string> = {
   gaming: 'Jogos',
   music: 'Música',
 }
-// One collator for the whole sort (`localeCompare` with a locale builds one per comparison).
-const ptBr = new Intl.Collator('pt-BR')
-export const CATEGORIES_ALPHABETICAL = (Object.keys(CATEGORY_LABELS) as NftCategory[]).sort((a, b) =>
-  ptBr.compare(CATEGORY_LABELS[a], CATEGORY_LABELS[b]),
-)
+// Alphabetical order ignoring case and accents. Plain comparison of the folded labels: an
+// `Intl.Collator` (or `localeCompare` with a locale) loads the ICU collation data on the startup path.
+const fold = (label: string) =>
+  label
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+export const CATEGORIES_ALPHABETICAL = (Object.keys(CATEGORY_LABELS) as NftCategory[]).sort((a, b) => {
+  const [x, y] = [fold(CATEGORY_LABELS[a]), fold(CATEGORY_LABELS[b])]
+  return x < y ? -1 : x > y ? 1 : 0
+})
 
 export const SORT_OPTIONS: ReadonlyArray<{ value: NftSort; label: string }> = [
   { value: 'newest', label: 'Listados recentemente' },

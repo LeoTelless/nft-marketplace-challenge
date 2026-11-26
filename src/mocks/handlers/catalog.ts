@@ -5,6 +5,12 @@ import { db, findNft } from '../db/store'
 import { is } from '../scenarios'
 import { api, MockHttpError, route, validationError } from './utils'
 
+/**
+ * Ids and ISO-8601 timestamps sort by code point (their natural order). `localeCompare` would load
+ * the ICU collation data on the first catalog request; it stays for the name sorts.
+ */
+const byCodePoint = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
+
 function parseListQuery(url: URL) {
   const params = url.searchParams
   const raw = {
@@ -57,17 +63,17 @@ export const catalogHandlers = [
       items.sort((a, b) => {
         switch (query.sort) {
           case 'price_asc':
-            return compareEth(a.minPrice, b.minPrice) || a.id.localeCompare(b.id)
+            return compareEth(a.minPrice, b.minPrice) || byCodePoint(a.id, b.id)
           case 'price_desc':
-            return compareEth(b.minPrice, a.minPrice) || a.id.localeCompare(b.id)
+            return compareEth(b.minPrice, a.minPrice) || byCodePoint(a.id, b.id)
           case 'name_asc':
             return a.name.localeCompare(b.name)
           case 'name_desc':
             return b.name.localeCompare(a.name)
           case 'oldest':
-            return a.createdAt.localeCompare(b.createdAt)
+            return byCodePoint(a.createdAt, b.createdAt)
           default:
-            return b.createdAt.localeCompare(a.createdAt)
+            return byCodePoint(b.createdAt, a.createdAt)
         }
       })
 

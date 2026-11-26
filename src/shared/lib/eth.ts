@@ -77,9 +77,12 @@ export interface FormatEthOptions {
 
 /**
  * Group and decimal separators per locale, computed once: creating an `Intl.NumberFormat` is
- * costly and every price on screen is formatted through here.
+ * costly and every price on screen is formatted through here. The default locale is known in
+ * advance, so the first price rendered does not pay for loading the ICU number data either.
  */
-const separators = new Map<string, { groupSeparator: string; decimalSeparator: string }>()
+const separators = new Map<string, { groupSeparator: string; decimalSeparator: string }>([
+  ['en-US', { groupSeparator: ',', decimalSeparator: '.' }],
+])
 function separatorsOf(locale: string) {
   let found = separators.get(locale)
   if (!found) {
