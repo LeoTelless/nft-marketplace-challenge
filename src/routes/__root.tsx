@@ -1,6 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { createRootRouteWithContext, Outlet, useRouterState } from '@tanstack/react-router'
 import { SessionProvider } from '@/features/auth/session-provider'
+import { DemoPanel } from '@/features/demo/demo-panel'
 import { useSession } from '@/features/auth/session'
 import { useLogout } from '@/features/auth/use-auth'
 import { useCartCount } from '@/features/cart/use-cart'
@@ -25,7 +26,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 /** Screens with their own bottom action bar on mobile (the tab bar would cover it). */
 function useHidesTabBar() {
   return useRouterState({
-    select: (state) => state.matches.some((match) => match.routeId === '/nft/$nftId'),
+    select: (state) =>
+      state.matches.some((match) => match.routeId === '/nft/$nftId' || match.routeId === '/_authenticated/checkout'),
   })
 }
 
@@ -66,6 +68,7 @@ function RootLayout() {
           <SiteFooter />
         </div>
       </div>
+      <DemoPanel />
       {hideTabBar ? null : <MobileTabBar cartCount={cartCount} accountHref={user ? '/account/profile' : '/login'} />}
     </SessionProvider>
   )
