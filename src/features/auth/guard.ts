@@ -25,10 +25,13 @@ export async function requireSession(queryClient: QueryClient, location: ParsedL
   }
 }
 
-/** `beforeLoad` of `/login` and `/register`: an authenticated user goes straight to the target. */
-export function redirectIfAuthenticated(queryClient: QueryClient, target: string) {
+/**
+ * `beforeLoad` of `/login` and `/register`: an authenticated user goes straight to the target.
+ * The stored token is validated first (after a refresh the cache is empty).
+ */
+export async function redirectIfAuthenticated(queryClient: QueryClient, target: string) {
   const token = sessionStore.getToken()
-  if (token && queryClient.getQueryData(sessionQueryOptions(token).queryKey)) {
-    throw redirect({ href: target, replace: true })
-  }
+  if (!token) return
+  const session = await queryClient.ensureQueryData(sessionQueryOptions(token)).catch(() => null)
+  if (session) throw redirect({ href: target, replace: true })
 }

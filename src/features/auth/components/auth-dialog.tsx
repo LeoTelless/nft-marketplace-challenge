@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate, useRouter } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { HomeHero } from '@/features/catalog/home-sections'
 import { FormAlert, PasswordField, TextField } from '@/shared/flow-ui/fields'
@@ -24,6 +24,8 @@ type Mode = 'login' | 'register'
 export function AuthScreen({ mode, search }: { mode: Mode; search: AuthSearch }) {
   const router = useRouter()
   const navigate = useNavigate()
+  // The element that opened the dialog (e.g. the header "Entrar"), focused again when it closes.
+  const [trigger] = useState(() => (typeof document === 'undefined' ? null : (document.activeElement as HTMLElement | null)))
   const close = () => {
     // Back to where the user was; after an expiry the previous page is private (the guard would
     // bounce back here), so go home instead.
@@ -41,6 +43,11 @@ export function AuthScreen({ mode, search }: { mode: Mode; search: AuthSearch })
       <Dialog open onOpenChange={(open) => (open ? undefined : close())}>
         <DialogContent
           aria-describedby={`${mode}-description`}
+          onCloseAutoFocus={(event) => {
+            event.preventDefault()
+            const target = trigger?.isConnected && trigger !== document.body ? trigger : document.getElementById('conteudo')
+            target?.focus()
+          }}
           className={cn(
             'gap-0 overflow-y-auto p-0',
             // Mobile: full screen, as the mobile frames.
@@ -49,11 +56,11 @@ export function AuthScreen({ mode, search }: { mode: Mode; search: AuthSearch })
             'md:max-h-[calc(100dvh-2rem)] md:max-w-[500px] md:rounded-none md:border-0 md:border-b-[10px] md:border-b-brand md:pt-12 md:pb-14',
           )}
         >
-          <p aria-hidden="true" className="mb-10 text-center text-[32px] leading-[42px] font-bold tracking-[0.12em] md:hidden">
+          <p aria-hidden="true" className="mb-10 grid h-[136px] place-content-center text-[32px] leading-[42px] font-bold tracking-[0.12em] md:hidden">
             KURIO
           </p>
           <div className="flex flex-col items-center gap-10 md:px-12">
-            <DialogTitle className="text-xl leading-4 font-bold md:sr-only">{mode === 'login' ? 'Entrar' : 'Criar conta'}</DialogTitle>
+            <DialogTitle className={cn('leading-4 font-bold md:sr-only', mode === 'login' ? 'text-xl' : 'text-lg')}>{mode === 'login' ? 'Entrar' : 'Criar conta'}</DialogTitle>
             <nav aria-label="Acesso à conta" className="flex items-center gap-2 text-xl leading-4 font-medium max-md:hidden">
               <Link
                 to="/login"

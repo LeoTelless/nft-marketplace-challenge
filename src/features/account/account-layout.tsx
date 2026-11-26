@@ -30,7 +30,8 @@ const item = 'flex h-[45px] shrink-0 items-center gap-3 px-4 text-[15px] leading
 export function AccountLayout({ children }: { children: ReactNode }) {
   const logout = useLogout()
   return (
-    <div className="container-page flex flex-col gap-6 pt-4 md:pt-8 lg:flex-row lg:items-start lg:gap-7">
+    // min-h: the footer starts below the fold while data loads, so skeleton → content never shifts it (CLS).
+    <div className="container-page flex min-h-dvh flex-col gap-6 pt-4 md:pt-8 lg:flex-row lg:items-start lg:gap-7">
       <aside className="bg-surface lg:w-[310px] lg:shrink-0 lg:py-2 max-lg:-mx-6 max-lg:md:-mx-10">
         <p className="hidden p-2.5 text-lg leading-4 font-bold lg:block" aria-hidden="true">
           Meu perfil
