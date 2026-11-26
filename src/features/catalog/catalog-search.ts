@@ -21,8 +21,10 @@ export const CATEGORY_LABELS: Record<NftCategory, string> = {
   gaming: 'Jogos',
   music: 'Música',
 }
+// One collator for the whole sort (`localeCompare` with a locale builds one per comparison).
+const ptBr = new Intl.Collator('pt-BR')
 export const CATEGORIES_ALPHABETICAL = (Object.keys(CATEGORY_LABELS) as NftCategory[]).sort((a, b) =>
-  CATEGORY_LABELS[a].localeCompare(CATEGORY_LABELS[b], 'pt-BR'),
+  ptBr.compare(CATEGORY_LABELS[a], CATEGORY_LABELS[b]),
 )
 
 export const SORT_OPTIONS: ReadonlyArray<{ value: NftSort; label: string }> = [

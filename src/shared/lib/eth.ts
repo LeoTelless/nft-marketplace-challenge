@@ -76,6 +76,24 @@ export interface FormatEthOptions {
 }
 
 /**
+ * Group and decimal separators per locale, computed once: creating an `Intl.NumberFormat` is
+ * costly and every price on screen is formatted through here.
+ */
+const separators = new Map<string, { groupSeparator: string; decimalSeparator: string }>()
+function separatorsOf(locale: string) {
+  let found = separators.get(locale)
+  if (!found) {
+    const format = new Intl.NumberFormat(locale)
+    found = {
+      groupSeparator: format.formatToParts(1000).find((p) => p.type === 'group')?.value ?? ',',
+      decimalSeparator: format.formatToParts(1.1).find((p) => p.type === 'decimal')?.value ?? '.',
+    }
+    separators.set(locale, found)
+  }
+  return found
+}
+
+/**
  * Display formatting. Works on the decimal string directly (no `Number` conversion),
  * so large or very precise amounts are never distorted. Values smaller than the
  * displayed precision are shown as `< 0.0001 ETH` instead of a misleading `0`.
@@ -95,8 +113,7 @@ export function formatEth(value: EthLike, options: FormatEthOptions = {}): strin
   let fraction = fractionPart.replace(/0+$/, '')
   if (fraction.length < minDecimals) fraction = fraction.padEnd(minDecimals, '0')
 
-  const groupSeparator = new Intl.NumberFormat(locale).formatToParts(1000).find((p) => p.type === 'group')?.value ?? ','
-  const decimalSeparator = new Intl.NumberFormat(locale).formatToParts(1.1).find((p) => p.type === 'decimal')?.value ?? '.'
+  const { groupSeparator, decimalSeparator } = separatorsOf(locale)
   const groupedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator)
 
   return `${groupedInteger}${fraction ? decimalSeparator + fraction : ''}${suffix}`
