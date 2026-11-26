@@ -122,7 +122,7 @@ test.describe('dialogs and sheets: focus is trapped and returned', () => {
 
     await page.keyboard.press('Escape')
     await expect(dialog).toBeHidden()
-    await expect(page).toHaveURL(/:\d+\/$/)
+    await expect(page).toHaveURL((url) => url.pathname === '/' && url.search === '')
     // Focus left the (removed) dialog: it is back in the page, not lost on <body> of an inert dialog.
     await expect.poll(() => page.evaluate(() => document.activeElement?.closest('[role="dialog"]') === null)).toBe(true)
   })
