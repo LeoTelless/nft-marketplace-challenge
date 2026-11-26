@@ -17,7 +17,17 @@ function readStorage(key: string): string | null {
   }
 }
 
+function writeStorage(key: string, value: string | null) {
+  try {
+    if (value === null) localStorage.removeItem(key)
+    else localStorage.setItem(key, value)
+  } catch {
+    // Storage unavailable (private mode): keep the in-memory value only.
+  }
+}
+
 let token: string | null = readStorage(TOKEN_KEY)
+let guestCartId: string | null = readStorage(GUEST_CART_KEY)
 
 function notify() {
   for (const listener of listeners) listener()
@@ -30,38 +40,27 @@ export const sessionStore = {
   setToken(next: string | null) {
     if (next === token) return
     token = next
-    try {
-      if (next) localStorage.setItem(TOKEN_KEY, next)
-      else localStorage.removeItem(TOKEN_KEY)
-    } catch {
-      // Storage unavailable (private mode): keep the in-memory session only.
-    }
+    writeStorage(TOKEN_KEY, next)
     notify()
   },
+  /** Notified on token and visitor cart id changes. */
   subscribe(listener: Listener): () => void {
     listeners.add(listener)
     return () => listeners.delete(listener)
   },
-  /** Visitor cart id, created lazily and sent as `X-Cart-Id`. */
+  /** Visitor cart id, created lazily and sent as `X-Cart-Id`. Stable until rotated. */
   getGuestCartId(): string {
-    let id = readStorage(GUEST_CART_KEY)
-    if (!id) {
-      id = `guest_${crypto.randomUUID()}`
-      try {
-        localStorage.setItem(GUEST_CART_KEY, id)
-      } catch {
-        // ignore
-      }
+    if (!guestCartId) {
+      guestCartId = readStorage(GUEST_CART_KEY) ?? `guest_${crypto.randomUUID()}`
+      writeStorage(GUEST_CART_KEY, guestCartId)
     }
-    return id
+    return guestCartId
   },
   /** After a merge (login) or logout the old visitor cart must not be reused. */
   rotateGuestCartId() {
-    try {
-      localStorage.removeItem(GUEST_CART_KEY)
-    } catch {
-      // ignore
-    }
+    guestCartId = null
+    writeStorage(GUEST_CART_KEY, null)
+    notify()
   },
 }
 
