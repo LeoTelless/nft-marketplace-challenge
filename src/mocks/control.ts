@@ -2,7 +2,7 @@ import type { Nft, Order, RealtimeEvent } from '@/contracts'
 import { clearOrderTimers, resolveOrder as resolveDbOrder } from './db/commerce'
 import { db, findNft, mutateNft, persist, resetDb } from './db/store'
 import type { DbState } from './db/types'
-import { connectedPeers, dropSockets, emitStaleNftEvent, replayLastEvent, restoreSockets } from './realtime'
+import { announceReset, connectedPeers, dropSockets, emitStaleNftEvent, redeliverEvent, replayLastEvent, restoreSockets } from './realtime'
 import { getScenario, isScenarioId, SCENARIOS, setScenario, type ScenarioId } from './scenarios'
 
 /**
@@ -14,7 +14,10 @@ export interface MocksControl {
   readonly scenarios: typeof SCENARIOS
   getScenario(): ScenarioId
   setScenario(id: ScenarioId): void
-  /** Restores the seed database and the `default` scenario. */
+  /**
+   * Restores the seed data and the `default` scenario, without a reload: ids, event ids and
+   * versions stay monotonic (see `resetDb`) and connected clients get `system.resync`.
+   */
   reset(): void
   getState(): DbState
   getNft(id: string): Nft | undefined
@@ -28,6 +31,8 @@ export interface MocksControl {
   disconnectWallets(): void
   /** Re-emits the last event (same `eventId`). */
   replayLastEvent(type?: RealtimeEvent['type']): RealtimeEvent | null
+  /** Re-sends an event emitted earlier (same `eventId`), e.g. one kept by a test across a reload or a new login. */
+  replayEvent(event: RealtimeEvent): RealtimeEvent
   /** Emits an `nft.updated` with an older version. */
   emitStaleNftEvent(nftId: string): RealtimeEvent | null
   /** Closes all sockets; reconnection attempts are held until `restoreSocket()` answers them. */
@@ -49,6 +54,7 @@ export function createMocksControl(): MocksControl {
       resetDb()
       setScenario('default')
       restoreSockets()
+      announceReset()
     },
     getState: () => structuredClone(db()),
     getNft: (id) => structuredClone(findNft(id)),
@@ -74,6 +80,7 @@ export function createMocksControl(): MocksControl {
       persist()
     },
     replayLastEvent: (type) => replayLastEvent(type ? (e) => e.type === type : undefined),
+    replayEvent: redeliverEvent,
     emitStaleNftEvent,
     dropSocket: dropSockets,
     restoreSocket: restoreSockets,

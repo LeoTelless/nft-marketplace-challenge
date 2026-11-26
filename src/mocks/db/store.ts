@@ -73,8 +73,22 @@ export function persist() {
   }
 }
 
+/**
+ * Restores the seed data. Identity counters stay monotonic, as on a real server whose data is
+ * restored: ids (`seq`) and event ids (`eventSeq`) continue, and if any NFT had changed, every
+ * seed NFT starts above the highest version issued so far. A client that saw `evt_000007` or
+ * NFT version 3 before the reset therefore never takes a later event for a duplicate or an old
+ * one. From a fresh database (the E2E start) the result is exactly the seed: ids from 1000,
+ * `evt_000001`, version 1.
+ */
 export function resetDb() {
-  state = createSeedState()
+  const previous = state
+  const next = createSeedState()
+  next.seq = Math.max(next.seq, previous.seq)
+  next.eventSeq = Math.max(next.eventSeq, previous.eventSeq)
+  const highestVersion = Math.max(1, ...previous.nfts.map((nft) => nft.version))
+  if (highestVersion > 1) for (const nft of next.nfts) nft.version = highestVersion + 1
+  state = next
   persist()
 }
 

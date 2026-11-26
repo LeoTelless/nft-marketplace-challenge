@@ -8,6 +8,7 @@ import {
   type NftUpdatedEvent,
   type OrderUpdatedEvent,
   type RealtimeEvent,
+  type SystemResyncEvent,
 } from '@/contracts'
 import { findNft, nextEventId, onDbChange, persist } from './db/store'
 import { findValidSession } from './handlers/utils'
@@ -172,6 +173,16 @@ export function replayLastEvent(filter?: (event: RealtimeEvent) => boolean): Rea
 }
 
 /**
+ * Re-sends an event emitted earlier, as given (at-least-once delivery). Unlike `replayLastEvent`,
+ * it also works after the page was reloaded or the user logged in again, when this in-page
+ * server no longer remembers the events of the previous page.
+ */
+export function redeliverEvent(event: RealtimeEvent): RealtimeEvent {
+  deliver(event)
+  return event
+}
+
+/**
  * Emits an `nft.updated` with a fresh `eventId` but an old version (the previous snapshot,
  * or the current one at a lower version): the client must not regress.
  */
@@ -208,6 +219,20 @@ export function restoreSockets() {
   const waiting = [...held]
   held.clear()
   for (const connection of waiting) accept(connection)
+}
+
+/**
+ * After `resetDb()`: forgets the events of the previous data (so `replayLastEvent` and
+ * `emitStaleNftEvent` never re-send them) and tells every connected client to reconcile
+ * (`system.resync`), since the reset is not described by per-resource events.
+ */
+export function announceReset() {
+  recentEvents.length = 0
+  previousSnapshots.clear()
+  const event: SystemResyncEvent = { type: REALTIME_EVENTS.resync, reason: 'reset', occurredAt: new Date().toISOString() }
+  for (const peer of peers) {
+    if (peer.userId !== undefined) peer.emit(event.type, event)
+  }
 }
 
 export function connectedPeers() {
