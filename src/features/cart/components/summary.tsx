@@ -36,7 +36,6 @@ export function SummaryRows({ quote, updating, className }: { quote: Quote | und
       </div>
     )
   }
-  const hasDiscount = quote.discount !== '0'
   return (
     <div aria-busy={updating || undefined} className={cn('flex flex-col gap-3 transition-opacity', updating && 'opacity-70', className)}>
       <dl className="flex flex-col gap-3">
@@ -51,7 +50,7 @@ export function SummaryRows({ quote, updating, className }: { quote: Quote | und
             {quote.coupon ? `Desconto (${quote.coupon.code}, −${quote.coupon.percentOff}%)` : 'Desconto do lançamento'}
           </dt>
           <dd className="text-right text-[15px] leading-5" data-testid="summary-discount">
-            (-) {hasDiscount ? eth(quote.discount) : '00.00'}
+            (-) {eth(quote.discount)}
           </dd>
         </div>
         <div className="flex flex-col gap-0 md:gap-3">
