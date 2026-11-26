@@ -1,7 +1,7 @@
 {
   "environment": {
     "label": "Local, build servido com compressão (Brotli), cabeçalhos do vercel.json e HTTP/2 (TLS)",
-    "generatedAt": "2026-11-26T19:09:53.499Z",
+    "generatedAt": "2026-11-26T21:40:25.457Z",
     "lighthouse": "13.6.0",
     "chrome": "Chrome/159.0.8154.6",
     "node": "v22.23.5",
@@ -12,7 +12,8 @@
       "scenario": "default (fresh browser profile per run, no ?scenario)",
       "throttling": "simulated (Lighthouse default). Mobile: 4x CPU, 150 ms RTT, 1.6 Mbps. Desktop: 1x CPU, 40 ms RTT, 10 Mbps",
       "runsPerCase": 3,
-      "categories": "performance, accessibility, best-practices, seo"
+      "categories": "performance, accessibility, best-practices, seo",
+      "reports": "HTML and JSON of every run; the median run complete, the others without screenshots (audits screenshot-thumbnails and final-screenshot without details, no fullPageScreenshot)"
     }
   },
   "results": [
@@ -21,53 +22,56 @@
       "path": "/",
       "profile": "Mobile",
       "median": {
-        "performance": 92,
+        "performance": 81,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 2410,
+        "lcpMs": 2612,
         "cls": 0,
-        "tbtMs": 251
+        "tbtMs": 386
       },
       "runs": [
         {
           "run": 1,
-          "performance": 92,
+          "performance": 78,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2515.058,
+          "lcp": 2743.5765,
           "cls": 0,
-          "tbt": 250.5,
+          "tbt": 383,
           "report": "inicio-mobile-run1",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": false,
+          "screenshotsRemoved": true
         },
         {
           "run": 2,
-          "performance": 93,
+          "performance": 87,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2399.179,
+          "lcp": 2611.5385,
           "cls": 0,
-          "tbt": 238,
+          "tbt": 386,
           "report": "inicio-mobile-run2",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": false,
+          "screenshotsRemoved": true
         },
         {
           "run": 3,
-          "performance": 92,
+          "performance": 81,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2409.5235000000002,
+          "lcp": 2607.741,
           "cls": 0,
-          "tbt": 290,
+          "tbt": 463.5,
           "report": "inicio-mobile-run3",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": true
+          "isMedianReport": true,
+          "screenshotsRemoved": false
         }
       ]
     },
@@ -80,9 +84,9 @@
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 543,
+        "lcpMs": 554,
         "cls": 0,
-        "tbtMs": 0
+        "tbtMs": 3
       },
       "runs": [
         {
@@ -91,25 +95,27 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 523.813,
+          "lcp": 553.5625,
           "cls": 0,
-          "tbt": 0,
+          "tbt": 3,
           "report": "inicio-desktop-run1",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": true,
+          "screenshotsRemoved": false
         },
         {
           "run": 2,
-          "performance": 100,
+          "performance": 89,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 544.485,
+          "lcp": 597.2805,
           "cls": 0,
-          "tbt": 0,
+          "tbt": 160,
           "report": "inicio-desktop-run2",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": false,
+          "screenshotsRemoved": true
         },
         {
           "run": 3,
@@ -117,12 +123,13 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 543.123,
+          "lcp": 542.04,
           "cls": 0,
-          "tbt": 0,
+          "tbt": 3,
           "report": "inicio-desktop-run3",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": true
+          "isMedianReport": false,
+          "screenshotsRemoved": true
         }
       ]
     },
@@ -131,53 +138,56 @@
       "path": "/nft/nft-001",
       "profile": "Mobile",
       "median": {
-        "performance": 94,
+        "performance": 90,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 2433,
+        "lcpMs": 2625,
         "cls": 0,
-        "tbtMs": 214
+        "tbtMs": 314
       },
       "runs": [
         {
           "run": 1,
-          "performance": 94,
+          "performance": 90,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2427.5885,
+          "lcp": 2619.526,
           "cls": 0,
-          "tbt": 209,
+          "tbt": 280,
           "report": "detalhe-mobile-run1",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": false,
+          "screenshotsRemoved": true
         },
         {
           "run": 2,
-          "performance": 94,
+          "performance": 90,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2441.7965,
+          "lcp": 2624.676,
           "cls": 0,
-          "tbt": 214,
+          "tbt": 313.5,
           "report": "detalhe-mobile-run2",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": true
+          "isMedianReport": true,
+          "screenshotsRemoved": false
         },
         {
           "run": 3,
-          "performance": 91,
+          "performance": 88,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2432.9105,
+          "lcp": 2661.349,
           "cls": 0,
-          "tbt": 318,
+          "tbt": 352.5,
           "report": "detalhe-mobile-run3",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": false,
+          "screenshotsRemoved": true
         }
       ]
     },
@@ -190,23 +200,24 @@
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100,
-        "lcpMs": 531,
+        "lcpMs": 574,
         "cls": 0,
-        "tbtMs": 0
+        "tbtMs": 21
       },
       "runs": [
         {
           "run": 1,
-          "performance": 100,
+          "performance": 99,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 529.702,
+          "lcp": 573.761,
           "cls": 0,
-          "tbt": 0,
+          "tbt": 24,
           "report": "detalhe-desktop-run1",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": false,
+          "screenshotsRemoved": true
         },
         {
           "run": 2,
@@ -214,12 +225,13 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 533.8315,
+          "lcp": 549.115,
           "cls": 0,
           "tbt": 0,
           "report": "detalhe-desktop-run2",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": false
+          "isMedianReport": false,
+          "screenshotsRemoved": true
         },
         {
           "run": 3,
@@ -227,12 +239,13 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 531.4739999999999,
+          "lcp": 579.11,
           "cls": 0,
-          "tbt": 0,
+          "tbt": 21,
           "report": "detalhe-desktop-run3",
           "lighthouseVersion": "13.6.0",
-          "isMedianReport": true
+          "isMedianReport": true,
+          "screenshotsRemoved": false
         }
       ]
     }
